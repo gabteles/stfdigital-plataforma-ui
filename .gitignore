@@ -1,0 +1,29 @@
+# --------------------------------
+# Mac OS
+.DS_Store
+.project
+
+# Eclipse
+.settings/
+.project
+
+# Node
+node_modules
+node
+
+# Bower
+bower_components
+
+# Gulp
+.tmp
+dist
+
+# Typings
+typings
+
+# JS Main
+src/app/main/**/*.js
+src/app/main/**/*.js.map
+
+# WebStorm
+.idea

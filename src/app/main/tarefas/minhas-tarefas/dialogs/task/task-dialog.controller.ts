@@ -1,5 +1,4 @@
-module app.tarefas.minhasTarefas {
-    'use strict';
+namespace app.tarefas.minhasTarefas {
 
     import IDialogService = angular.material.IDialogService;
     import IFilterService = angular.IFilterService;
@@ -64,9 +63,11 @@ module app.tarefas.minhasTarefas {
                     break;
                 }
             }
+            
+            let data: string;
 
             if (this.task.title === 'Autuar Processo Originário') {
-            	var data: string = "{\"processoId\":" + this.task.id.substring(3) + ", \"classeId\":\"ADI\"}";
+            	data = "{\"processoId\":" + this.task.id.substring(3) + ", \"classeId\":\"ADI\"}";
                 this.$http.post(this.properties.url + ":" +  this.properties.port + TaskDialogController.apiAutuacao, data)
                 	.success(() => {
                     	this.closeDialog();
@@ -74,7 +75,7 @@ module app.tarefas.minhasTarefas {
             }
 
             if (this.task.title === 'Distribuir Processo') {
-            	var data: string = "{\"distribuicaoId\":" + this.task.id.substring(3) + "}";
+            	data = "{\"distribuicaoId\":" + this.task.id.substring(3) + "}";
                 this.$http.post(this.properties.url + ":" +  this.properties.port + TaskDialogController.apiDistribuicao, data)
                 	.success(() => {
                 		this.closeDialog();

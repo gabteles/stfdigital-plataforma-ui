@@ -1,10 +1,11 @@
-module app.processos.ultimosAcessos {
+namespace app.processos.ultimosAcessos {
     'use strict';
+    
     import IQService = angular.IQService;
     import IPromise = angular.IPromise;
     import IDeferred = angular.IDeferred;
 
-    export interface Acesso {
+    export interface IAcesso {
         name: string,
         type: {
             name: string,
@@ -23,13 +24,13 @@ module app.processos.ultimosAcessos {
         /** @ngInject **/
         constructor(private $q: IQService) { }
 
-        public acessos(): IPromise<Acesso[]> {
-            var deferred: IDeferred<Acesso[]> = this.$q.defer();
+        public acessos(): IPromise<IAcesso[]> {
+            var deferred: IDeferred<IAcesso[]> = this.$q.defer();
             deferred.resolve(UltimosAcessosService.mockAcessos());
             return deferred.promise;
         }
 
-        private static mockAcessos(): Acesso[] {
+        private static mockAcessos(): IAcesso[] {
             return [
                 {
                     "name": "AP 470",

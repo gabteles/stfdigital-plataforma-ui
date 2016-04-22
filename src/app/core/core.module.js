@@ -20,6 +20,8 @@
                 'pascalprecht.translate',
                 'timer',
                 'ui.router',
+                'ct.ui.router.extras',
+                'oc.lazyLoad',
                 'ui.sortable',
                 'ng-sortable',
                 'xeditable',

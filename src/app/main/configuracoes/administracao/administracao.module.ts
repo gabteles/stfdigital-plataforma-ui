@@ -1,4 +1,4 @@
-module app.configuracoes.administracao {
+namespace app.configuracoes.administracao {
 	'use strict';
 	import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
 	import IStateProvider = angular.ui.IStateProvider;

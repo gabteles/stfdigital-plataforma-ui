@@ -1,51 +1,30 @@
-module app.novoProcesso {
+namespace app.novoProcesso {
     'use strict';
-    
+
     import IScope = angular.IScope;
-    
-    interface IProcessoWorkflow {
-        id: number;
-        name: string;
-        state: string;
-    }
-    
+    import IState = angular.ui.IState;
+
     export class NovoProcessoController {
-        
-        public buscaProcesso: string;
-        public processos: IProcessoWorkflow[];
+
+        public buscaProcesso: string = "";
+        private todosProcessos: IProcessoWorkflow[];
         
         /** @ngInject **/
-        constructor(private $scope: IScope) {
-            this.buscaProcesso = "";
-            this.$scope.$watch(() => { return this.buscaProcesso; }, this.filtrarProcessos());
-            this.processos = NovoProcessoController.getProcessosMock();
+        constructor(private $scope: IScope, public processos: IProcessoWorkflow[]) {
+            this.$scope.$watch(() => this.buscaProcesso, () => this.filtrarProcessos());
+            this.todosProcessos = angular.copy(processos);
         }
 
-        private filtrarProcessos(): Function {
-            return (): void => {
-                var busca:any = this.buscaProcesso.toLowerCase();
-                var origem:IProcessoWorkflow[] = NovoProcessoController.getProcessosMock();
+        private filtrarProcessos(): void {
+            var busca: string = this.buscaProcesso.toLowerCase();
 
-                if (busca.length === 0) {
-                    this.processos = origem;
-                } else {
-                    this.processos = origem.filter((processo) => {
-                        return (processo.name.toLowerCase().indexOf(busca) !== -1);
-                    });
-                }
-            };
-        }
-
-        private static getProcessosMock(): IProcessoWorkflow[] {
-            return [{
-                id : 1,
-                name : "Nova Petição",
-                state : 'app.novo-processo.peticoes'
-            }, {
-                id : 2,
-                name : "Nova Petição Física",
-                state : 'app.novo-processo.peticoes-fisicas'
-            }];
+            if (busca.length === 0) {
+                this.processos = this.todosProcessos;
+            } else {
+                this.processos = this.todosProcessos.filter((processo) => {
+                    return (processo.description.toLowerCase().indexOf(busca) !== -1);
+                });
+            }
         }
     }
 

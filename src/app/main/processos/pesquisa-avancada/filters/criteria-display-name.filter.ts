@@ -1,10 +1,10 @@
-module app.processos.pesquisaAvancada {
+namespace app.processos.pesquisaAvancada {
     'use strict';
+    
     import IFilterDate = ng.IFilterDate;
     import ITranslateService = ng.translate.ITranslateService;
     import IFilterService = ng.IFilterService;
 
-    /** @ngInject **/
     class CriteriaDisplayNameFilter {
 
         private static getFilter($filter: IFilterService,

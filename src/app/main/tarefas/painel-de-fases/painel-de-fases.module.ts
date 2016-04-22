@@ -1,5 +1,6 @@
-module app.tarefas.painelDeFases {
+namespace app.tarefas.painelDeFases {
     'use strict';
+    
     import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
     import IStateProvider = angular.ui.IStateProvider;
 

@@ -1,15 +1,16 @@
-module app.processos.pesquisaAvancada {
+namespace app.processos.pesquisaAvancada {
     'use strict';
+    
     import IDirective = angular.IDirective;
     import IDirectiveFactory = angular.IDirectiveFactory;
 
     export class ComparisionOperator {
-        public static IGUAL: string = 'IGUAL';
-        public static CONTEM: string = 'CONTEM';
-        public static ENTRE: string = 'ENTRE';
-        public static MAIORQUE: string = 'MAIOR-QUE';
-        public static MENORQUE: string = 'MENOR-QUE';
-        public static EXISTE: string = 'EXISTE';
+        public static get IGUAL(): string { return 'IGUAL'; }
+        public static get CONTEM(): string { return 'CONTEM'; }
+        public static get ENTRE(): string { return 'ENTRE'; }
+        public static get MAIORQUE(): string { return 'MAIOR-QUE'; }
+        public static get MENORQUE(): string { return 'MENOR-QUE'; }
+        public static get EXISTE(): string { return 'EXISTE'; }
     }
 
     export interface ISearch {

@@ -1,4 +1,4 @@
-module app.gestao {
+namespace app.gestao {
     'use strict';
     import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
     import IStateProvider = angular.ui.IStateProvider;

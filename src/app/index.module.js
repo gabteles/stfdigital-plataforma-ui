@@ -7,6 +7,9 @@
      */
     angular
         .module('app', [
+            
+            //Constants
+            'app.constants',
 
             // Core
             'app.core',
@@ -25,8 +28,6 @@
             'app.cadastro',
 
             'app.novo-processo',
-            'app.novo-processo.peticoes',
-            'app.novo-processo.peticoes-fisicas',
 
             //'app.gestao',
             //'app.gestao.meus-paineis',

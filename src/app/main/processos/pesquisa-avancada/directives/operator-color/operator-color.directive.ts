@@ -1,4 +1,4 @@
-module app.processos.pesquisaAvancada {
+namespace app.processos.pesquisaAvancada {
     'use strict';
     import IDirective = angular.IDirective;
     import IScope = angular.IScope;
@@ -18,7 +18,7 @@ module app.processos.pesquisaAvancada {
         };
         public link: Function = OperatorColor.fnLink();
 
-        private static defaults: Object = {
+        private static defaults: any = {
             button: {
                 afirmativeClass: 'md-accent',
                 negativeClass: 'md-warn'
@@ -34,7 +34,7 @@ module app.processos.pesquisaAvancada {
         private static fnLink(): Function {
             return ($scope: IScope, el: IAugmentedJQuery, attr: IOperatorColorAttr) => {
                 var key = el[0].tagName.toLowerCase(),
-                    config = OperatorColor.defaults[key] || OperatorColor.defaults['other'];
+                    config = OperatorColor.defaults[key] || OperatorColor.defaults.other;
 
                 $scope.$watch('operator', function(value) {
                     var classes: any[] = _.union(_.values(config), [attr.operatorColorNegative, attr.operatorColorAfirmative]);

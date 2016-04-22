@@ -1,4 +1,4 @@
-module app.gestao.meusPaineis {
+namespace app.gestao.meusPaineis {
     'use strict';
     import IHttpService = angular.IHttpService;
     import IPromise = angular.IPromise;

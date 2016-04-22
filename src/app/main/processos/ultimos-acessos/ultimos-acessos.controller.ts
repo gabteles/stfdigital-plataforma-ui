@@ -1,19 +1,19 @@
-module app.processos.ultimosAcessos {
+namespace app.processos.ultimosAcessos {
     'use strict';
     import IFilterFilter = angular.IFilterFilter;
     import IStateService = angular.ui.IStateService;
     
-    class UltimosAcessosController {
+    export class UltimosAcessosController {
     
         public ultimosAcessosDtOptions: any;
-        public ultimosAcessosOrig: Acesso[];
+        public ultimosAcessosOrig: IAcesso[];
         public activeFilter: number;
         public filterObject: any;
         
         /** @ngInject **/
         constructor(private $filter: IFilterFilter,
                     private $state: IStateService,
-                    public ultimosAcessos: Acesso[]) {
+                    public ultimosAcessos: IAcesso[]) {
 
             this.ultimosAcessosOrig = angular.copy(ultimosAcessos);
             this.ultimosAcessosDtOptions = this.defineUltimosAcessosDtOptions();

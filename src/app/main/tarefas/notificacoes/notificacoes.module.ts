@@ -1,4 +1,4 @@
-module app.tarefas.notificacoes {
+namespace app.tarefas.notificacoes {
 	'use strict';
 
 	import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;

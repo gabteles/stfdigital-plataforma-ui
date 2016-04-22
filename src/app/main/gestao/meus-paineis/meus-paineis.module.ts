@@ -1,4 +1,4 @@
-module app.gestao.meusPaineis {
+namespace app.gestao.meusPaineis {
     'use strict';
     import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
     import IStateProvider = angular.ui.IStateProvider;

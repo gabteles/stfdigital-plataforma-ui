@@ -1,4 +1,4 @@
-module app.processos.pesquisaAvancada {
+namespace app.processos.pesquisaAvancada {
     'use strict';
     import IDirective = angular.IDirective;
     import IDirectiveFactory = angular.IDirectiveFactory;

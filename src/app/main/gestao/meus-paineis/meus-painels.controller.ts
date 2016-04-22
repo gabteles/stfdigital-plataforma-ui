@@ -1,4 +1,4 @@
-module app.gestao.meusPaineis {
+namespace app.gestao.meusPaineis {
 	'use strict';
 	import IStateService = angular.ui.IStateService;
 	

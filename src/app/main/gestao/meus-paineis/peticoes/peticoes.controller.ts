@@ -1,4 +1,4 @@
-module app.gestao.meusPaineis {
+namespace app.gestao.meusPaineis {
     'use strict';
 
     export class PeticoesController {

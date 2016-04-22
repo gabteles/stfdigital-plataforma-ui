@@ -1,5 +1,6 @@
-module app.tarefas.minhasTarefas {
+namespace app.tarefas.minhasTarefas {
     'use strict';
+    
     import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
     import IStateProvider = angular.ui.IStateProvider;
 

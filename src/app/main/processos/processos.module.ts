@@ -1,4 +1,4 @@
-module app.processos {
+namespace app.processos {
 	'use strict';
 	import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
 	import IStateProvider = angular.ui.IStateProvider;

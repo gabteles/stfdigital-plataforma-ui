@@ -1,4 +1,4 @@
-module app.tarefas.minhasTarefas {
+namespace app.tarefas.minhasTarefas {
     'use strict';
     import IDialogService = angular.material.IDialogService;
     import ISidenavService = angular.material.ISidenavService;

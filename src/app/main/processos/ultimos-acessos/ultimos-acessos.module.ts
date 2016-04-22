@@ -1,4 +1,4 @@
-module app.processos.ultimosAcessos {
+namespace app.processos.ultimosAcessos {
 	'use strict';
     import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
     import IStateProvider = angular.ui.IStateProvider;
@@ -16,7 +16,7 @@ module app.processos.ultimosAcessos {
 				views: {
 					'content@app.autenticado': {
 						templateUrl: 'app/main/processos/ultimos-acessos/ultimos-acessos.html',
-                        controller: 'app.processos.ultimos-acessos.UltimosAcessosController',
+                        controller: UltimosAcessosController,
                         controllerAs: 'vm'
 					}
 				},

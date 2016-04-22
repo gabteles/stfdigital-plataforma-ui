@@ -1,4 +1,4 @@
-module app.tarefas.minhasTarefas {
+namespace app.tarefas.minhasTarefas {
     'use strict';
     import IHttpService = angular.IHttpService;
     import IPromise = angular.IPromise;

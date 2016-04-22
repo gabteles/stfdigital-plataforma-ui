@@ -1,12 +1,10 @@
-module app.tarefas.painelDeFases {
+namespace app.tarefas.painelDeFases {
     'use strict';    
 
     export class PainelDeFasesController {
         
         /** @ngInject **/
-        constructor(private boardList) {
-            
-        }
+        constructor(private boardList) { }
     }
     
     angular

@@ -18,10 +18,10 @@
             	layout="column"
             	layout-align="center center"
             	layout-wrap
-                ng-attr-ui-sref="{{processo.state}}">
+                ng-attr-ui-sref="{{processo.stateName}}">
 
                 <md-icon md-font-icon="icon-plus-circle" class="icon s64"></md-icon>
-                <div class="processo-name">{{processo.name}}</div>
+                <div class="processo-name">{{processo.description}}</div>
             </div>
 
             <div ng-if="vm.processos.length === 0">

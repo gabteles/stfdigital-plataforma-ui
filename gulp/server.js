@@ -6,6 +6,7 @@ var conf = require('./conf');
 
 var browserSync = require('browser-sync');
 var browserSyncSpa = require('browser-sync-spa');
+var superstatic = require("superstatic");
 
 var util = require('util');
 
@@ -25,7 +26,16 @@ function browserSyncInit(baseDir, browser)
 
     var server = {
         baseDir: baseDir,
-        routes : routes
+        routes : routes,
+        middleware: superstatic({
+        	  "headers": [{
+        	                "source" : "**",
+        	                "headers" : [{
+        	                  "key" : "Access-Control-Allow-Origin",
+        	                  "value" : "*"
+        	                }]
+        	  			}]
+        })
     };
 
     /*

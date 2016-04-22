@@ -1,4 +1,4 @@
-module app.configuracoes.meuPerfil {
+namespace app.configuracoes.meuPerfil {
     'use strict';
     import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
     import IStateProvider = angular.ui.IStateProvider;

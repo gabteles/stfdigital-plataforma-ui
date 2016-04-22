@@ -1,5 +1,5 @@
-module app.cadastro {
-	'use strict';
+namespace app.cadastro {
+
 	import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
 	import IStateProvider = angular.ui.IStateProvider;
 
@@ -21,7 +21,7 @@ module app.cadastro {
 			}
 		});
 	}
-
+	
 	angular
 		.module('app.cadastro', ['app.nao-autenticado', 'ngMask'])
 		.config(config);

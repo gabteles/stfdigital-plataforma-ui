@@ -63,10 +63,12 @@
 		
 		//Desabilita o cache dos templates do ui-router
 		/** @ngInject **/
-		function templateFactoryDecorator($delegate) {
+		function templateFactoryDecorator($delegate, properties) {
 			var fromUrl = angular.bind($delegate, $delegate.fromUrl);
+			var gatewayUrl = properties.url + ':' + properties.port; 
 			$delegate.fromUrl = function (url, params) {
-				if (url !== null && angular.isDefined(url) && angular.isString(url)) {
+				
+				if (url !== null && angular.isDefined(url) && angular.isString(url) && url.indexOf(gatewayUrl) !== -1) {
 					url += (url.indexOf("?") === -1 ? "?" : "&") + "ts=" + Date.now().toString();
 				}
 				return fromUrl(url, params);

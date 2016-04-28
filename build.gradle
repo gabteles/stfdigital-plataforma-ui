@@ -1,0 +1,38 @@
+buildscript {
+    ext {    
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }        
+    }
+    dependencies {
+        classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.6.0")
+        classpath('com.moowork.gradle:gradle-node-plugin:0.12')
+        classpath('com.moowork.gradle:gradle-gulp-plugin:0.12')
+    }
+}
+
+apply plugin: 'eclipse'
+apply plugin: "com.palantir.docker"
+apply plugin: 'com.moowork.node'
+apply plugin: 'com.moowork.gulp'
+
+//Cria o diretório dist para não dar erro na task docker, pois o dist não existe no git
+task createDistFolder() {
+    def distDir = new File(projectDir, "dist")
+    if(!distDir.exists()) {
+        distDir.mkdirs()
+    }
+}
+
+npmInstall.dependsOn npm_prune
+gulp_clean.dependsOn tasks.npmInstall
+gulp_build.dependsOn gulp_clean
+dockerPrepare.dependsOn gulp_build
+
+docker {
+    name 'plataforma-ui'
+    dockerfile 'Dockerfile'
+    files 'dist', '.dockerignore', 'superstatic.json'
+}

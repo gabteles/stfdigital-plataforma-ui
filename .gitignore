@@ -6,6 +6,12 @@
 # Visual Studio Code
 .vscode
 
+# Gradle
+.gradle
+build
+bin
+data
+
 
 # Eclipse
 .settings/

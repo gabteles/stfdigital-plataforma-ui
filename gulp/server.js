@@ -27,15 +27,7 @@ function browserSyncInit(baseDir, browser)
     var server = {
         baseDir: baseDir,
         routes : routes,
-        middleware: superstatic({
-        	  "headers": [{
-        	                "source" : "**",
-        	                "headers" : [{
-        	                  "key" : "Access-Control-Allow-Origin",
-        	                  "value" : "*"
-        	                }]
-        	  			}]
-        })
+        middleware: superstatic()
     };
 
     /*

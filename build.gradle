@@ -34,5 +34,5 @@ dockerPrepare.dependsOn gulp_build
 docker {
     name 'plataforma-ui'
     dockerfile 'Dockerfile'
-    files 'dist', '.dockerignore'
+    files 'dist', '.dockerignore', 'superstatic.json'
 }

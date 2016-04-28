@@ -11,4 +11,4 @@ RUN npm install -g superstatic
 COPY . /usr/stfdigital/src/
 WORKDIR /usr/stfdigital/src
 
-ENTRYPOINT ["superstatic", "--port", "8080", "--host", "0.0.0.0"]
+ENTRYPOINT ["superstatic", "--port", "8080", "--host", "0.0.0.0", "--config", "superstatic.json"]

@@ -16,6 +16,7 @@ data
 # Eclipse
 .settings/
 .project
+.classpath
 
 # Node
 node_modules

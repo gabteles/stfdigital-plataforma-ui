@@ -1,10 +1,10 @@
 namespace app.novoProcesso {
-    'use strict';
-    
-    import IHttpService = angular.IHttpService;
+	'use strict';
+	
+	import IHttpService = angular.IHttpService;
     import IPromise = angular.IPromise;
     import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
-
+    
     export interface IProcessoWorkflow {
         description: string;
         stateName: string;
@@ -24,12 +24,17 @@ namespace app.novoProcesso {
         public list(): IPromise<IProcessoWorkflow[]> {
             return this.$http.get(this.properties.url + ":" + this.properties.port + NovoProcessoService.apiProcessos)
                 .then((response: IHttpPromiseCallbackArg<any>): IProcessoWorkflow[] => {
-                    return response.data.filter((processo: any) => {
-                        //TODO: Deve vir filtrado do backend
-                        return (processo.stateName.indexOf("novo-processo") !== -1);
-                    }).map((processo: any) => {
-                        return new ProcessoWorkflow(processo.description, processo.stateName);
-                    });
+                	var processos = response.data;
+                	if (angular.isArray(processos)) {
+	                    return processos.filter((processo: any) => {
+	                        //TODO: Deve vir filtrado do backend
+	                        return (processo.stateName.indexOf("novo-processo") !== -1);
+	                    }).map((processo: any) => {
+	                        return new ProcessoWorkflow(processo.description, processo.stateName);
+	                    });
+                	} else {
+                		return [];
+                	}
                 });
         }
     }

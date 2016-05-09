@@ -7,7 +7,7 @@
         .run(runBlock);
 
     /** @ngInject */
-    function runBlock(msUtils, fuseGenerator, fuseConfig)
+    function runBlock($rootScope, $translate, msUtils, fuseGenerator, fuseConfig)
     {
         /**
          * Generate extra classes based on registered themes so we
@@ -42,5 +42,9 @@
             var htmlClass = browserInfo.browser + ' ' + browserInfo.version + ' ' + browserInfo.os;
             angular.element('html').addClass(htmlClass);
         }
+        
+        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
+        	$translate.refresh();
+        });
     }
 })();

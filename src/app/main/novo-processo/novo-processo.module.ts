@@ -1,10 +1,10 @@
 namespace app.novoProcesso {
-    'use strict';
-    
-    import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
-    import IStateProvider = angular.ui.IStateProvider;
-    import IPromise = angular.IPromise;
+	'use strict';
 
+	import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
+	import IStateProvider = angular.ui.IStateProvider;
+	import IPromise = angular.IPromise;
+	
     /** @ngInject * */
     function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider,
                     $stateProvider: IStateProvider) {

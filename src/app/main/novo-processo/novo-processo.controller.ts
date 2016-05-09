@@ -1,9 +1,8 @@
 namespace app.novoProcesso {
-    'use strict';
-
-    import IScope = angular.IScope;
-    import IState = angular.ui.IState;
-
+	'use strict';
+	
+	import IScope = angular.IScope;
+	
     export class NovoProcessoController {
 
         public buscaProcesso: string = "";

@@ -32,8 +32,8 @@
             //'app.gestao',
             //'app.gestao.meus-paineis',
 
-            //'app.processos.ultimos-acessos',
-            'app.processos.pesquisa-avancada',
+            //'app.ultimos-acessos',
+            'app.pesquisa-avancada',
 
             'app.tarefas.minhas-tarefas',
             //'app.tarefas.painel-de-fases',

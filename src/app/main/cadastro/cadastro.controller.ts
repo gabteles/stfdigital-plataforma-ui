@@ -1,8 +1,6 @@
 namespace app.cadastro {
 	'use strict';
-	
-	angular.module('app.cadastro').controller("app.CadastroController", CadastroController);
-
+		
 	interface ICadastro {
 		tipoCadastro: number;
 	}
@@ -20,4 +18,8 @@ namespace app.cadastro {
 		}
 
 	}
+	
+	angular
+		.module('app.cadastro')
+		.controller("app.cadastro.CadastroController", CadastroController);
 }

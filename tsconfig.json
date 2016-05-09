@@ -10,6 +10,8 @@
       "typings/browser",
       "typings/browser.d.ts",
       "node_modules",
-      "bower_components"
+      "bower_components",
+      "dist",
+      "build"
     ]
 }

@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:slim
 
 # Create app directory
 RUN mkdir -p /usr/stfdigital/src

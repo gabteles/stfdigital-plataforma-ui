@@ -5,7 +5,7 @@
   "scripts": {
     "start": "gulp serve",
     "test": "gulp test",
-    "postinstall": "typings prune && typings install && bower prune && bower install"
+    "postinstall": "typings install && typings prune && bower prune && bower install"
   },
   "devDependencies": {
     "browser-sync": "~2.11.1",

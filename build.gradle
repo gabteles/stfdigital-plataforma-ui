@@ -26,7 +26,7 @@ task createDistFolder() {
     }
 }
 
-npmInstall.dependsOn npm_prune
+//npmInstall.dependsOn npm_prune
 gulp_clean.dependsOn tasks.npmInstall
 gulp_build.dependsOn gulp_clean
 dockerPrepare.dependsOn gulp_build

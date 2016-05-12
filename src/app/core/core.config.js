@@ -7,7 +7,7 @@
         .config(config);
 
     /** @ngInject */
-    function config($ariaProvider, $logProvider, msScrollConfigProvider, $translateProvider, $provide, fuseConfigProvider)
+    function config($ariaProvider, $logProvider, msScrollConfigProvider, $translateProvider, $provide, fuseConfigProvider, $sceDelegateProvider)
     {
         // ng-aria configuration
         $ariaProvider.config({
@@ -41,5 +41,11 @@
             'disableCustomScrollbarsOnMobile': true,
             'disableMdInkRippleOnMobile'     : true
         });
+        
+        $sceDelegateProvider.resourceUrlWhitelist([
+			'self',
+			'http://docker:8765/**',
+			'http://pacaembu:8765/**'
+		]);
     }
 })();

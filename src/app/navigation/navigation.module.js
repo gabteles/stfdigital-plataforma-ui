@@ -8,7 +8,7 @@
 
     /** @ngInject **/
     function config($translatePartialLoaderProvider, $ocLazyLoadProvider, $stateProvider, $futureStateProvider, $provide, properties) {
-
+        	 
     	$translatePartialLoaderProvider.addPart('app/navigation');
     	
     	/**
@@ -19,21 +19,20 @@
 			var deferred = $q.defer();
 			
 			//Realiza a importação dos arquivos dos módulos
-			System.import(futureState.src)
-				.then(function(loaded) {
-					var newModule = loaded;
-					if (!loaded.name) {
-						var key = Object.keys(loaded);
-						newModule = loaded[key[0]];
-					}
-					//Carrega o módulo angular importado
-					$ocLazyLoad.load(newModule)
-						.then(function() {
-							deferred.resolve();
-						}, function(err) {
-							throw err;
-						});
-				});
+			System.import(futureState.src).then(function(loaded) {
+				var newModule = loaded;
+				if (!loaded.name) {
+					var key = Object.keys(loaded);
+					newModule = loaded[key[0]];
+				}
+				//Carrega o módulo angular importado
+				$ocLazyLoad.load(newModule)
+					.then(function() {
+						deferred.resolve();
+					}, function(err) {
+						throw err;
+					});
+			});
 			return deferred.promise;
 		});
 		
@@ -49,29 +48,14 @@
 		System.locate = function (load) {
 		    return new Promise(function(resolve) {
 		    	resolve(systemLocate.call(System, load))
-		    		.then(function (url) {
-		    			return url + (url.indexOf("?") === -1 ? "?" : "&") + "ts=" + Date.now().toString();
-		    		});
+		    		.then(getUrlWithTimestamp);
 		    });
 		};
 		
-		//Desabilita o cache dos templates de módulos externos no ui-router.
-		/** @ngInject **/
-		function templateFactoryDecorator($delegate, properties) {
-			var fromUrl = angular.bind($delegate, $delegate.fromUrl);
-			var gatewayUrl = properties.apiUrl; 
-			$delegate.fromUrl = function (url, params) {
-				
-				if (url !== null && angular.isDefined(url) && angular.isString(url) && url.indexOf(gatewayUrl) !== -1) {
-					url += (url.indexOf("?") === -1 ? "?" : "&") + "ts=" + Date.now().toString();
-				}
-				return fromUrl(url, params);
-			};
-			return $delegate;
-		}
 		if (properties.development) {
 			$provide.decorator('$templateFactory', templateFactoryDecorator);
-		}	
+			$ocLazyLoadProvider.config({debug: true});
+		}
     }
     
     /** @ngInject **/
@@ -87,5 +71,25 @@
 				});
 			});
     }
+    
+	//Desabilita o cache dos templates de módulos externos no ui-router.
+	/** @ngInject **/
+	function templateFactoryDecorator($delegate, properties) {
+		var fromUrl = angular.bind($delegate, $delegate.fromUrl);
+		var gatewayUrl = properties.apiUrl; 
+		$delegate.fromUrl = function (url, params) {
+			
+			if (url !== null && angular.isDefined(url) && angular.isString(url) && url.indexOf(gatewayUrl) !== -1) {
+				url = getUrlWithTimestamp(url);
+			}
+			return fromUrl(url, params);
+		};
+		return $delegate;
+	}
+    
+	//Monta uma url com um timestamp na querystring
+	function getUrlWithTimestamp(url) {
+		return url + (url.indexOf("?") === -1 ? "?" : "&") + "ts=" + Date.now().toString();
+	}
 
 })();

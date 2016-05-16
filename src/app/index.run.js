@@ -29,11 +29,6 @@
             });
         });
         
-        var stateNotFoundEvent = $rootScope.$on('$stateNotFound', function(event, unfoundState)
-        {
-            $log.warn('State: "' + unfoundState.to + '" not found');
-        });
-        
         var stateChangeErrorEvent = $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error)
         {
         	$log.error(error);
@@ -47,7 +42,6 @@
         {
             stateChangeStartEvent();
             stateChangeSuccessEvent();
-            stateNotFoundEvent();
             stateChangeErrorEvent();
         });
     }

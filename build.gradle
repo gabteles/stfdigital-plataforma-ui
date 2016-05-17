@@ -31,8 +31,10 @@ gulp_clean.dependsOn tasks.npmInstall
 gulp_build.dependsOn gulp_clean
 dockerPrepare.dependsOn gulp_build
 
+ext.dockerImageTag = project.hasProperty('dockerImageTag') ? project.getProperty('dockerImageTag') : ''
+
 docker {
-    name 'plataforma-ui'
+    name 'plataforma-ui' + (dockerImageTag ? ':' + dockerImageTag : '')
     dockerfile 'Dockerfile'
     files 'dist', '.dockerignore', 'superstatic.json'
 }

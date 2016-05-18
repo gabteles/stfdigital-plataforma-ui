@@ -34,6 +34,8 @@
 
             //'app.ultimos-acessos',
             'app.pesquisa-avancada',
+            
+            'app.documentos',
 
             'app.tarefas.minhas-tarefas',
             //'app.tarefas.painel-de-fases',

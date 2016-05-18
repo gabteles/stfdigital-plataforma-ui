@@ -1,27 +1,37 @@
-(function ()
-{
-    'use strict';
-
-    var app = angular.module('app.tarefas.painel-de-fases');
-
-    /** @ngInject */
-    app.classy.controller({
-        name: 'TarefasPainelDeFasesPainelController',
-
-        inject: ['$document', '$mdDialog', 'msUtils', 'BoardList', 'BoardService', 'CardFilters', 'DialogService', '$mdSidenav'],
-
-        init: function() {
+namespace app.tarefas.painelDeFases {
+	
+	class TarefasPainelDeFasesPainelController {
+		
+		public currentView: string = 'board';
+        public board: any;
+        public boardList: any;
+        public cardFilters: any;
+        public filteringIsOn: any;
+        public openCardDialog: any;
+        public clearFilters: any;
+        public card: any = {};
+        public cardOptions: any = {};
+        public newListName: string = '';
+        public sortableListOptions: any;
+		public sortableCardOptions: any;
+		
+		/** @ngInject **/
+		constructor(private $document: ng.IDocumentService,
+					private $mdDialog: ng.material.IDialogService,
+					private $mdSidenav: ng.material.ISidenavService,
+					private msUtils,
+					BoardList,
+					BoardService,
+					CardFilters, 
+					DialogService) {
             // Data
             this.currentView = 'board';
-            this.board = this.BoardService.data;
-            this.boardList = this.BoardList.data;
-            this.cardFilters = this.CardFilters;
-            this.filteringIsOn = this.CardFilters.isOn;
-            this.openCardDialog = this.DialogService.openCardDialog;
-            this.clearFilters = this.CardFilters.clear;
-            this.card = {};
-            this.cardOptions = {};
-            this.newListName = '';
+            this.board = BoardService.data;
+            this.boardList = BoardList.data;
+            this.cardFilters = CardFilters;
+            this.filteringIsOn = CardFilters.isOn;
+            this.openCardDialog = DialogService.openCardDialog;
+            this.clearFilters = CardFilters.clear;
             this.sortableListOptions = {
                 axis       : 'x',
                 delay      : 75,
@@ -111,57 +121,54 @@
                 }
             };
 
-            Array.prototype.getById = function (value) {
+            Array.prototype['getById'] = function(value) {
                 return this.find(function (x) { return x.id === value; });
             };
-        },
+		}
+		
+        /**
+         * Toggle sidenav
+         *
+         * @param sidenavId
+         */
+        public toggleSidenav(sidenavId): void {
+            this.$mdSidenav(sidenavId).toggle();
+        }
 
-        methods: {
-            /**
-             * Toggle sidenav
-             *
-             * @param sidenavId
-             */
-            toggleSidenav: function(sidenavId) {
-                this.$mdSidenav(sidenavId).toggle();
-            },
+        /**
+         * Card filter
+         *
+         * @param cardId
+         * @returns {*}
+         */
+        public cardFilter(cardId): boolean|any {
+            var card = this.board.cards.find(function(card) { return card.id === cardId; });
 
-            /**
-             * Card filter
-             *
-             * @param cardId
-             * @returns {*}
-             */
-            cardFilter: function(cardId) {
-                var card = this.board.cards.find(function(card) { return card.id === cardId; });
-
-                try {
-                    if ( angular.lowercase(card.name).indexOf(angular.lowercase(this.cardFilters.name)) < 0 ) {
-                        throw false;
-                    }
-
-                    angular.forEach(this.cardFilters.labels, function (label) {
-                        if ( !this.msUtils.exists(label, card.idLabels) ) {
-                            throw false;
-                        }
-                    }.bind(this));
-
-                } catch ( err ) {
-                    return err;
+            try {
+                if ( angular.lowercase(card.name).indexOf(angular.lowercase(this.cardFilters.name)) < 0 ) {
+                    throw false;
                 }
 
-                return true;
-            },
+                angular.forEach(this.cardFilters.labels, label => {
+                    if ( !this.msUtils.exists(label, card.idLabels) ) {
+                        throw false;
+                    }
+                });
 
-            /**
-             * Is the card overdue?
-             *
-             * @param cardDate
-             * @returns {boolean}
-             */
-            isOverdue: function(cardDate) {
-                return new Date() > cardDate;
+            } catch ( err ) {
+                return err;
             }
+            return true;
         }
-    });
-})();
+
+        /**
+         * Is the card overdue?
+         *
+         * @param cardDate
+         * @returns {boolean}
+         */
+        public isOverdue(cardDate): boolean {
+            return new Date() > cardDate;
+        }	
+	}	
+}

@@ -11,19 +11,16 @@ var $ = require('gulp-load-plugins')();
 var wiredep = require('wiredep').stream;
 var _ = require('lodash');
 
-gulp.task('styles-reload', ['styles'], function ()
-{
+gulp.task('styles-reload', ['styles'], function() {
     return buildStyles()
         .pipe(browserSync.stream());
 });
 
-gulp.task('styles', function ()
-{
+gulp.task('styles', ['bower:prune'], function() {
     return buildStyles();
 });
 
-var buildStyles = function ()
-{
+var buildStyles = function() {
     var sassOptions = {
         style: 'expanded'
     };

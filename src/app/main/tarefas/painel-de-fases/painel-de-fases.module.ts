@@ -74,6 +74,6 @@ namespace app.tarefas.painelDeFases {
     }
 
     angular
-        .module('app.tarefas.painel-de-fases', [ 'app.tarefas', 'classy' ])
+        .module('app.tarefas.painel-de-fases', ['app.tarefas'])
         .config(config);
 }

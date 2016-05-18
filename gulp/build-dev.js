@@ -62,7 +62,7 @@ gulp.task('html-dev', ['inject'], function ()
 
 // Only applies for fonts from bower dependencies
 // Custom fonts are handled by the "other" task
-gulp.task('fonts-dev', function ()
+gulp.task('fonts-dev', ['bower:prune'], function ()
 {
     return gulp.src($.mainBowerFiles())
         .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))

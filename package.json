@@ -2,11 +2,7 @@
   "name": "fuse",
   "version": "1.2.0",
   "dependencies": {},
-  "scripts": {
-    "start": "gulp serve",
-    "test": "gulp test",
-    "postinstall": "typings install && typings prune && bower prune && bower install"
-  },
+  "scripts": {},
   "devDependencies": {
     "browser-sync": "~2.11.1",
     "browser-sync-spa": "~1.0.3",
@@ -44,6 +40,7 @@
     "gulp-tslint": "^4.2.1",
     "gulp-typescript": "^2.10.0",
     "gulp-typings":"^1.3.4",
+    "gulp-bower": "~0.0.13",
     "typings": "^0.8.1",
     "typescript": "^1.8.9", 
     "http-proxy-middleware": "~0.9.0",

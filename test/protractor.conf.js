@@ -1,6 +1,5 @@
 'use strict';
 
-var paths = require('./.yo-rc.json')['generator-gulp-angular'].props.paths;
 var Jasmine2HtmlReporter = require('protractor-jasmine2-html-reporter');
 var SpecReporter = require('jasmine-spec-reporter');
 
@@ -24,12 +23,12 @@ exports.config = {
 
   // Spec patterns are relative to the current working directory when
   // protractor is called.
-  specs: [paths.e2e + '/**/*.js'],
+  specs: ['src/test/ui/e2e/**/*.js'],
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
 	  showColors: true,
-	  defaultTimeoutInterval: 40000
+	  defaultTimeoutInterval: 40000,
 	  print: function() {}
   },
   

@@ -31,10 +31,13 @@ dist
 
 # Typings
 typings
+test/typings
 
 # JS Main
 src/app/main/**/*.js
 src/app/main/**/*.js.map
+test/e2e/**/*.js
+test/e2e/.eslintrc
 
 # WebStorm
 .idea

@@ -14,7 +14,7 @@
     	/**
     	 * Define como os estados futuros do ui-router serão carregados
     	 */
-		$futureStateProvider.stateFactory('load', /** @ngInject **/ function($q, $ocLazyLoad, futureState) {
+		$futureStateProvider.stateFactory('load', /** @ngInject **/ function($q, $ocLazyLoad, $log, futureState) {
 			
 			var deferred = $q.defer();
 			
@@ -30,7 +30,8 @@
 					.then(function() {
 						deferred.resolve();
 					}, function(err) {
-						throw err;
+						$log.error(err);
+						deferred.reject();
 					});
 			});
 			return deferred.promise;

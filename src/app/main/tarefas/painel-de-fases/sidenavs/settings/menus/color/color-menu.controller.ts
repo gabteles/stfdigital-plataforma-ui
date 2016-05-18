@@ -1,18 +1,19 @@
-(function ()
-{
-    'use strict';
-
-    var app = angular.module('app.tarefas.painel-de-fases');
-        
-    app.classy.controller({
-
-        name: 'ColorMenuController',
-
-        inject: ['$mdColorPalette', 'BoardService'],
-
-        init: function() {
-            this.board = this.BoardService.data;
-            this.palettes = this.$mdColorPalette;
-        }
-    });
-})();
+namespace app.tarefas.painelDeFases {
+	
+	class ColorMenuController {
+		
+		public board: any;
+		public palettes: any;
+		
+		/** @ngInject **/
+		constructor($mdColorPalette: ng.material.IPalette,
+					BoardService) {
+            this.board = BoardService.data;
+            this.palettes = $mdColorPalette;
+		}
+	}
+	
+	angular
+		.module('app.tarefas.painel-de-fases')
+		.controller('app.tarefas.painel-de-fases.ColorMenuController', ColorMenuController);
+}

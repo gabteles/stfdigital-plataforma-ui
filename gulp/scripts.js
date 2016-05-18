@@ -14,7 +14,7 @@ gulp.task('scripts-reload', function ()
         .pipe(browserSync.stream());
 });
 
-gulp.task('scripts', ['compile-ts'], function ()
+gulp.task('scripts', ['bower:prune', 'compile-ts'], function ()
 {
     return buildScripts();
 });

@@ -1,7 +1,7 @@
 'use strict';
 
 var path = require('path');
-var conf = require('./gulp/conf');
+var conf = require('./../../../gulp/conf');
 
 var _ = require('lodash');
 var wiredep = require('wiredep');
@@ -69,7 +69,7 @@ module.exports = function(config) {
       'karma-angular-filesort',
       //'karma-coverage',
       'karma-jasmine',
-      'karma-ng-html2js-preprocessor'
+      'karma-ng-html2js-preprocessor',
 	  'karma-html-reporter',
 	  'karma-mocha-reporter' 
     ],

@@ -8,33 +8,67 @@
 
     /** @ngInject **/
     function config($translatePartialLoaderProvider, $ocLazyLoadProvider, $stateProvider, $futureStateProvider, $provide, properties) {
-        	 
+    	
     	$translatePartialLoaderProvider.addPart('app/navigation');
     	
     	/**
     	 * Define como os estados futuros do ui-router serão carregados
     	 */
-		$futureStateProvider.stateFactory('load', /** @ngInject **/ function($q, $ocLazyLoad, $log, futureState) {
+		$futureStateProvider.stateFactory('load', /** @ngInject **/ function($q, $ocLazyLoad, $log, $mdDialog, $translate, $futureState, $timeout, futureState) {
 			
-			var deferred = $q.defer();
+			var deferredState = $q.defer();
+			
+			var alert = $mdDialog.alert()
+				.clickOutsideToClose(true)
+	        	.title($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.TITULO'))
+	        	.textContent($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.MSG'))
+	        	.ariaLabel($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.ALERTA'))
+	        	.ok($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.OK'))
+			
+			function fnErr(err) {
+				$log.error(err);
+				deferredState.reject();
+				$mdDialog.show(alert);
+				//Coloca o estado como futuro, para que tente acessar novamente
+				$timeout(function() {
+					$futureState.futureState(futureState);
+				})
+			}
 			
 			//Realiza a importação dos arquivos dos módulos
 			System.import(futureState.src).then(function(loaded) {
 				var newModule = loaded;
+				
 				if (!loaded.name) {
 					var key = Object.keys(loaded);
 					newModule = loaded[key[0]];
 				}
 				//Carrega o módulo angular importado
-				$ocLazyLoad.load(newModule)
-					.then(function() {
-						deferred.resolve();
-					}, function(err) {
-						$log.error(err);
-						deferred.reject();
-					});
+				$ocLazyLoad.load(newModule).then(function() {
+					deferredState.resolve();
+				}, fnErr);
+			}, fnErr);
+			return deferredState.promise;
+		});
+		
+		/**
+		 * Carrega as configurações das rotas dos módulos no FutureState do ui-router
+		 * possibilitando a garantia de que o estado estará carregado antes da transição
+		 * de estados ocorrer
+		 */
+		$futureStateProvider.addResolve(/** @ngInject **/ function($q, $http) {
+			
+			var deferredRoutes = $q.defer();
+			
+	    	$http.get(properties.apiUrl + '/services/routes.json').then(function(response) {
+				angular.forEach(response.data, function(route) {
+					$futureStateProvider.futureState(route);
+				});
+				deferredRoutes.resolve();
+			}, function() {
+				deferredRoutes.reject();
 			});
-			return deferred.promise;
+	    	return deferredRoutes.promise;
 		});
 		
 		//Configura o SystemJS para importar os arquivos através do gateway
@@ -47,10 +81,8 @@
 		//Adiciona um timestamp na url garantindo que no primeiro carregamento não vai ao cache
 		var systemLocate = System.locate;
 		System.locate = function (load) {
-		    return new Promise(function(resolve) {
-		    	resolve(systemLocate.call(System, load))
-		    		.then(getUrlWithTimestamp);
-		    });
+			var System = this;
+		    return Promise.resolve(systemLocate.call(this, load)).then(getUrlWithTimestamp);
 		};
 		
 		if (properties.development) {
@@ -62,15 +94,7 @@
     /** @ngInject **/
     function run($http, $futureState, $rootScope, properties) {
     	
-		//Carrega as configurações das rotas dos módulos no FutureState do ui-router
-		//possibilitando a garantia de que o estado estará carregado antes da transição
-		//de estados ocorrer
-    	$http.get(properties.apiUrl + '/services/routes.json')
-    		.then(function(response) {
-				angular.forEach(response.data, function(route) {
-					$futureState.futureState(route);
-				});
-			});
+
     }
     
 	//Desabilita o cache dos templates de módulos externos no ui-router.

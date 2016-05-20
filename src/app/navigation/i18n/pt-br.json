@@ -1,5 +1,11 @@
 {
 	"NAVEGACAO": {
-		"INICIAR_PROCESSO": "Iniciar Processo"
+		"INICIAR_PROCESSO": "Iniciar Processo",
+		"SERVICO_INDISPONIVEL": {
+		  "ALERTA": "Alerta de indiponibilidade de serviço!",
+		  "TITULO": "Serviço indisponível",
+		  "MSG": "O serviço está indisponível no momento!",
+		  "OK": ":-("
+		} 
 	}
 }

@@ -55,6 +55,19 @@ namespace app.documentos {
 			});
 		}
 		
+		recuperarUrlArquivoApi(): IPromise<string> {
+			return this.$http({
+				method: "GET",
+				url: this.properties.apiUrl + '/documents/api/onlyoffice/baseUrl',
+				transformResponse: (data, headersGetter, status) => {
+					return {
+						url: data
+					};
+				}
+			}).then((response: any) => {
+				return response.data.url + '/OfficeWeb/apps/api/documents/api.js';
+			});
+		}
 	}
 
 	angular.module('app.documentos').service('app.documentos.OnlyofficeService', OnlyofficeService);

@@ -3,8 +3,10 @@ namespace app.documentos {
 	
 	declare var $: JQueryStatic;
 	
-	angular.module('app.documentos', ['app.autenticado', 'app.constants']).run((properties) => {
-		"ngInject";
-		$('body').append('<script src="' + properties.apiUrl + '/OfficeWeb/apps/api/documents/api.js' + '"></script>');
-	});
+	angular.module('app.documentos', ['app.autenticado', 'app.constants'])
+	.run(['properties', 'app.documentos.OnlyofficeService', (properties, onlyofficeService: OnlyofficeService) => {
+		onlyofficeService.recuperarUrlArquivoApi().then((url) => {
+			$('body').append('<script src="' + url + '"></script>');
+		});
+	}]);
 }

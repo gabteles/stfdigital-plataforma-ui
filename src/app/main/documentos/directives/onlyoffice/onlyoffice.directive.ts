@@ -1,7 +1,9 @@
 namespace DocsAPI {
 
 	export interface OnlyofficeDocument {
-		
+		src: string;
+		name: string;
+		callbackUrl: string;
 	}
 	
 	export interface DocEditorFactory {
@@ -67,64 +69,61 @@ namespace app.documentos {
 		}
 		
 		public link($scope: OnlyofficeScope, el: IAugmentedJQuery, attrs: IAttributes) {
-			console.log('inside link1');
-			//return ($scope: OnlyofficeScope, el: IAugmentedJQuery, attrs: IAttributes) => {
-				console.log('inside link2');
-				$scope.$watch('config.document.src', () => {
-					if (!$scope.config || !$scope.config.document || !$scope.config.document.src)
-						return;
-					let docUrl : string = $scope.config.document.src;
-					
-					let docTitle = $scope.config.document.name || docUrl;
-					let docKey = key(docUrl);
-					
-					let docType = docUrl.split('?')[0].substring(docUrl.lastIndexOf(".") + 1).trim().toLowerCase();
-					let documentType = getDocumentType(docType);
-					
-					let callbackUrl = $scope.config.document.callbackUrl;
-					
-					let defaultConfig = {
-							type : "desktop",
-							width : '100%',
-							height : '100%',
-							documentType : documentType,
-							document : {
-								title : docTitle,
-								url : docUrl,
-								fileType : docType,
-								key : docKey,
-								permissions : {
-									edit : true,
-									download : false
-								}
-							},
-							editorConfig : {
-								mode : 'edit',
-								callbackUrl: callbackUrl
-							},
-							events : {
-								onReady : function() {
-									setTimeout(function() {
-										$scope.$apply(function() {
-											$scope.ready = true;
-										});
-									}, 5000);
-								},
-								onSave : function(event) {
-									var url = event.data;
-									$scope.save({
-										url : url,
-										close : $scope.close
-									});
-								}
-							}
-						};
-					
-						let config = angular.merge(defaultConfig, $scope.config);
-						
-						new DocsAPI.DocEditor("onlyoffice-editor", config);
-				});
-			//}
+			$scope.$watch('config.document.src', () => {
+				if (!$scope.config || !$scope.config.document || !$scope.config.document.src)
+					return;
+				
+				let docUrl : string = $scope.config.document.src;
+				
+				let docTitle = $scope.config.document.name || docUrl;
+				let docKey = key(docUrl);
+				
+				let docType = docUrl.split('?')[0].substring(docUrl.lastIndexOf(".") + 1).trim().toLowerCase();
+				let documentType = getDocumentType(docType);
+				
+				let callbackUrl = $scope.config.document.callbackUrl;
+				
+				let defaultConfig = {
+					type : "desktop",
+					width : '100%',
+					height : '100%',
+					documentType : documentType,
+					document : {
+						title : docTitle,
+						url : docUrl,
+						fileType : docType,
+						key : docKey,
+						permissions : {
+							edit : true,
+							download : false
+						}
+					},
+					editorConfig : {
+						mode : 'edit',
+						callbackUrl: callbackUrl
+					},
+					events : {
+						onReady : function() {
+							setTimeout(function() {
+								$scope.$apply(function() {
+									$scope.ready = true;
+								});
+							}, 5000);
+						},
+						onSave : function(event) {
+							var url = event.data;
+							$scope.save({
+								url : url,
+								close : $scope.close
+							});
+						}
+					}
+				};
+			
+				let config = angular.merge(defaultConfig, $scope.config);
+				
+				new DocsAPI.DocEditor("onlyoffice-editor", config);
+			});
 		}
 		
 		public static factory(): IDirectiveFactory {

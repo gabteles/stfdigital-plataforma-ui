@@ -15,7 +15,7 @@ namespace app.documentos {
 	class EditorDirective implements IDirective {
 	
 		public restrict: string = 'AE';
-		public templateUrl: string;
+		public templateUrl: string = 'app/main/documentos/directives/editor/editor.tpl.html';
 	
 		public scope: Object = {
 			api: "=?",
@@ -28,14 +28,13 @@ namespace app.documentos {
 		public controller: any = EditorController;
 		public controllerAs: string = 'vm';
 	
-		constructor(private properties) {
+		constructor() {
 			this.templateUrl = 'app/main/documentos/directives/editor/editor.tpl.html';
 		}
 		
 		public static factory(): IDirectiveFactory {
-			return (properties) => {
-				"ngInject";
-				return new EditorDirective(properties);
+			return () => {
+				return new EditorDirective();
 			};
 		}
 	

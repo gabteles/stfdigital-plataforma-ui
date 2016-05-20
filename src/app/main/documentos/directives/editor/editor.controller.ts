@@ -3,6 +3,7 @@ namespace app.documentos {
 	import IQService = angular.IQService;
 	import IIntervalService = angular.IIntervalService;
 	import IPromise = angular.IPromise;
+	import IDeferred = angular.IDeferred;
 	
 	export class EditorController {
 		
@@ -19,61 +20,12 @@ namespace app.documentos {
 		constructor(private $q: IQService, private $interval: IIntervalService, private $scope: EditorScope, private onlyofficeService: OnlyofficeService) {
 			this.documento = $scope.documento;
 			
-			var verificarEdicaoIniciada = () => {
-				var tentativas = 0;
-				var deferred = $q.defer();
-				var verificarEdicao = () => {
-					var tratarNaoAtivo = () => {
-						tentativas++;
-						if (tentativas < 20) {
-							$interval(verificarEdicao, 1000, 1);
-						} else {
-							deferred.reject();
-						}
-					};
-					this.onlyofficeService.recuperarNumeroEdicao($scope.documento.id).then((edicao) => {
-						console.log(edicao);
-						if (edicao.ativo) {
-							deferred.resolve();
-						} else {
-							tratarNaoAtivo();
-						}
-					}, (edicao) => {
-						console.log(edicao);
-						tratarNaoAtivo();
-					});
-				};
-				verificarEdicao();
-				return deferred.promise;
-			};
-			
-			var verificarEdicaoCompleta = () => {
-				var tentativas = 0;
-				var deferred = $q.defer();
-				var verificarEdicao = () => {
-					this.onlyofficeService.recuperarNumeroEdicao($scope.documento.id).then((edicao) => {
-						console.log(edicao);
-						tentativas++;
-						if (tentativas < 20) {
-							$interval(verificarEdicao, 1000, 1);
-						} else {
-							deferred.reject();
-						}
-					}, (edicao) => {
-						console.log(edicao);
-						deferred.resolve();
-					});
-				};
-				verificarEdicao();
-				return deferred.promise;
-			};
-			
 			$scope.api = {
 				salvar: () => {
 					if ($scope.aguardarConclusao == "true") {
 						this.showEditor = false;
 						this.showProgress = true;
-						verificarEdicaoCompleta().then(() => {
+						this.verificarEdicaoCompleta().then(() => {
 							$scope.edicaoConcluida();
 						}, () => {
 							$scope.edicaoTimeout();
@@ -109,7 +61,7 @@ namespace app.documentos {
 								callbackUrl: urls[1]
 							}
 						};
-						verificarEdicaoIniciada().then(() => {
+						this.verificarEdicaoIniciada().then(() => {
 							this.edicaoIniciada = true;
 						});
 					});
@@ -119,34 +71,62 @@ namespace app.documentos {
 			});
 		}
 		
-		private verificarEdicaoIniciada(): IPromise<any> {
-			return this.$q.when();
-			/*
-			var tentativas = 0;
-			var deferred = this.$q.defer();
-			var verificarEdicao = () => {
-				var tratarNaoAtivo = () => {
-					tentativas++;
-					if (tentativas < 20) {
-						this.$interval(verificarEdicao, 1000, 1);
-					} else {
-						deferred.reject();
-					}
-				};
-				this.onlyofficeService.recuperarNumeroEdicao(this.documento.id).then((edicao) => {
-					console.log(edicao);
-					if (edicao.ativo) {
-						deferred.resolve();
-					} else {
-						tratarNaoAtivo();
-					}
-				}, (edicao) => {
-					console.log(edicao);
-					tratarNaoAtivo();
-				});
-			};
-			verificarEdicao();
-			return deferred.promise;*/
+		private tentativasVerificaoEdicaoCompleta: number = 0;
+		private deferredEdicaoCompleta: IDeferred<{}>;
+		
+		verificarEdicaoCompleta() {
+			this.tentativasVerificaoEdicaoCompleta = 0;
+			this.deferredEdicaoCompleta = this.$q.defer();
+			this.iteracaoVerificarEdicaoCompleta();
+			return this.deferredEdicaoCompleta.promise;
+		};
+		
+		private iteracaoVerificarEdicaoCompleta() {
+			this.onlyofficeService.recuperarNumeroEdicao(this.documento.id).then((edicao) => {
+				console.log(edicao);
+				this.tentativasVerificaoEdicaoCompleta++;
+				if (this.tentativasVerificaoEdicaoCompleta < 20) {
+					this.$interval(() => this.iteracaoVerificarEdicaoCompleta(), 1000, 1);
+				} else {
+					this.deferredEdicaoCompleta.reject();
+				}
+			}, (edicao) => {
+				console.log(edicao);
+				this.deferredEdicaoCompleta.resolve();
+			});
+		}
+		
+		private tentativasVerificaoEdicaoIniciada: number = 0;
+		private deferredEdicaoIniciada: IDeferred<{}>;
+		
+		private verificarEdicaoIniciada(): IPromise<{}> {
+			this.tentativasVerificaoEdicaoIniciada = 0;
+			this.deferredEdicaoIniciada = this.$q.defer();
+			this.iteracaoVerificarEdicaoIniciada();
+			return this.deferredEdicaoIniciada.promise;
+		}
+		
+		private iteracaoVerificarEdicaoIniciada() {
+			this.onlyofficeService.recuperarNumeroEdicao(this.documento.id).then((edicao) => {
+				console.log(edicao);
+				if (edicao.ativo) {
+					this.deferredEdicaoIniciada.resolve();
+				} else {
+					this.tratarNaoAtivo();
+				}
+			}, (edicao) => {
+				console.log(edicao);
+				this.tratarNaoAtivo();
+			});
+		}
+		
+		private tratarNaoAtivo() {
+			this.tentativasVerificaoEdicaoIniciada++;
+			if (this.tentativasVerificaoEdicaoIniciada < 20) {
+				this.$interval(() => this.iteracaoVerificarEdicaoIniciada(), 1000, 1);
+			} else {
+				this.deferredEdicaoIniciada.reject();
+			}
 		}
 		
 	}

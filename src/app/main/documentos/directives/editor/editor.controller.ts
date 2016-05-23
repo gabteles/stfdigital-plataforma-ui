@@ -71,6 +71,30 @@ namespace app.documentos {
 			});
 		}
 		
+		private iniciarEditor(numeroEdicao) {
+			this.$q.all([this.onlyofficeService.criarUrlConteudoDocumento(this.documento.id),
+					this.onlyofficeService.recuperarUrlCallback(this.documento.id)])
+				.then((urls) => {
+					this.config = {
+						editorConfig : {
+							user: {
+								id: 'usuario-teste',
+								name: 'Usuário Teste'
+							},
+						},
+						document: {
+							src: urls[0],
+							key: numeroEdicao,
+							name: this.documento.nome,
+							callbackUrl: urls[1]
+						}
+					};
+					this.verificarEdicaoIniciada().then(() => {
+						this.edicaoIniciada = true;
+					});
+				});
+		};
+		
 		private tentativasVerificaoEdicaoCompleta: number = 0;
 		private deferredEdicaoCompleta: IDeferred<{}>;
 		

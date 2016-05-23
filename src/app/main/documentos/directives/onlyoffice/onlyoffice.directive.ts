@@ -1,18 +1,3 @@
-namespace DocsAPI {
-
-	export interface OnlyofficeDocument {
-		src: string;
-		name: string;
-		callbackUrl: string;
-	}
-	
-	export interface DocEditorFactory {
-		new(id: string, document: OnlyofficeDocument): any;
-	}
-	
-	export declare var DocEditor: DocEditorFactory;
-}
-
 namespace app.documentos {
 	
 	import IDirective = angular.IDirective;
@@ -20,6 +5,7 @@ namespace app.documentos {
 	import IScope = angular.IScope;
 	import IAugmentedJQuery = angular.IAugmentedJQuery;
 	import IAttributes = angular.IAttributes;
+	import ITimeoutService = angular.ITimeoutService;
 	
 	// Funções utilitárias
 	
@@ -38,21 +24,27 @@ namespace app.documentos {
 		return null;
 	}
 	
-	interface OnlyofficeDocument {
+	interface OnlyofficeScope extends IScope {
+		config: DocumentConfig;
+		docEditor: DocsAPI.OnlyofficeDocEditor;
+		ready: boolean;
+	}
+	
+	export interface DocumentConfig {
+		document: Document;
+		user: User;
+	}
+	
+	export interface Document {
 		src: string;
+		key: string;
 		name: string;
 		callbackUrl: string;
 	}
 	
-	interface OnlyofficeConfig {
-		document: OnlyofficeDocument;
-	}
-	
-	interface OnlyofficeScope extends IScope {
-		config: OnlyofficeConfig;
-		ready: boolean;
-		save: Function;
-		close: any;
+	export interface User {
+		id: string;
+		name: string;
 	}
 	
 	class OnlyofficeDirective implements IDirective {
@@ -63,14 +55,14 @@ namespace app.documentos {
 		public scope: Object = {
 			config: "=onlyoffice",
 		};
-	
-		constructor() {
+
+		constructor(private $timeout: ITimeoutService) {
 			
 		}
 		
 		public link($scope: OnlyofficeScope, el: IAugmentedJQuery, attrs: IAttributes) {
-			$scope.$watch('config.document.src', () => {
-				if (!$scope.config || !$scope.config.document || !$scope.config.document.src)
+			$scope.$watch('config.document.src', (newVal) => {
+				if (!newVal)
 					return;
 				
 				let docUrl : string = $scope.config.document.src;
@@ -83,52 +75,49 @@ namespace app.documentos {
 				
 				let callbackUrl = $scope.config.document.callbackUrl;
 				
-				let defaultConfig = {
+				let config: DocsAPI.OnlyofficeConfig = {
+					documentType : documentType,
+					height : '100%',
 					type : "desktop",
 					width : '100%',
-					height : '100%',
-					documentType : documentType,
 					document : {
+						fileType : docType,
+						key : $scope.config.document.key || docKey,
 						title : docTitle,
 						url : docUrl,
-						fileType : docType,
-						key : docKey,
 						permissions : {
 							edit : true,
-							download : false
-						}
+							download : false,
+							print: true
+						},
 					},
 					editorConfig : {
+						callbackUrl: callbackUrl,
+						lang: 'pt-BR',
 						mode : 'edit',
-						callbackUrl: callbackUrl
+						customization: {
+							about: true,
+							chat: true
+						}
 					},
 					events : {
 						onReady : function() {
-							setTimeout(function() {
-								$scope.$apply(function() {
-									$scope.ready = true;
-								});
-							}, 5000);
+							this.$timeout(function() {
+								$scope.ready = true;
+							}, 0);
 						},
-						onSave : function(event) {
-							var url = event.data;
-							$scope.save({
-								url : url,
-								close : $scope.close
-							});
-						}
+						
 					}
 				};
-			
-				let config = angular.merge(defaultConfig, $scope.config);
 				
-				new DocsAPI.DocEditor("onlyoffice-editor", config);
+				$scope.docEditor = new DocsAPI.DocEditor("onlyoffice-editor", config);
 			});
 		}
 		
 		public static factory(): IDirectiveFactory {
-			return () => {
-				return new OnlyofficeDirective();
+			return ($timeout: ITimeoutService) => {
+				"ngInject";
+				return new OnlyofficeDirective($timeout);
 			};
 		}
 	

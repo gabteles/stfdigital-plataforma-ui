@@ -8,6 +8,7 @@ namespace app.documentos {
 		api: any;
 		documento: any;
 		edicaoConcluida: any;
+		edicaoIniciada: Function;
 		edicaoTimeout: any;
 		aguardarConclusao: any;
 	}
@@ -21,6 +22,7 @@ namespace app.documentos {
 			api: "=?",
 			documento: "=onlyofficeEditor",
 			edicaoConcluida: "&",
+			edicaoIniciada: "&",
 			edicaoTimeout: "&",
 			aguardarConclusao: "@"
 		};

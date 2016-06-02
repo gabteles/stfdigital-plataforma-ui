@@ -36,6 +36,8 @@
             'app.pesquisa-avancada',
             
             'app.documentos',
+            
+            'app.messaging',
 
             'app.tarefas.minhas-tarefas',
             //'app.tarefas.painel-de-fases',

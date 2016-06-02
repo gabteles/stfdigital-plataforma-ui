@@ -47,8 +47,5 @@
 			'http://docker:8765/**',
 			'http://pacaembu:8765/**'
 		]);
-        
-        $mdThemingProvider.theme('error-toast');
-        $mdThemingProvider.theme('success-toast');
     }
 })();

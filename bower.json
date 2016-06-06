@@ -20,6 +20,8 @@
     "angular-ui-calendar": "~1.0.1",
     "angular-file-upload": "~2.2.0",
     "angular-ui-router": "~0.2.18",
+    "angular-ui-select": "~0.17.1",
+    "select2": "3.5.4",
     "ui-router-extras": "~0.1.2",
     "angular-ui-sortable": "~0.14.0",
     "angular-websocket": "~1.0.14",

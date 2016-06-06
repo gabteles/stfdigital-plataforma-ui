@@ -7,7 +7,7 @@
         .config(config);
 
     /** @ngInject */
-    function config($ariaProvider, $logProvider, msScrollConfigProvider, $translateProvider, $provide, fuseConfigProvider, $sceDelegateProvider)
+    function config($ariaProvider, $logProvider, msScrollConfigProvider, $translateProvider, $provide, fuseConfigProvider, $sceDelegateProvider, uiSelectConfig)
     {
         // ng-aria configuration
         $ariaProvider.config({
@@ -47,5 +47,7 @@
 			'http://docker:8765/**',
 			'http://pacaembu:8765/**'
 		]);
+        
+        uiSelectConfig.theme = 'select2';
     }
 })();

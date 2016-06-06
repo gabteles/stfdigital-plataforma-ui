@@ -37,37 +37,9 @@ namespace app.documentos {
 					}
 				}
 			};
-			
-			var iniciarEditor = (numeroEdicao) => {
-				$q.all([this.onlyofficeService.criarUrlConteudoDocumento($scope.documento.id),
-						this.onlyofficeService.recuperarUrlCallback($scope.documento.id)])
-					.then((urls) => {
-						this.config = {
-							editorConfig : {
-								lang: 'pt-BR',
-								customization: {
-									about: true,
-									chat: true
-								},
-								user: {
-									id: 'usuario-teste',
-									name: 'Usuário Teste'
-								},
-							},
-							document: {
-								src: urls[0],
-								key: numeroEdicao,
-								name: $scope.documento.nome,
-								callbackUrl: urls[1]
-							}
-						};
-						this.verificarEdicaoIniciada().then(() => {
-							this.edicaoIniciada = true;
-						});
-					});
-			};
+
 			this.onlyofficeService.gerarNumeroEdicao($scope.documento.id).then((edicao) => {
-				iniciarEditor(edicao.numero);
+				this.iniciarEditor(edicao.numero);
 			});
 		}
 		
@@ -77,6 +49,11 @@ namespace app.documentos {
 				.then((urls) => {
 					this.config = {
 						editorConfig : {
+							lang: 'pt-BR',
+							customization: {
+								about: true,
+								chat: true
+							},
 							user: {
 								id: 'usuario-teste',
 								name: 'Usuário Teste'
@@ -85,12 +62,13 @@ namespace app.documentos {
 						document: {
 							src: urls[0],
 							key: numeroEdicao,
-							name: this.documento.nome,
+							name: this.$scope.documento.nome,
 							callbackUrl: urls[1]
 						}
 					};
 					this.verificarEdicaoIniciada().then(() => {
 						this.edicaoIniciada = true;
+						this.$scope.edicaoIniciada();
 					});
 				});
 		};

@@ -1,5 +1,6 @@
 declare namespace app.certification {
     import IQService = angular.IQService;
+    import IPromise = angular.IPromise;
     class ProgressTracker {
         private finishedSteps;
         private totalSteps;
@@ -7,6 +8,14 @@ declare namespace app.certification {
         incrementFinishedSteps(): void;
         currentProgress(): number;
         currentProgressOfTotal(totalProgress: number): number;
+    }
+    class StepsChain<S> {
+        private $q;
+        private progressTracker;
+        private data;
+        constructor($q: IQService, progressTracker: ProgressTracker, data: IPromise<S>);
+        chain<T>(func: (param: S) => IPromise<T>): StepsChain<T>;
+        promise(): IPromise<S>;
     }
     class Signer {
         private manager;

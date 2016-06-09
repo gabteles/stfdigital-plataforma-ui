@@ -48,12 +48,16 @@ function runTests(singleRun, done)
     server.start();
 }
 
-gulp.task('test:unit', ['scripts'], function (done)
+gulp.task('test:unit', ['compile-ts:unit', 'scripts'], function (done)
 {
     runTests(true, done);
 });
 
-gulp.task('tdd', ['compile-ts:unit', 'watch'], function (done)
+gulp.task('tdd', ['compile-ts:unit', 'watch', 'watch-unit'], function (done)
 {
     runTests(false, done);
+});
+
+gulp.task('watch-unit', function() {
+    gulp.watch(path.join(conf.paths.unit, 'app/main/**/*.ts'), ['compile-ts:unit']);
 });

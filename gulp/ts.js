@@ -8,7 +8,9 @@ var $ = require('gulp-load-plugins')({
 		pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 
-var tsProject = $.typescript.createProject('tsconfig.json');
+var createTsProject = function() {
+    return $.typescript.createProject('tsconfig.json');
+};
 var allTypeScript = path.join(conf.paths.src, '/app/main/**/*.ts');
 var libraryTypeScript = 'typings/main/**/*.d.ts';
 var tsOutputPath = path.join(conf.paths.src, '/app/main');
@@ -48,7 +50,7 @@ gulp.task('install-typings:e2e',function(){
 /**
  * Install all unit typings files
  */
-gulp.task('install-typings:unit', ['compile-ts'], function() {
+gulp.task('install-typings:unit', ['generate-definitions'], function() {
     return gulp.src('typings.json', {cwd : conf.paths.unit})
         .pipe($.typings());
 });
@@ -86,15 +88,15 @@ gulp.task('ts-lint:unit', ['install-typings:unit'], function() {
 gulp.task('compile-ts', ['ts-lint'], function () {
     return gulp.src([allTypeScript, libraryTypeScript])
         .pipe($.sourcemaps.init())
-        .pipe($.typescript(tsProject))
+        .pipe($.typescript(createTsProject()))
         .pipe($.ngAnnotate())
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(tsOutputPath));
 });
 
-gulp.task('generate-definitions', ['compile-ts'], function() {
+gulp.task('generate-definitions', function() {
 	return gulp.src([allTypeScript, libraryTypeScript])
-    	.pipe($.typescript(createTsProjectUnit()))
+    	.pipe($.typescript(createTsProject()))
     	.dts.pipe(gulp.dest('definitions'));
 });
 
@@ -114,7 +116,7 @@ gulp.task('compile-ts:e2e', ['ts-lint:e2e'], function() {
 gulp.task('compile-ts:unit', ['ts-lint:unit'], function() {
     return gulp.src([allTypeScriptUnit, libraryTypeScriptUnit])
         .pipe($.sourcemaps.init())
-        .pipe($.typescript(tsProjectUnit))
+        .pipe($.typescript(createTsProjectUnit()))
         .pipe($.ngAnnotate())
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(tsOutputPathUnit));

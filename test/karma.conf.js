@@ -29,27 +29,26 @@ function listFiles() {
       pattern: pattern
     };
   });
-  // Assets
-  files.push({
-    pattern: path.join(conf.paths.src, '/assets/**/*'),
-    included: false,
-    served: true,
-    watched: false
+
+  var patternsToServeOnly = [
+    path.join(conf.paths.src, '/assets/**/*'), // Assets
+    path.join(conf.paths.root, '/bower_components/**/*.js'), // Arquivos fontes do bower_components
+    path.join(conf.paths.root, '/bower_components/**/*.js.map'), // Mappings dos arquivos do bower_components
+    path.join(conf.paths.src, '/app/**/*.js.map'), // Mappings do app
+    path.join(conf.paths.unit, '/build/**/*.js.map') // Mappings dos testes
+  ];
+
+  var filesToServeOnly = patternsToServeOnly.map(function(ptn) {
+    return {
+      pattern: ptn,
+      included: false,
+      served: true,
+      watched: false
+    };
   });
-  // Mappings
-  files.push({
-    pattern: path.join(conf.paths.src, '/app/**/*.js.map'),
-    included: false,
-    served: true,
-    watched: false
-  });
-  // Mappings
-  files.push({
-    pattern: path.join(conf.paths.unit, '/build/**/*.js.map'),
-    included: false,
-    served: true,
-    watched: false
-  });
+
+  files = files.concat(filesToServeOnly);
+
   return files;
 }
 

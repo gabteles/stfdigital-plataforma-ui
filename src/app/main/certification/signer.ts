@@ -17,7 +17,7 @@ namespace app.certification {
 		signature: string;
 	}
 
-	class ProgressTracker {
+	export class ProgressTracker {
 		private finishedSteps: number = 0;
 		private totalSteps: number = 0;
 
@@ -38,7 +38,7 @@ namespace app.certification {
 		}
 	}
 
-	class StepsChain<S> {
+	export class StepsChain<S> {
 
 		private data: IPromise<S>;
 

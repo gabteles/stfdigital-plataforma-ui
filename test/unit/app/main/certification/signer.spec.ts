@@ -15,4 +15,29 @@ namespace app.certification {
 		});
 		
 	});
+
+	describe('ProgressTracker', () => {
+
+		let progressTracker: ProgressTracker;
+
+		beforeEach(() => {
+			progressTracker = new ProgressTracker();
+		});
+
+		it('Deveria calcular o progresso corretamente', () => {
+			progressTracker.incrementTotalSteps();
+			progressTracker.incrementTotalSteps();
+			expect(progressTracker.currentProgress()).toEqual(0);
+			expect(progressTracker.currentProgressOfTotal(10)).toEqual(0);
+
+			progressTracker.incrementFinishedSteps();
+			expect(progressTracker.currentProgress()).toEqual(50);
+			expect(progressTracker.currentProgressOfTotal(10)).toEqual(5);
+
+			progressTracker.incrementFinishedSteps();
+			expect(progressTracker.currentProgress()).toEqual(100);
+			expect(progressTracker.currentProgressOfTotal(10)).toEqual(10);
+		});
+
+	});
 }

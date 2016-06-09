@@ -4,8 +4,7 @@
         "module": "system",
         "moduleResolution": "node",
         "sourceMap": true,
-        "removeComments": false,
-        "declaration": true
+        "removeComments": false
     },
     "exclude": [
       "typings/browser",

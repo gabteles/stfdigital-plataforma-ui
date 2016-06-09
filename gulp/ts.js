@@ -11,6 +11,11 @@ var $ = require('gulp-load-plugins')({
 var createTsProject = function() {
     return $.typescript.createProject('tsconfig.json');
 };
+var createTsProjectForDefinition = function() {
+    return $.typescript.createProject('tsconfig.json', {
+    	declaration: true
+    });
+};
 var allTypeScript = path.join(conf.paths.src, '/app/main/**/*.ts');
 var libraryTypeScript = 'typings/main/**/*.d.ts';
 var tsOutputPath = path.join(conf.paths.src, '/app/main');
@@ -96,7 +101,7 @@ gulp.task('compile-ts', ['ts-lint'], function () {
 
 gulp.task('generate-definitions', function() {
 	return gulp.src([allTypeScript, libraryTypeScript])
-    	.pipe($.typescript(createTsProject()))
+    	.pipe($.typescript(createTsProjectForDefinition()))
     	.dts.pipe(gulp.dest('definitions'));
 });
 

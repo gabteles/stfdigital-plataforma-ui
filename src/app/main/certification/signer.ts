@@ -36,8 +36,17 @@ namespace app.certification {
 		currentProgressOfTotal(totalProgress: number) {
 			return (this.finishedSteps / this.totalSteps) * totalProgress;
 		}
+
+		public getTotalSteps(): number {
+			return this.totalSteps;
+		}
 	}
 
+	/**
+	 * Representa uma cadeia de passos a serem executados
+	 * sequencialmente, encapsulando a passagem de um dado
+	 * para o próximo passo como resultado do passo atual.
+	 */
 	export class StepsChain<S> {
 
 		private data: IPromise<S>;

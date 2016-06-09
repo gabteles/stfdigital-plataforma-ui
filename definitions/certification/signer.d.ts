@@ -8,7 +8,13 @@ declare namespace app.certification {
         incrementFinishedSteps(): void;
         currentProgress(): number;
         currentProgressOfTotal(totalProgress: number): number;
+        getTotalSteps(): number;
     }
+    /**
+     * Representa uma cadeia de passos a serem executados
+     * sequencialmente, encapsulando a passagem de um dado
+     * para o próximo passo como resultado do passo atual.
+     */
     class StepsChain<S> {
         private $q;
         private progressTracker;

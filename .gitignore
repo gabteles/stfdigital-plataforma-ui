@@ -31,11 +31,21 @@ dist
 
 # Typings
 typings
-test/typings
 
 # JS Main
 src/app/main/**/*.js
 src/app/main/**/*.js.map
+
+# JS Test Unit
+test/unit/build
+test/unit/typings
+test/unit/results
+test/unit/app/main/**/*.js
+test/unit/app/main/**/*.js.map
+
+# JS Test E2E
+test/e2e/typings
+test/e2e/results
 test/e2e/**/*.js
 test/e2e/.eslintrc
 

@@ -1,7 +1,7 @@
 'use strict';
 
 var path = require('path');
-var conf = require('./../../../gulp/conf');
+var conf = require('./../gulp/conf');
 
 var _ = require('lodash');
 var wiredep = require('wiredep');
@@ -20,8 +20,7 @@ function listFiles() {
       .concat([
         path.join(conf.paths.src, '/app/**/*.module.js'),
         path.join(conf.paths.src, '/app/**/*.js'),
-        path.join(conf.paths.src, '/**/*.spec.js'),
-        path.join(conf.paths.src, '/**/*.mock.js'),
+        path.join(conf.paths.unit, '/build/**/*.spec.js')
       ])
       .concat(pathSrcHtml);
 
@@ -30,8 +29,23 @@ function listFiles() {
       pattern: pattern
     };
   });
+  // Assets
   files.push({
     pattern: path.join(conf.paths.src, '/assets/**/*'),
+    included: false,
+    served: true,
+    watched: false
+  });
+  // Mappings
+  files.push({
+    pattern: path.join(conf.paths.src, '/app/**/*.js.map'),
+    included: false,
+    served: true,
+    watched: false
+  });
+  // Mappings
+  files.push({
+    pattern: path.join(conf.paths.unit, '/build/**/*.js.map'),
     included: false,
     served: true,
     watched: false
@@ -45,6 +59,8 @@ module.exports = function(config) {
     files: listFiles(),
 
     singleRun: true,
+
+    basePath: '..',
 
     autoWatch: false,
 
@@ -61,7 +77,7 @@ module.exports = function(config) {
       whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
     },
 
-    browsers : ['PhantomJS'],
+    browsers : ['Chrome'],
 
     plugins : [
       'karma-chrome-launcher',
@@ -70,8 +86,8 @@ module.exports = function(config) {
       //'karma-coverage',
       'karma-jasmine',
       'karma-ng-html2js-preprocessor',
-	  'karma-html-reporter',
-	  'karma-mocha-reporter' 
+	    'karma-html-reporter',
+	    'karma-mocha-reporter' 
     ],
 
     coverageReporter: {
@@ -79,7 +95,11 @@ module.exports = function(config) {
       dir : 'coverage/'
     },
 
-    reporters: ['progress'],
+    reporters: ['mocha', 'html'],
+
+    htmlReporter : {
+		  outputDir : path.join(conf.paths.unit, 'results/html')
+    },
 
     proxies: {
       '/assets/': path.join('/base/', conf.paths.src, '/assets/')

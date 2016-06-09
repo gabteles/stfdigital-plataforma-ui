@@ -20,7 +20,7 @@ function runProtractor(done)
 
     gulp.src(path.join(conf.paths.e2e, '/**/*.js'))
         .pipe($.protractor.protractor({
-            configFile: 'protractor.conf.js',
+            configFile: path.join(conf.paths.test, 'protractor.conf.js'),
             args      : args
         }))
         .on('error', function (err)
@@ -36,6 +36,6 @@ function runProtractor(done)
         });
 }
 
-gulp.task('protractor', ['protractor:src']);
+gulp.task('test:e2e', ['protractor:src']);
 gulp.task('protractor:src', ['serve:e2e', 'webdriver-update'], runProtractor);
 gulp.task('protractor:dist', ['serve:e2e-dist', 'webdriver-update'], runProtractor);

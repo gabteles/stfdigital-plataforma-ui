@@ -12,6 +12,8 @@
       "node_modules",
       "bower_components",
       "dist",
-      "build"
+      "build",
+      "test",
+      "definitions"
     ]
 }

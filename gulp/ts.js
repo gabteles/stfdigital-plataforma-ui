@@ -15,11 +15,19 @@ var tsOutputPath = path.join(conf.paths.src, '/app/main');
 var tsGenFiles = path.join(conf.paths.src, '/app/main/**/*.js');
 var tsGenMapFiles = path.join(conf.paths.src, '/app/main/**/*.js.map');
 
-var tsProjectE2E = $.typescript.createProject(path.join(conf.paths.test, 'tsconfig.json'));
+var tsProjectE2E = $.typescript.createProject(path.join(conf.paths.e2e, 'tsconfig.json'));
 var allTypeScriptE2E = path.join(conf.paths.e2e, '**/*.ts');
-var libraryTypeScriptE2E = path.join(conf.paths.test, 'typings/main/**/*.d.ts');
+var libraryTypeScriptE2E = path.join(conf.paths.e2e, 'typings/main/**/*.d.ts');
 var tsOutputPathE2E = conf.paths.e2e;
 var tsGenFilesE2E = path.join(conf.paths.e2e, '**/*.js');
+
+var createTsProjectUnit = function() {
+	return $.typescript.createProject(path.join(conf.paths.unit, 'tsconfig.json'));
+};
+var allTypeScriptUnit = path.join(conf.paths.unit, 'app/main/**/*.ts');
+var libraryTypeScriptUnit = path.join(conf.paths.unit, 'typings/main/**/*.d.ts');
+var tsOutputPathUnit = path.join(conf.paths.unit, 'build');
+var tsGenFilesUnit = path.join(conf.paths.unit, '**/*.js');
 
 /**
  * Install all typings files
@@ -33,7 +41,15 @@ gulp.task('install-typings',function(){
  * Install e2e typings files
  */
 gulp.task('install-typings:e2e',function(){
-    gulp.src('typings.json', {cwd: conf.paths.test})
+    gulp.src('typings.json', {cwd: conf.paths.e2e})
+        .pipe($.typings());
+});
+
+/**
+ * Install all unit typings files
+ */
+gulp.task('install-typings:unit', ['compile-ts'], function() {
+    return gulp.src('typings.json', {cwd : conf.paths.unit})
         .pipe($.typings());
 });
 
@@ -56,6 +72,15 @@ gulp.task('ts-lint:e2e', ['install-typings:e2e'], function() {
 });
 
 /**
+ * Lint all custom TypeScript files.
+ */
+gulp.task('ts-lint:unit', ['install-typings:unit'], function() {
+    return gulp.src(allTypeScriptUnit)
+    			.pipe($.tslint())
+    			.pipe($.tslint.report('prose'));
+});
+
+/**
  * Compile TypeScript and include references to library and app .d.ts files.
  */
 gulp.task('compile-ts', ['ts-lint'], function () {
@@ -67,6 +92,12 @@ gulp.task('compile-ts', ['ts-lint'], function () {
         .pipe(gulp.dest(tsOutputPath));
 });
 
+gulp.task('generate-definitions', ['compile-ts'], function() {
+	return gulp.src([allTypeScript, libraryTypeScript])
+    	.pipe($.typescript(createTsProjectUnit()))
+    	.dts.pipe(gulp.dest('definitions'));
+});
+
 /**
  * Compile TypeScript and include references to library and app .d.ts files.
  */
@@ -75,6 +106,18 @@ gulp.task('compile-ts:e2e', ['ts-lint:e2e'], function() {
         .pipe($.typescript(tsProjectE2E))
         .pipe($.ngAnnotate())
         .pipe(gulp.dest(tsOutputPathE2E));
+});
+
+/**
+ * Compile TypeScript and include references to library and app .d.ts files.
+ */
+gulp.task('compile-ts:unit', ['ts-lint:unit'], function() {
+    return gulp.src([allTypeScriptUnit, libraryTypeScriptUnit])
+        .pipe($.sourcemaps.init())
+        .pipe($.typescript(tsProjectUnit))
+        .pipe($.ngAnnotate())
+        .pipe($.sourcemaps.write('.'))
+        .pipe(gulp.dest(tsOutputPathUnit));
 });
 
 /**

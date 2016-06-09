@@ -1,5 +1,13 @@
 declare namespace app.certification {
     import IQService = angular.IQService;
+    class ProgressTracker {
+        private finishedSteps;
+        private totalSteps;
+        incrementTotalSteps(): void;
+        incrementFinishedSteps(): void;
+        currentProgress(): number;
+        currentProgressOfTotal(totalProgress: number): number;
+    }
     class Signer {
         private manager;
         private cryptoService;

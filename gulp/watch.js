@@ -13,12 +13,9 @@ function isOnlyChange(event)
 
 gulp.task('watch', ['inject'], function ()
 {
-    gulp.watch([path.join(conf.paths.src, '/*.html'), 'bower.json'], ['inject-reload']);
+    gulp.watch([path.join(conf.paths.src, '*.html'), 'bower.json'], ['inject-reload']);
 
-    gulp.watch([
-        path.join(conf.paths.src, '/app/**/*.css'),
-        path.join(conf.paths.src, '/app/**/*.scss')
-    ], function (event)
+    gulp.watch(path.join(conf.paths.src, 'app/**/*.{css, scss}'), function (event)
     {
         if ( isOnlyChange(event) )
         {
@@ -30,7 +27,7 @@ gulp.task('watch', ['inject'], function ()
         }
     });
 
-    gulp.watch(path.join(conf.paths.src, '/app/**/*.js'), function (event)
+    gulp.watch(path.join(conf.paths.src, 'app/**/*.js'), function (event)
     {
         if ( isOnlyChange(event) )
         {
@@ -42,13 +39,10 @@ gulp.task('watch', ['inject'], function ()
         }
     });
 
-    gulp.watch([
-        path.join(conf.paths.src, '/app/**/*.json'),
-        path.join(conf.paths.src, '/app/**/*.html')
-    ], function (event)
+    gulp.watch(path.join(conf.paths.src, 'app/**/*.{json, html}'), function (event)
     {
         browserSync.reload(event.path);
     });
 
-    gulp.watch([path.join(conf.paths.src, '/app/main/**/*.ts')], ['compile-ts']);
+    gulp.watch(path.join(conf.paths.src, 'app/main/**/*.ts'), ['compile-ts']);
 });

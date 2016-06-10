@@ -36,16 +36,16 @@
             'app.pesquisa-avancada',
             
             'app.documentos',
-            
-            'app.messaging',
 
             'app.tarefas.minhas-tarefas',
             //'app.tarefas.painel-de-fases',
             //'app.tarefas.notificacoes',
 
-            'app.configuracoes.meu-perfil'
+            'app.configuracoes.meu-perfil',
             //'app.tarefas.peticao',
             //'app.tarefas.peticao-fisica',
-            //'app.configuracoes.administracao'
+            //'app.configuracoes.administracao',
+            
+            'app.support'
         ]);
 })();

@@ -1,4 +1,4 @@
-namespace app.messaging {
+namespace app.support.messaging {
 	'use strict';
 	
 	import IThemingProvider = angular.material.IThemingProvider;
@@ -9,5 +9,5 @@ namespace app.messaging {
         $mdThemingProvider.theme('success-toast');
 	}
 	
-	angular.module('app.messaging', ['ngMaterial']).config(config);
+	angular.module('app.support.messaging', ['ngMaterial']).config(config);
 }

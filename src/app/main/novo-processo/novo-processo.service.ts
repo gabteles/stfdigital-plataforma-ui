@@ -16,7 +16,7 @@ namespace app.novoProcesso {
 
     export class NovoProcessoService {
 
-        private static apiProcessos: string = '/services/routes.json';
+        private static apiProcessos: string = '/services/api/navigation/routes?type=startprocess';
 
         /** @ngInject **/
         constructor(private $http: IHttpService, private properties) { }

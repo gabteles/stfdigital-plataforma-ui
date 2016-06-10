@@ -121,9 +121,12 @@ namespace app.tarefas.painelDeFases {
                 }
             };
 
-            Array.prototype['getById'] = function(value) {
-                return this.find(function (x) { return x.id === value; });
-            };
+            Object.defineProperty(Array.prototype, 'getById', {
+            	enumerable: false,
+            	value: function(value) {
+                    return this.find(function (x) { return x.id === value; });
+                }
+            }); 
 		}
 		
         /**

@@ -23,7 +23,7 @@
 	        	.title($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.TITULO'))
 	        	.textContent($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.MSG'))
 	        	.ariaLabel($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.ALERTA'))
-	        	.ok($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.OK'))
+	        	.ok($translate.instant('NAVEGACAO.SERVICO_INDISPONIVEL.OK'));
 			
 			function fnErr(err) {
 				$log.error(err);
@@ -32,7 +32,7 @@
 				//Coloca o estado como futuro, para que tente acessar novamente
 				$timeout(function() {
 					$futureState.futureState(futureState);
-				})
+				});
 			}
 			
 			//Realiza a importação dos arquivos dos módulos
@@ -60,8 +60,9 @@
 			
 			var deferredRoutes = $q.defer();
 			
-	    	$http.get(properties.apiUrl + '/services/routes.json').then(function(response) {
+	    	$http.get(properties.apiUrl + '/services/api/navigation/routes').then(function(response) {
 				angular.forEach(response.data, function(route) {
+					route.type = "load";
 					$futureStateProvider.futureState(route);
 				});
 				deferredRoutes.resolve();
@@ -89,12 +90,6 @@
 			$provide.decorator('$templateFactory', templateFactoryDecorator);
 			$ocLazyLoadProvider.config({debug: true});
 		}
-    }
-    
-    /** @ngInject **/
-    function run($http, $futureState, $rootScope, properties) {
-    	
-
     }
     
 	//Desabilita o cache dos templates de módulos externos no ui-router.

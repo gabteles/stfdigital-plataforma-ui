@@ -1,4 +1,4 @@
-namespace app.messaging {
+namespace app.support.messaging {
 	'use strict';
 	
 	import IToastService = angular.material.IToastService;
@@ -36,5 +36,5 @@ namespace app.messaging {
 		
 	}
 	
-	angular.module('app.messaging').service('app.messaging.MessagesService', MessagesService);
+	angular.module('app.support.messaging').service('app.support.messaging.MessagesService', MessagesService);
 }

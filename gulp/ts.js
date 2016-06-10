@@ -9,11 +9,11 @@ var $ = require('gulp-load-plugins')({
 });
 
 var tsProject = $.typescript.createProject('tsconfig.json');
-var allTypeScript = path.join(conf.paths.src, '/app/main/**/*.ts');
+var allTypeScript = path.join(conf.paths.src, 'app/main/**/*.ts');
 var libraryTypeScript = 'typings/main/**/*.d.ts';
-var tsOutputPath = path.join(conf.paths.src, '/app/main');
-var tsGenFiles = path.join(conf.paths.src, '/app/main/**/*.js');
-var tsGenMapFiles = path.join(conf.paths.src, '/app/main/**/*.js.map');
+var tsOutputPath = path.join(conf.paths.src, 'app/main');
+var tsGenFiles = path.join(conf.paths.src, 'app/main/**/*.js');
+var tsGenMapFiles = path.join(conf.paths.src, 'app/main/**/*.js.map');
 
 var tsProjectE2E = $.typescript.createProject(path.join(conf.paths.test, 'tsconfig.json'));
 var allTypeScriptE2E = path.join(conf.paths.e2e, '**/*.ts');

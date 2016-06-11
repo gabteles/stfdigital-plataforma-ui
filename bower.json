@@ -41,7 +41,8 @@
     "jqueryui-touch-punch": "*",
     "ngMask": "angular-mask#~3.0.16",
     "system.js": "~0.19.26",
-    "oclazyload": "~1.0.9"
+    "oclazyload": "~1.0.9",
+    "checklist-model": "~0.9.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.3"

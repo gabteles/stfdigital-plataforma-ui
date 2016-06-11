@@ -7,7 +7,7 @@ namespace app.certification {
 
 		private certificate: Certificate;
 
-		constructor(private $q: IQService, private cryptoService: CryptoService) {
+		constructor(private $q: IQService, private cryptoService: CryptoService, private signatureService: SignatureService) {
 
 		}
 
@@ -43,7 +43,7 @@ namespace app.certification {
 		}
 
 		createSigner() {
-			return new Signer(this, null, null);
+			return new Signer(this, null, this.signatureService, null);
 		}
 
 	}

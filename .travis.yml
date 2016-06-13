@@ -1,11 +1,11 @@
 sudo: required
-
 language: java
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 services:
-  - docker
-
+- docker
 install: true
 script: gradle docker
+notifications:
+  slack:
+    secure: cO2plplwVctvT9a5u4W1Xld3682p3TwSALDQrSdSncNMAhzykFSxUuy/QWg7G010oLNp6kHLDjNtWCSagYyqtXgpC7ECPD9TAivfBMeSYV1JvNvZ8toAIwhn+rq/OnpohmkZ4MAYvqseeyj8GQb18UBHANlErlO5rDbZ2K3jRpocJf5PiFydOMAquDp505TgiYDAFXoCQBQoEPy6CjNHyNOaKTl2AWdFCGmLdvXXyHo60TKquneiFblX/muqtdVH6cFfIjYPgfZErFHzBvsGrm/JiZXPvWwrJdFLzFgHbtZin84vP0fdHyAXCQHB3QaW2FeyC4x+/iD7NRE0hwo4OZyXjKPSWj+Jizsj7bGzgiIsb2P12Zloq5Vxe9afeaUSVD5gY5eReYDrYMqYJ8QKBVnHK/5FT3A9C4JDA9SAdKuJi/haceXKsgtCh6Z5bx3tIxii15y7rTCmx9cR+ylsvTBZ/4FJKuN4+4kabeQVyhcGPymxwnjz+VnyFZodacWQ+ZcGkw4HnDxmAdfAxRJPwq5st5US0jcoA/Jqy5Ih9oJEs8KA3TCcCnk8pXQ9KMotYr0YAlQoKJ/lTU4dHCdK9i2fsrpqDuRngdgxmYYNWeISaMPRuamUZkhy54Dj0Skf4s4jCBh0/9hHcDbU9rCjaCPxOX9ojqmqeq47omGg+oU=

@@ -4,8 +4,9 @@ declare namespace app.certification {
     class SigningManager {
         private $q;
         private cryptoService;
+        private signatureService;
         private certificate;
-        constructor($q: IQService, cryptoService: CryptoService);
+        constructor($q: IQService, cryptoService: CryptoService, signatureService: SignatureService);
         injectCertificate(resolvedObject: any): void;
         collectCertificate(cert: any): void;
         injectAlreadySelectedCertificate(): void;

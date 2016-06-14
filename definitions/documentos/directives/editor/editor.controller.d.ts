@@ -1,7 +1,6 @@
 declare namespace app.documentos {
     import IQService = angular.IQService;
     import IIntervalService = angular.IIntervalService;
-    import IPromise = angular.IPromise;
     class EditorController {
         private $q;
         private $interval;
@@ -17,7 +16,7 @@ declare namespace app.documentos {
         private iniciarEditor(numeroEdicao);
         private tentativasVerificaoEdicaoCompleta;
         private deferredEdicaoCompleta;
-        verificarEdicaoCompleta(): IPromise<{}>;
+        verificarEdicaoCompleta(): any;
         private iteracaoVerificarEdicaoCompleta();
         private tentativasVerificaoEdicaoIniciada;
         private deferredEdicaoIniciada;

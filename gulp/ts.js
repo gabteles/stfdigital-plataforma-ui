@@ -33,8 +33,9 @@ var createTsProjectUnit = function() {
 };
 var allTypeScriptUnit = path.join(conf.paths.unit, 'app/main/**/*.ts');
 var libraryTypeScriptUnit = path.join(conf.paths.unit, 'typings/main/**/*.d.ts');
-var tsOutputPathUnit = path.join(conf.paths.unit, 'build');
+var tsOutputPathUnit = path.join(conf.paths.unit, 'build/test');
 var tsGenFilesUnit = path.join(conf.paths.unit, '**/*.js');
+var tsOutputPathUnitForApp = path.join(conf.paths.unit, 'build/app');
 
 /**
  * Install all typings files
@@ -97,6 +98,15 @@ gulp.task('compile-ts', ['ts-lint'], function () {
         .pipe($.ngAnnotate())
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(tsOutputPath));
+});
+
+gulp.task('compile-ts:for-tdd', [], function () {
+    return gulp.src([allTypeScript, libraryTypeScript])
+        .pipe($.sourcemaps.init())
+        .pipe($.typescript(createTsProject()))
+        .pipe($.ngAnnotate())
+        .pipe($.sourcemaps.write('.'))
+        .pipe(gulp.dest(tsOutputPathUnitForApp));
 });
 
 gulp.task('generate-definitions', function() {

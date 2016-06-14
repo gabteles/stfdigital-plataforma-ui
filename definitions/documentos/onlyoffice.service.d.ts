@@ -10,10 +10,10 @@ declare namespace app.documentos {
         /** @ngInject **/
         constructor($http: IHttpService, $q: IQService, properties: any);
         private getBaseUrl();
-        criarUrlConteudoDocumento(id: number): IPromise<string>;
+        criarUrlConteudoDocumento(id: number): any;
         gerarNumeroEdicao(id: number): IPromise<any>;
         recuperarNumeroEdicao(id: number): IPromise<any>;
-        recuperarUrlCallback(id: number): IPromise<string>;
+        recuperarUrlCallback(id: number): any;
         recuperarUrlArquivoApi(): IPromise<string>;
     }
 }

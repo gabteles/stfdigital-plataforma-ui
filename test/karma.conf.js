@@ -18,29 +18,46 @@ function listFiles() {
 
   var patterns = wiredep(wiredepOptions).js
       .concat([
-        path.join(conf.paths.src, '/app/**/*.module.js'),
-        path.join(conf.paths.src, '/app/**/*.js'),
-        path.join(conf.paths.unit, '/build/**/*.spec.js')
+        path.join(conf.paths.src, '/app/*.module.js'),
+        path.join(conf.paths.src, '/app/*.js'),
+        path.join(conf.paths.src, '/app/!(main)/**/*.module.js'),
+        path.join(conf.paths.src, '/app/!(main)/**/*.js')
       ])
       .concat(pathSrcHtml);
 
   var files = patterns.map(function(pattern) {
     return {
-      pattern: pattern
+      pattern: pattern,
+      watched: false
     };
   });
+
+  // Monitora apenas esses arquivos por mudanças.
+  var patternsToWatch = [
+    path.join(conf.paths.unit, '/build/app/**/*.module.js'),
+    path.join(conf.paths.unit, '/build/app/**/*.js'),
+    path.join(conf.paths.unit, '/build/test/**/*.spec.js')
+  ];
+
+  var filesToWatch = patternsToWatch.map(function(pattern) {
+    return {
+      pattern: pattern,
+      watched: true
+    }
+  });
+
+  var files = files.concat(filesToWatch);
 
   var patternsToServeOnly = [
     path.join(conf.paths.src, '/assets/**/*'), // Assets
     path.join(conf.paths.root, '/bower_components/**/*.js'), // Arquivos fontes do bower_components
     path.join(conf.paths.root, '/bower_components/**/*.js.map'), // Mappings dos arquivos do bower_components
-    path.join(conf.paths.src, '/app/**/*.js.map'), // Mappings do app
-    path.join(conf.paths.unit, '/build/**/*.js.map') // Mappings dos testes
+    path.join(conf.paths.unit, '/build/**/*.js.map') // Mappings dos testes e app compilado
   ];
 
-  var filesToServeOnly = patternsToServeOnly.map(function(ptn) {
+  var filesToServeOnly = patternsToServeOnly.map(function(pattern) {
     return {
-      pattern: ptn,
+      pattern: pattern,
       included: false,
       served: true,
       watched: false
@@ -62,6 +79,8 @@ module.exports = function(config) {
     basePath: '..',
 
     autoWatch: false,
+
+    autoWatchBatchDelay: 2000,
 
     ngHtml2JsPreprocessor: {
       stripPrefix: conf.paths.src + '/',

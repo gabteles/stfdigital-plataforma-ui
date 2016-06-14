@@ -48,11 +48,11 @@ namespace app.certification {
             return hwcrypto.use(backend);
         }
 
-        getCertificate(options: CertificateOptions) {
+        getCertificate(options: CertificateOptions): Promise<Certificate> {
             return hwcrypto.getCertificate(options);
         }
 
-        sign(certificate: Certificate, data: SigningData, options: SigningOptions) {
+        sign(certificate: Certificate, data: SigningData, options: SigningOptions): Promise<Signature> {
             return hwcrypto.sign(certificate, {type: data.type, hex: data.hex}, options);
         }
     }

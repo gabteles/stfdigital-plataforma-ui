@@ -10,10 +10,6 @@ namespace app.certification {
 		hashType: string;
 	}
 
-	class Signature {
-		signature: string;
-	}
-
 	export class ProgressTracker {
 		private finishedSteps: number = 0;
 		private totalSteps: number = 0;
@@ -91,6 +87,9 @@ namespace app.certification {
 		private signingCompletedCallback: () => void;
 		private errorCallback: (SigningError) => void;
 
+		private certificate: Certificate;
+		private signer: SignerDto;
+
 		/**
 		 * Este deferred é utilizado para bloquear a execução
 		 * da cadeia de chamadas para a assinatura enquanto o
@@ -128,6 +127,10 @@ namespace app.certification {
 			this.errorCallback = callback;
 		}
 
+		saveSignedDocument(): IPromise<SignedDocumentDto> {
+			return this.signatureService.save(this.signer.signerId);
+		}
+
 		/**
 		 * Inicia a cadeia de chamadas para efetuar a assinatura. Esses passos
 		 * envolvem operações tanto no cliente, quanto no servidor, que precisam
@@ -138,7 +141,9 @@ namespace app.certification {
 			this.cryptoService.use('auto').then((status) => {
 				let sc = new StepsChain<void>(this.$q, this.progressTracker, null);
 				sc.chain(() => this.requestUserCertificate())
+					.chain((certificate: Certificate) => this.storeCertificate(certificate))
 					.chain((certificate: Certificate) => this.prepare(certificate))
+					.chain((signer: SignerDto) => this.storeSigner(signer))
 					.chain((signer) => this.callSignerReadyCallback(signer))
 					// A chamada acima bloqueará o encadeamento até que o upload seja concluído.
 					.chain((signer) => this.preSign(signer))
@@ -162,6 +167,16 @@ namespace app.certification {
 			return this.manager.recoverCertificate();
 		}
 
+		private storeCertificate(certificate: Certificate): IPromise<Certificate> {
+			this.certificate = certificate;
+			return this.$q.when(certificate);
+		}
+
+		private storeSigner(signer: SignerDto): IPromise<SignerDto> {
+			this.signer = signer;
+			return this.$q.when(signer);
+		}
+
 		private prepare(certificate: Certificate): IPromise<SignerDto> {
 			let command = new PrepareCommand(certificate.hex);
 			return this.signatureService.prepare(command);
@@ -182,19 +197,37 @@ namespace app.certification {
 		}
 
 		private preSign(signer: SignerDto): IPromise<PreSignatureDto> {
-			return null;
+			let command = new PreSignCommand(signer.signerId);
+			return this.signatureService.preSign(command);
 		}
 
 		private sign(preSignature: PreSignatureDto): IPromise<Signature> {
-			return null;
+			return this.$q((resolve, reject) => {
+				this.cryptoService.sign(this.certificate,
+					{
+						data: preSignature.data,
+						type: 'SHA-256',
+						hex: preSignature.hash
+					},
+					{
+						lang: 'en'
+					}
+				).then((signature) => {
+					return signature;
+				});
+			});
 		}
 
 		private postSign(signature: Signature): IPromise<void> {
-			return null;
+			let command = new PostSignCommand(this.signer.signerId, signature.hex);
+			return this.signatureService.postSign(command);
 		}
 
 		private callSigningCompletedCallback(): IPromise<void> {
-			return null;
+			if (this.signingCompletedCallback) {
+				this.signingCompletedCallback();
+			}
+			return this.$q.when();
 		}
 
 		private callErrorCallback(error: string): void {

@@ -43,7 +43,7 @@ namespace app.certification {
 		}
 
 		createSigner() {
-			return new Signer(this, null, this.signatureService, null);
+			return new Signer(this, this.cryptoService, this.signatureService, this.$q);
 		}
 
 	}

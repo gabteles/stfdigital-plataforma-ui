@@ -11,8 +11,8 @@ namespace app.certification {
 		let signingManager: SigningManager;
 
 		beforeEach(() => {
-			signingManager = new SigningManager(null, null);
-			signer = new Signer(null, null, null);
+			signingManager = new SigningManager(null, null, null);
+			signer = new Signer(null, null, null, null);
 		});
 
 		it('TODO: Escrever o teste', () => {

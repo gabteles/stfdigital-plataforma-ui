@@ -71,7 +71,7 @@ namespace app.documentos {
 						this.$scope.edicaoIniciada();
 					});
 				});
-		};
+		}
 		
 		private tentativasVerificaoEdicaoCompleta: number = 0;
 		private deferredEdicaoCompleta: IDeferred<{}>;
@@ -81,7 +81,7 @@ namespace app.documentos {
 			this.deferredEdicaoCompleta = this.$q.defer();
 			this.iteracaoVerificarEdicaoCompleta();
 			return this.deferredEdicaoCompleta.promise;
-		};
+		}
 		
 		private iteracaoVerificarEdicaoCompleta() {
 			this.onlyofficeService.recuperarNumeroEdicao(this.documento.id).then((edicao) => {

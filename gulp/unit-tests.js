@@ -36,7 +36,7 @@ function runTests(singleRun, done)
     var localConfig = {
         configFile   : path.resolve(path.join(conf.paths.test, 'karma.conf.js')),
         singleRun    : singleRun,
-        autoWatch    : !singleRun,
+        autoWatch    : !singleRun
         //reporters    : reporters,
         //preprocessors: preprocessors
     };
@@ -53,11 +53,16 @@ gulp.task('test:unit', ['compile-ts:unit', 'scripts'], function (done)
     runTests(true, done);
 });
 
-gulp.task('tdd', ['compile-ts:unit', 'watch', 'watch-unit'], function (done)
+gulp.task('tdd', ['compile-ts:unit', 'watch-sources:for-tdd', 'watch-unit'], function (done)
 {
     runTests(false, done);
 });
 
-gulp.task('watch-unit', function() {
+gulp.task('watch-unit', ['compile-ts:unit'], function() {
     gulp.watch(path.join(conf.paths.unit, 'app/main/**/*.ts'), ['compile-ts:unit']);
+});
+
+gulp.task('watch-sources:for-tdd', ['compile-ts:for-tdd'], function ()
+{
+    gulp.watch([path.join(conf.paths.src, '/app/main/**/*.ts')], ['compile-ts:for-tdd']);
 });

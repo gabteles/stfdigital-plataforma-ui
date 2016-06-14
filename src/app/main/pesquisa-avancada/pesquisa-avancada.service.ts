@@ -4,17 +4,17 @@ namespace app.pesquisaAvancada {
 	import IHttpService = angular.IHttpService;
     import IPromise = angular.IPromise;
     import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
+    import RouteConfig = app.support.command.RouteConfig;
+    
     
     class PesquisaAvancada {
         constructor(public description: string,
-        			public stateName: string,
-        			public navigationItem: string,
-        			public translation: string) {}
+        			public route: RouteConfig) {}
     }
 
     export class PesquisaAvancadaService {
 
-        private static apiPesquisas: string = '/services/api/navigation/routes?type=advancedsearch';
+        private static apiPesquisas: string = '/discovery/api/queries';
 
         /** @ngInject **/
         constructor(private $http: IHttpService, private msNavigationService, private properties) { }
@@ -23,11 +23,12 @@ namespace app.pesquisaAvancada {
         	this.list()
         		.then((pesquisas: PesquisaAvancada[]) => {
         			pesquisas.forEach((pesquisa: PesquisaAvancada) => {
-        				this.msNavigationService.saveItem(pesquisa.navigationItem, {
+        				let route: RouteConfig = pesquisa.route; 
+        				this.msNavigationService.saveItem(route.navigationItem, {
         			        title : pesquisa.description,
         			        icon : 'icon-magnify',
-        			        state : pesquisa.stateName,
-        			        translation : pesquisa.translation,
+        			        state : route.stateName,
+        			        translation : route.translation,
         			        lazy : true,
         			        weight: 1
         			    });
@@ -40,14 +41,9 @@ namespace app.pesquisaAvancada {
                 .then((response: IHttpPromiseCallbackArg<any>): PesquisaAvancada[] => {
                 	var pesquisas = response.data;
                 	if (angular.isArray(pesquisas)) {
-	                    return pesquisas.filter((pesquisa: any) => {
-	                        //TODO: Deve vir filtrado do backend
-	                        return (pesquisa.stateName.indexOf("pesquisa-avancada") !== -1);
-	                    }).map((pesquisa: any) => {
+	                    return pesquisas.map((pesquisa: any) => {
 	                        return new PesquisaAvancada(pesquisa.description, 
-	                        							pesquisa.stateName,
-	                        							pesquisa.navigationItem,
-	                        							pesquisa.translation);
+	                        							pesquisa.route);
 	                    });
                 	} else {
                 		return [];

@@ -3,8 +3,7 @@
 
     angular
         .module('app.navigation', ['app.constants'])
-        .config(config)
-        .run(run);
+        .config(config);
 
     /** @ngInject **/
     function config($translatePartialLoaderProvider, $ocLazyLoadProvider, $stateProvider, $futureStateProvider, $provide, properties) {
@@ -60,7 +59,7 @@
 			
 			var deferredRoutes = $q.defer();
 			
-	    	$http.get(properties.apiUrl + '/services/api/navigation/routes').then(function(response) {
+	    	$http.get(properties.apiUrl + '/discovery/api/routes').then(function(response) {
 				angular.forEach(response.data, function(route) {
 					route.type = "load";
 					$futureStateProvider.futureState(route);

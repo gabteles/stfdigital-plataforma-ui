@@ -35,7 +35,7 @@ namespace app.tarefas.minhasTarefas {
     
     export class MinhasTarefasService {
         
-        private static apiTarefas: string = '/services/api/tarefas';
+        private static apiTarefas: string = '/discovery/api/tarefas';
         
         /** @ngInject **/
         constructor(private $http: IHttpService, private properties) { }

@@ -11,12 +11,13 @@ namespace app.novoProcesso {
     }
 
     export class ProcessoWorkflow implements IProcessoWorkflow {
+    	
         constructor(public description: string, public stateName: string) {}
     }
 
     export class NovoProcessoService {
 
-        private static apiProcessos: string = '/services/api/navigation/routes?type=startprocess';
+        private static apiProcessos: string = '/discovery/api/commands/start-process';
 
         /** @ngInject **/
         constructor(private $http: IHttpService, private properties) { }
@@ -26,11 +27,8 @@ namespace app.novoProcesso {
                 .then((response: IHttpPromiseCallbackArg<any>): IProcessoWorkflow[] => {
                 	var processos = response.data;
                 	if (angular.isArray(processos)) {
-	                    return processos.filter((processo: any) => {
-	                        //TODO: Deve vir filtrado do backend
-	                        return (processo.stateName.indexOf("novo-processo") !== -1);
-	                    }).map((processo: any) => {
-	                        return new ProcessoWorkflow(processo.description, processo.stateName);
+	                    return processos.map((processo: any) => {
+	                        return new ProcessoWorkflow(processo.description, processo.route.stateName);
 	                    });
                 	} else {
                 		return [];

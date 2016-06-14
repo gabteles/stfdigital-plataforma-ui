@@ -1,2 +1,2 @@
-declare namespace app.messaging {
+declare namespace app.support.messaging {
 }

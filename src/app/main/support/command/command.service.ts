@@ -1,12 +1,10 @@
 namespace app.support.command {
 	
 	export interface CommandTarget {
-		
 		type(): string;
 	}
 	
 	export interface ConditionHandler {
-		
 		match(target: CommandTarget): boolean;
 	}
 	
@@ -19,7 +17,6 @@ namespace app.support.command {
 	}
 	
 	export interface CommandConfig {
-		
 		id: string;
 		description: string;
 		route: RouteConfig;
@@ -78,7 +75,7 @@ namespace app.support.command {
 			let commandsDeferred = $q.defer();
 			this.commands = commandsDeferred.promise;
 			
-			$http.get(this.properties.apiUrl + '/services/api/commands')
+			$http.get(this.properties.apiUrl + '/discovery/api/commands')
 				.then((response: ng.IHttpPromiseCallbackArg<CommandConfig[]>) => {
 					let cmds: Command[] = [];
 					response.data.forEach(config => {
@@ -94,7 +91,7 @@ namespace app.support.command {
 			return this.commands;
 		}
 		
-		public addHandlers(id: string, handlers: {new():  ConditionHandler; }[]): void {
+		public addHandlers(id: string, handlers: {new(): ConditionHandler }[]): void {
         	this.findById(id)
         		.then(command => {
     				for (let handler of handlers) {
@@ -145,9 +142,9 @@ namespace app.support.command {
 			return found.promise;
 		}
 		
-	};
+	}
 	
 	angular
-		.module('app.support.commmand')
-		.service('app.support.commmand.CommandService', CommandService);
+		.module('app.support.command')
+		.service('app.support.command.CommandService', CommandService);
 }

@@ -1,4 +1,4 @@
-declare namespace app.messaging {
+declare namespace app.support.messaging {
     import IToastService = angular.material.IToastService;
     class MessagesService {
         private $mdToast;

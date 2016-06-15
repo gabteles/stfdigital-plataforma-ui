@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app.navigation', ['app.constants'])
+        .module('app.navigation', ['app.support'])
         .config(config);
 
     /** @ngInject **/

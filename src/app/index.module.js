@@ -7,9 +7,6 @@
      */
     angular
         .module('app', [
-            
-            //Constants
-            'app.constants',
 
             // Core
             'app.core',
@@ -45,7 +42,5 @@
             //'app.tarefas.peticao',
             //'app.tarefas.peticao-fisica',
             //'app.configuracoes.administracao',
-            
-            'app.support'
         ]);
 })();

@@ -32,7 +32,7 @@ namespace app.pesquisaAvancada {
     run.$inject = ['app.pesquisa-avancada.PesquisaAvancadaService'];
 
     angular
-        .module('app.pesquisa-avancada', ['app.autenticado', 'app.constants'])
+        .module('app.pesquisa-avancada', ['app.autenticado', 'app.support'])
         .config(config)
         .run(run);
 }

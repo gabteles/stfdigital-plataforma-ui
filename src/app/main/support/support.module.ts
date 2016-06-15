@@ -3,6 +3,7 @@ namespace app.support {
 	
 	angular.module('app.support', [
 		'app.support.messaging',
-		'app.support.command'
+		'app.support.command',
+		'app.support.constants'
 	]);
 }

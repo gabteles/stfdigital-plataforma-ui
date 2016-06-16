@@ -48,7 +48,7 @@ function runTests(singleRun, done)
     server.start();
 }
 
-gulp.task('test:unit', ['compile-ts:unit', 'scripts'], function (done)
+gulp.task('test:unit', ['compile-ts:for-tdd', 'compile-ts:unit', 'scripts'], function (done)
 {
     runTests(true, done);
 });

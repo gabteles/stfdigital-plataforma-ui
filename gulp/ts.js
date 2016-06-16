@@ -106,6 +106,7 @@ gulp.task('compile-ts:for-tdd', [], function () {
         .pipe($.typescript(createTsProject()))
         .pipe($.ngAnnotate())
         .pipe($.sourcemaps.write('.'))
+        .pipe($.destClean(tsOutputPathUnitForApp))
         .pipe(gulp.dest(tsOutputPathUnitForApp));
 });
 
@@ -136,6 +137,7 @@ gulp.task('compile-ts:unit', ['ts-lint:unit'], function() {
         .pipe($.typescript(createTsProjectUnit()))
         .pipe($.ngAnnotate())
         .pipe($.sourcemaps.write('.'))
+        .pipe($.destClean(tsOutputPathUnit))
         .pipe(gulp.dest(tsOutputPathUnit));
 });
 

@@ -35,18 +35,23 @@
 			}
 			
 			//Realiza a importação dos arquivos dos módulos
-			System.import(futureState.src).then(function(loaded) {
-				var newModule = loaded;
-				
-				if (!loaded.name) {
-					var key = Object.keys(loaded);
-					newModule = loaded[key[0]];
-				}
-				//Carrega o módulo angular importado
-				$ocLazyLoad.load(newModule).then(function() {
-					deferredState.resolve();
+			var context = futureState.src.split('/')[0];
+			var bundle = context + '/bundle';
+			System.import(bundle).then(function() {
+				System.import(futureState.src).then(function(loaded) {
+					var newModule = loaded;
+					
+					if (!loaded.name) {
+						var key = Object.keys(loaded);
+						newModule = loaded[key[0]];
+					}
+					//Carrega o módulo angular importado
+					$ocLazyLoad.load(newModule).then(function() {
+						deferredState.resolve();
+					}, fnErr);
 				}, fnErr);
-			}, fnErr);
+			});
+			
 			return deferredState.promise;
 		});
 		

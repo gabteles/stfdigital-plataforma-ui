@@ -23,9 +23,9 @@ var tsGenFiles = path.join(conf.paths.src, 'app/main/**/*.js');
 var tsGenMapFiles = path.join(conf.paths.src, 'app/main/**/*.js.map');
 
 var tsProjectE2E = $.typescript.createProject(path.join(conf.paths.e2e, 'tsconfig.json'));
-var allTypeScriptE2E = path.join(conf.paths.e2e, '**/*.ts');
+var allTypeScriptE2E = path.join(conf.paths.e2e, 'app/**/*.ts');
 var libraryTypeScriptE2E = path.join(conf.paths.e2e, 'typings/main/**/*.d.ts');
-var tsOutputPathE2E = conf.paths.e2e;
+var tsOutputPathE2E = path.join(conf.paths.e2e, 'build');
 var tsGenFilesE2E = path.join(conf.paths.e2e, '**/*.js');
 
 var createTsProjectUnit = function() {
@@ -112,7 +112,9 @@ gulp.task('compile-ts:for-tdd', [], function () {
 gulp.task('generate-definitions', function() {
 	return gulp.src([allTypeScript, libraryTypeScript])
     	.pipe($.typescript(createTsProjectForDefinition()))
-    	.dts.pipe(gulp.dest('definitions'));
+    	.dts
+        .pipe($.destClean('definitions'))
+        .pipe(gulp.dest('definitions'));
 });
 
 /**

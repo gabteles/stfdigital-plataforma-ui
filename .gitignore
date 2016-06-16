@@ -44,10 +44,11 @@ test/unit/app/main/**/*.js
 test/unit/app/main/**/*.js.map
 
 # JS Test E2E
+test/e2e/build
 test/e2e/typings
 test/e2e/results
-test/e2e/**/*.js
-test/e2e/.eslintrc
+test/e2e/app/**/*.js
 
 # WebStorm
 .idea
+.eslintrc

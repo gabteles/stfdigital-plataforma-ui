@@ -3,6 +3,9 @@
 var Jasmine2HtmlReporter = require('protractor-jasmine2-html-reporter');
 var SpecReporter = require('jasmine-spec-reporter');
 
+var conf = require('./../gulp/conf');
+var path = require('path');
+
 // An example configuration file.
 exports.config = {
   // The address of a running selenium server.
@@ -15,18 +18,21 @@ exports.config = {
 	  'browserName': 'chrome'
   },
   
+  framework: 'jasmine2',
+  
   seleniumArgs : [
       '-browserTimeout=60' 
   ],
 
-  baseUrl: 'https://localhost:3000',
+  baseUrl: 'https://docker:8443',
 
   // Spec patterns are relative to the current working directory when
   // protractor is called.
-  specs: ['src/test/ui/e2e/**/*.js'],
+  specs: [path.join(conf.paths.e2e, 'build/**/{pattern}.scenario.js')],
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
+    includeStackTrace: true,
 	  showColors: true,
 	  defaultTimeoutInterval: 40000,
 	  print: function() {}
@@ -34,10 +40,10 @@ exports.config = {
   
   onPrepare: function() {
 	  browser.driver.manage().window().maximize();
-	  browser.getCapabilities().then(function() {
+	  return browser.getCapabilities().then(function() {
 		  jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
 		  jasmine.getEnv().addReporter(new Jasmine2HtmlReporter({
-			  savePath : 'src/main/resources/static/application/test/e2e/results/',
+			  savePath : path.join(conf.paths.e2e, 'results/'),
 			  screenshotsFolder: 'screenshots',
 			  takeScreenshots: true,
 			  takeScreenshotsOnlyOnFailures: true

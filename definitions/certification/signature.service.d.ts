@@ -1,6 +1,7 @@
 declare namespace app.certification {
     import IHttpService = angular.IHttpService;
     import IPromise = angular.IPromise;
+    import IQService = angular.IQService;
     class SigningError {
         error: string;
         constructor(error: string);
@@ -31,9 +32,11 @@ declare namespace app.certification {
     class SignatureService {
         private properties;
         private $http;
-        private crypto;
+        private $q;
+        private cryptoService;
         private static apiSignature;
-        constructor(properties: any, $http: IHttpService, crypto: CryptoService);
+        static $inject: string[];
+        constructor(properties: any, $http: IHttpService, $q: IQService, cryptoService: CryptoService);
         prepare(command: PrepareCommand): IPromise<SignerDto>;
         preSign(command: PreSignCommand): IPromise<PreSignatureDto>;
         postSign(command: PostSignCommand): IPromise<void>;

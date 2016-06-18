@@ -25,6 +25,6 @@ namespace app.tarefas {
     }
 
     angular
-        .module('app.tarefas', ['app.autenticado'])
+        .module('app.tarefas', ['app.autenticado', 'app.support'])
         .config(config);
 }

@@ -8,6 +8,7 @@
     
     "app.certification.signing-manager": "file:../../definitions/certification/signing-manager.d.ts",
     "app.certification.signer": "file:../../definitions/certification/signer.d.ts",
-    "app.certification.crypto.service": "file:../../definitions/certification/crypto.service.d.ts"
+    "app.certification.crypto.service": "file:../../definitions/certification/crypto.service.d.ts",
+    "app.support.command.service": "file:../../definitions/support/command/command.service.d.ts"
   }
 }

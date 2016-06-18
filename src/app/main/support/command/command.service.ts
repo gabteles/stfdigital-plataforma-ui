@@ -1,11 +1,12 @@
 namespace app.support.command {
 	
-	export interface CommandTarget {
-		type(): string;
+	export interface CommandTarget<T> {
+		type: string;
+		status?: string;
 	}
 	
-	export interface ConditionHandler {
-		match(target: CommandTarget): boolean;
+	export interface ConditionHandler<T> {
+		match(targets: CommandTarget<T>[]): boolean;
 	}
 	
 	export interface RouteConfig {
@@ -16,53 +17,68 @@ namespace app.support.command {
 		src: string;
 	}
 	
-	export interface CommandConfig {
-		id: string;
-		description: string;
-		route: RouteConfig;
-		targetType: string;
-		listable: boolean;
-		startProcess: boolean;
-		advancedSearch: boolean;	
+	export interface TargetConfig {
+		type: string;
+		mode: string;
+	}
+	
+	export interface FilterCommand {
+		targetType ?: string;
+		context ?: string;
 	}
 	
 	export class Command {
 		
-		private id: string;
-
+		id: string;
 		description: string;
+		context: string;
 		route: RouteConfig;
-		targetType: string;
+		target: TargetConfig; 
 		listable: boolean;
 		startProcess: boolean;
-		advancedSearch: boolean;
-		protected handlers: ConditionHandler[] = [];
+		protected handlers: ConditionHandler<any>[] = [];
 	
-		constructor(private config: CommandConfig) {
-			this.id = config.id;
-		}
-	
-		public getId(): string {
-			return this.id;
-		}
-	
-		public addHandler(handler: ConditionHandler): void {
+		public addHandler(handler: ConditionHandler<any>): void {
 			this.handlers.push(handler);
 		}
 		
-		public match(target: CommandTarget): boolean {
-			if (target.type() !== this.config.targetType) {
-				return false;
+		public match(targets: CommandTarget<any>[], filter ?: FilterCommand): boolean {
+			// match filter
+			if (filter) {
+				if (this.target.type !== filter.targetType || this.context !== filter.context) {
+					return false;
+				}
 			}
+			
+			//match mode
+			let length = angular.isArray(targets) ? targets.length : 0;
+			
+			if (!this.isCompatibleMode(length)) {
+				return false
+			}
+			
+			//match handlers
 			if (this.handlers.length === 0) {
 				return true;	
 			}
+			
 			for (let handler of this.handlers) {
-				if (!handler.match(target)) {
+				if (!handler.match(targets)) {
 					return false;
 				}
 			}
 			return true;
+		}
+		
+		//Verifica se o modo do comando é compatível com a quantidade de targets
+		private isCompatibleMode(length: number): boolean {
+			let mode = this.target.mode;
+			if ((length === 0 && mode === "None") ||
+				(length === 1 && (mode === "One" || mode === "OneOrMany")) ||
+				(length > 1  && (mode === "Many" || mode === "OneOrMany"))) {
+				return true;
+			}
+			return false;
 		}
 	}
 	
@@ -76,12 +92,8 @@ namespace app.support.command {
 			this.commands = commandsDeferred.promise;
 			
 			$http.get(this.properties.apiUrl + '/discovery/api/commands')
-				.then((response: ng.IHttpPromiseCallbackArg<CommandConfig[]>) => {
-					let cmds: Command[] = [];
-					response.data.forEach(config => {
-							cmds.push(new Command(config));
-					});
-					commandsDeferred.resolve(cmds);
+				.then((response: ng.IHttpPromiseCallbackArg<Command[]>) => {
+					commandsDeferred.resolve(response.data);
 				}, () => {
 					commandsDeferred.reject();
 				});
@@ -91,35 +103,33 @@ namespace app.support.command {
 			return this.commands;
 		}
 		
-		public addHandlers(id: string, handlers: {new(): ConditionHandler }[]): void {
+		public addHandlers(id: string, handlers: {new(): ConditionHandler<any> }[]): void {
         	this.findById(id)
         		.then(command => {
     				for (let handler of handlers) {
-    					command.addHandler(new handler());
+    					command.addHandler(new handler);
     				}
     			});
 		}
 		
-		public listMatched(target: CommandTarget): ng.IPromise<Command[]> {
+		public listMatched(targets: CommandTarget<any>[], filter ?: FilterCommand): ng.IPromise<Command[]> {
 			let matched: ng.IDeferred<Command[]> = this.$q.defer();
 			
 			this.commands
 				.then((commands: Command[]) => {
-					matched.resolve(commands.filter(command => {
-						return command.match(target);
-					}));
+					matched.resolve(commands.filter(command => command.match(targets, filter)));
 				}, () => {
 					matched.reject();
 				});
 			return matched.promise;
 		}
 		
-		public match(id: string, target: CommandTarget): ng.IPromise<boolean> {
+		public match(id: string, targets: CommandTarget<any>[], targetType ?: string): ng.IPromise<boolean> {
 			let matched: ng.IDeferred<boolean> = this.$q.defer();
 			
 			this.findById(id)
 				.then(command => {
-					matched.resolve(command.match(target));
+					matched.resolve(command.match(targets, targetType));
 				}, () => {
 					matched.reject();
 				});
@@ -132,7 +142,7 @@ namespace app.support.command {
 			this.commands
 				.then((commands: Command[]) => {
 					for (let command of commands) {
-						if (command.getId() === id) {
+						if (command.id === id) {
 							return found.resolve(command);
 						}
 					}

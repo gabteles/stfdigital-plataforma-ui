@@ -1,9 +1,10 @@
 declare namespace app.support.command {
-    interface CommandTarget {
-        type(): string;
+    interface CommandTarget<T> {
+        type: string;
+        status?: string;
     }
-    interface ConditionHandler {
-        match(target: CommandTarget): boolean;
+    interface ConditionHandler<T> {
+        match(targets: CommandTarget<T>[]): boolean;
     }
     interface RouteConfig {
         stateName: string;
@@ -12,29 +13,26 @@ declare namespace app.support.command {
         urlPrefix: string;
         src: string;
     }
-    interface CommandConfig {
-        id: string;
-        description: string;
-        route: RouteConfig;
-        targetType: string;
-        listable: boolean;
-        startProcess: boolean;
-        advancedSearch: boolean;
+    interface TargetConfig {
+        type: string;
+        mode: string;
+    }
+    interface FilterCommand {
+        targetType?: string;
+        context?: string;
     }
     class Command {
-        private config;
-        private id;
+        id: string;
         description: string;
+        context: string;
         route: RouteConfig;
-        targetType: string;
+        target: TargetConfig;
         listable: boolean;
         startProcess: boolean;
-        advancedSearch: boolean;
-        protected handlers: ConditionHandler[];
-        constructor(config: CommandConfig);
-        getId(): string;
-        addHandler(handler: ConditionHandler): void;
-        match(target: CommandTarget): boolean;
+        protected handlers: ConditionHandler<any>[];
+        addHandler(handler: ConditionHandler<any>): void;
+        match(targets: CommandTarget<any>[], filter?: FilterCommand): boolean;
+        private isCompatibleMode(length);
     }
     class CommandService {
         private $q;
@@ -44,10 +42,10 @@ declare namespace app.support.command {
         constructor($http: ng.IHttpService, $q: ng.IQService, properties: any);
         list(): ng.IPromise<Command[]>;
         addHandlers(id: string, handlers: {
-            new (): ConditionHandler;
+            new (): ConditionHandler<any>;
         }[]): void;
-        listMatched(target: CommandTarget): ng.IPromise<Command[]>;
-        match(id: string, target: CommandTarget): ng.IPromise<boolean>;
+        listMatched(targets: CommandTarget<any>[], filter?: FilterCommand): ng.IPromise<Command[]>;
+        match(id: string, targets: CommandTarget<any>[], targetType?: string): ng.IPromise<boolean>;
         findById(id: any): ng.IPromise<Command>;
     }
 }

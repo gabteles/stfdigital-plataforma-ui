@@ -93,7 +93,13 @@ namespace app.support.command {
 			
 			$http.get(this.properties.apiUrl + '/discovery/api/commands')
 				.then((response: ng.IHttpPromiseCallbackArg<Command[]>) => {
-					commandsDeferred.resolve(response.data);
+					let commands: Command[] = [];
+					response.data.forEach(commandData => {
+						let command = new Command();
+						angular.extend(command, commandData);
+						commands.push(command);
+					});
+					commandsDeferred.resolve(commands);
 				}, () => {
 					commandsDeferred.reject();
 				});
@@ -107,7 +113,7 @@ namespace app.support.command {
         	this.findById(id)
         		.then(command => {
     				for (let handler of handlers) {
-    					command.addHandler(new handler);
+    					command.addHandler(new handler());
     				}
     			});
 		}
@@ -117,7 +123,7 @@ namespace app.support.command {
 			
 			this.commands
 				.then((commands: Command[]) => {
-					matched.resolve(commands.filter(command => command.match(targets, filter)));
+					matched.resolve(commands.filter((command: Command) => command.match(targets, filter)));
 				}, () => {
 					matched.reject();
 				});

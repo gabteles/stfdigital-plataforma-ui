@@ -35,25 +35,27 @@ namespace app.support.command {
 	
 		public constructor(private commandService: CommandService, private $state: ng.ui.IStateService) { }
 	
-		public link($scope: CommandListDirectiveScope): void {
+		public link: ng.IDirectiveLinkFn = ($scope: CommandListDirectiveScope): void => {
 			
-			let filter: FilterCommand = <FilterCommand>{
-				context: $scope.context,
-				targetType: $scope.targetType
+			let filter: FilterCommand = null;
+		
+			if ($scope.context || $scope.targetType) {
+				filter = <FilterCommand> {
+					context: $scope.context,
+					targetType: $scope.targetType
+				};
 			}
 			
-			var listCommands = (commandService: CommandService): Function => {
-				return (n: CommandTarget<any>[], v: CommandTarget<any>[]) => {
-					//serviço que lista os comandos
-					commandService.listMatched($scope.targets, filter)
-						.then((commands: Command[]) => {
-							$scope.commands = commands;
-						});
-					}
+			var listCommands = () => {
+				//serviço que lista os comandos
+				this.commandService.listMatched($scope.targets, filter)
+					.then((commands: Command[]) => {
+						$scope.commands = commands;
+					});
 			};
 			
 			//os comandos devem ser recarregadas sempre que a quantidade de objetos mudar
-			$scope.$watchCollection('targets', listCommands(this.commandService)());
+			$scope.$watchCollection(() => $scope.targets, listCommands);
 			
 			//vai para o estado de uma ação selecionada, passando o target como parâmetro
 			$scope.go = (index: number) => {

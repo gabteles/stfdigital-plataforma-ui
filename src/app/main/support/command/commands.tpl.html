@@ -6,5 +6,8 @@
         <md-menu-item ng-repeat="(index, command) in commands | orderBy: 'description' track by command.id">
               <md-button ng-click="go(index)"><span md-menu-align-target>{{command.description}}</span></md-button>
         </md-menu-item>
+        <md-menu-item ng-if="commands.length == 0">
+              <span md-menu-align-target>Nenhuma ação disponível</span>
+        </md-menu-item>
     </md-menu-content>
 </md-menu>

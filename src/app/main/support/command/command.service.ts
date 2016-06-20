@@ -123,7 +123,8 @@ namespace app.support.command {
 			
 			this.commands
 				.then((commands: Command[]) => {
-					matched.resolve(commands.filter((command: Command) => command.match(targets, filter)));
+					matched.resolve(commands.filter(
+							(command: Command) => command.listable && command.match(targets, filter)));
 				}, () => {
 					matched.reject();
 				});

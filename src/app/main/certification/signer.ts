@@ -131,6 +131,25 @@ namespace app.certification {
 			return this.signatureService.save(this.signer.signerId);
 		}
 
+		provideExistingDocument(documentId: number) {
+			let command = new ProvideToSignCommand(this.signer.signerId, documentId);
+			this.signatureService.provideToSign(command).then(() => {
+				this.triggerDocumentProvided();
+			}, (error) => {
+				this.errorCallback(new SigningError(error));
+			});
+		}
+
+		getProgressTracker(): ProgressTracker {
+			return this.progressTracker;
+		}
+
+		triggerDocumentProvided(): void {
+			if (this.documentUploadDeferred) {
+				this.documentUploadDeferred.resolve(this.signer);
+			}
+		}
+
 		/**
 		 * Inicia a cadeia de chamadas para efetuar a assinatura. Esses passos
 		 * envolvem operações tanto no cliente, quanto no servidor, que precisam

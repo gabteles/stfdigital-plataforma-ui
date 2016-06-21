@@ -65,6 +65,9 @@ declare namespace app.certification {
          */
         onErrorCallback(callback: (SigningError) => void): void;
         saveSignedDocument(): IPromise<SignedDocumentDto>;
+        provideExistingDocument(documentId: number): void;
+        getProgressTracker(): ProgressTracker;
+        triggerDocumentProvided(): void;
         /**
          * Inicia a cadeia de chamadas para efetuar a assinatura. Esses passos
          * envolvem operações tanto no cliente, quanto no servidor, que precisam

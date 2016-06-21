@@ -14,6 +14,11 @@ declare namespace app.certification {
         signerId: string;
         constructor(signerId: string);
     }
+    class ProvideToSignCommand {
+        signerId: string;
+        documentId: number;
+        constructor(signerId: string, documentId: number);
+    }
     class PostSignCommand {
         signerId: string;
         constructor(signerId: string, signatureAsHex: string);
@@ -38,6 +43,7 @@ declare namespace app.certification {
         static $inject: string[];
         constructor(properties: any, $http: IHttpService, $q: IQService, cryptoService: CryptoService);
         prepare(command: PrepareCommand): IPromise<SignerDto>;
+        provideToSign(command: ProvideToSignCommand): IPromise<any>;
         preSign(command: PreSignCommand): IPromise<PreSignatureDto>;
         postSign(command: PostSignCommand): IPromise<void>;
         save(signerId: string): IPromise<SignedDocumentDto>;

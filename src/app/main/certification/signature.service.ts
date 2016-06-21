@@ -25,6 +25,12 @@ namespace app.certification {
 		}
 	}
 
+	export class ProvideToSignCommand {
+		constructor(public signerId: string, public documentId: number) {
+
+		}
+	}
+
 	export class PostSignCommand {
 		constructor(public signerId: string, signatureAsHex: string) {
 
@@ -56,9 +62,16 @@ namespace app.certification {
 		}
 
 		prepare(command: PrepareCommand): IPromise<SignerDto> {
-			return this.$http.post(this.properties.apiUrl + '/prepare', command)
+			return this.$http.post(this.properties.apiUrl + SignatureService.apiSignature + '/prepare', command)
 				.then((response: IHttpPromiseCallbackArg<SignerDto>) => {
 					return response.data;
+				});
+		}
+
+		provideToSign(command: ProvideToSignCommand): IPromise<any> {
+			return this.$http.post(this.properties.apiUrl + SignatureService.apiSignature + '/provide-to-sign', command)
+				.then((response: IHttpPromiseCallbackArg<any>) => {
+					return null;
 				});
 		}
 
@@ -89,5 +102,5 @@ namespace app.certification {
 
 	}
 
-	angular.module('app.certification').service('SignatureService', SignatureService);
+	angular.module('app.certification').service('app.certification.SignatureService', SignatureService);
 }

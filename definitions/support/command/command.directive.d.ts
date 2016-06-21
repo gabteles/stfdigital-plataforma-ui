@@ -26,7 +26,7 @@ declare namespace app.support.command {
         templateUrl: string;
         scope: Object;
         constructor(commandService: CommandService, $state: ng.ui.IStateService);
-        link($scope: CommandListDirectiveScope): void;
+        link: ng.IDirectiveLinkFn;
         static factory(): ng.IDirectiveFactory;
     }
     interface CommandDirectiveScope extends ng.IScope {

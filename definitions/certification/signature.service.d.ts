@@ -21,6 +21,7 @@ declare namespace app.certification {
     }
     class PostSignCommand {
         signerId: string;
+        signatureAsHex: string;
         constructor(signerId: string, signatureAsHex: string);
     }
     interface SignerDto {

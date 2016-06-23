@@ -232,7 +232,7 @@ namespace app.certification {
 						lang: 'en'
 					}
 				).then((signature) => {
-					return signature;
+					resolve(signature);
 				});
 			});
 		}

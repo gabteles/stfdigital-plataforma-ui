@@ -32,7 +32,7 @@ namespace app.certification {
 	}
 
 	export class PostSignCommand {
-		constructor(public signerId: string, signatureAsHex: string) {
+		constructor(public signerId: string, public signatureAsHex: string) {
 
 		}
 	}
@@ -76,21 +76,21 @@ namespace app.certification {
 		}
 
 		preSign(command: PreSignCommand): IPromise<PreSignatureDto> {
-			return this.$http.post(SignatureService.apiSignature + '/pre-sign', command)
+			return this.$http.post(this.properties.apiUrl + SignatureService.apiSignature + '/pre-sign', command)
 				.then((response: IHttpPromiseCallbackArg<PreSignatureDto>) => {
 					return response.data;
 				});
 		}
 
 		postSign(command: PostSignCommand): IPromise<void> {
-			return this.$http.post(SignatureService.apiSignature + '/post-sign', command)
+			return this.$http.post(this.properties.apiUrl + SignatureService.apiSignature + '/post-sign', command)
 				.then(() => {
 					return null;
 				});
 		}
 
 		save(signerId: string): IPromise<SignedDocumentDto> {
-			return this.$http.post(SignatureService.apiSignature + '/save-signed/' + signerId, {})
+			return this.$http.post(this.properties.apiUrl + SignatureService.apiSignature + '/save-signed/' + signerId, {})
 				.then((response: IHttpPromiseCallbackArg<SignedDocumentDto>) => {
 					return response.data;
 				});

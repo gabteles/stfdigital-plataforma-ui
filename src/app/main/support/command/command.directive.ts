@@ -87,30 +87,39 @@ namespace app.support.command {
 		command: Command
 	}
 	
-	export interface CommandDirectiveAttributes extends ng.IAttributes {
-		id: string;
-	}
-	
 	/**
 	 * Bot&atilde;o de um comando espec&iacute;fico
 	 * Ex. de uso: 
-	 * &lt;button id="registrar" targets="vm.recursos"&gt;Executar&lt;/button&gt; 
+	 * &lt;button id="registrar" command="vm.command"&gt;Executar&lt;/button&gt; 
 	 */
 	export class CommandDirective implements ng.IDirective {
 		
 		public restrict: string = 'A';
+		public scope: Object = {
+			command : '=', //obrigatório, comando que será validado	
+		};
 		
 		public constructor(private commandService: CommandService, private $state: ng.ui.IStateService) { }
 		
-		public link($scope: CommandDirectiveScope, element: ng.IAugmentedJQuery, attrs: CommandDirectiveAttributes): void {
+		public link: ng.IDirectiveLinkFn = ($scope: CommandDirectiveScope, element: ng.IAugmentedJQuery): void => {
 			
-			attrs.$set('disabled', 'disabled');
+			let stopClick = (event: JQueryEventObject) => {
+				event.preventDefault();
+				event.stopPropagation();
+			}
 			
-			$scope.$watchCollection('targets', () => {
-				this.commandService.isValid(attrs.id, $scope.command)
-					.then(valid => valid ? attrs.$set('disabled', '') : angular.noop());
-			});
-						
+			$scope.$watch('command', () => {
+				this.commandService.isValid(element.attr('id'), $scope.command)
+					.then(valid => {
+						if (valid) {
+							element.removeAttr('disabled');
+							element.unbind('click', stopClick)
+						} else {
+							element.attr('disabled', 'disabled');
+							element.bind('click', stopClick);
+						}
+					});
+			}, true);				
 		}
 		
 	    public static factory(): ng.IDirectiveFactory {
@@ -118,7 +127,7 @@ namespace app.support.command {
 	        let directive = (commandService: CommandService, $state: ng.ui.IStateService) => new CommandDirective(commandService, $state);
 	        return directive;
 	    }
-		
+	    
 	}
 	
 	angular

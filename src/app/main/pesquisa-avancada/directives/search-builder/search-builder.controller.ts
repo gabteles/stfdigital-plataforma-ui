@@ -2,7 +2,7 @@ namespace app.pesquisaAvancada {
     'use strict';
     import IScope = angular.IScope;
 
-    interface SearchBuilderScope extends IScope {
+    export interface SearchBuilderScope extends IScope {
         traits: ITrait[];
         search: ISearch;
     }
@@ -74,10 +74,7 @@ namespace app.pesquisaAvancada {
         public getComparisonOperators(dataType): Object {
             var operatorMapping = this.comparisonOperators;
             var ops = _.keys(operatorMapping);
-            return _.reject(ops, function(op) {
-                var types = operatorMapping[op];
-                return !_.includes(types, dataType);
-            });
+            return _.reject(ops, op => !_.includes(operatorMapping[op], dataType));
         }
 
         private createFilterFor(query): Function {
@@ -88,9 +85,7 @@ namespace app.pesquisaAvancada {
                 }
     
                 if (trait.dataType === 'list') {
-                    return _.some(trait.values, (value) => {
-                        return value.toLowerCase().indexOf(lowercaseQuery) !== -1;
-                    });
+                    return _.some(trait.values, value => value.toLowerCase().indexOf(lowercaseQuery) !== -1);
                 }
                 return false;
             };

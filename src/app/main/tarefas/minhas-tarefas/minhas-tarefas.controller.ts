@@ -7,12 +7,12 @@ namespace app.tarefas.minhasTarefas {
     import IHttpService = angular.IHttpService;
     import IDocumentService = angular.IDocumentService;
 
-    interface ISelectedFilter {
+    export interface ISelectedFilter {
         filter: string;
         dueDate: number | boolean;
     }
 
-    interface ITaskFilters {
+    export interface ITaskFilters {
         search   : string,
         tags     : ITaskTag[],
         completed: boolean,

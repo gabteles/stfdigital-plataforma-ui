@@ -12,9 +12,7 @@ namespace app.pesquisaAvancada {
         public templateUrl: string = 'app/main/pesquisa-avancada/directives/criterias-summary/criterias-summary.html';
 
         public static factory(): IDirectiveFactory {
-            return () => {
-                return new CriteriasSummaryDirective();
-            };
+            return () => new CriteriasSummaryDirective();
         }
     }
 

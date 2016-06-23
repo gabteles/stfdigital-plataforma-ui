@@ -51,9 +51,7 @@ namespace app.pesquisaAvancada {
         constructor() { }
 
         public static factory(): IDirectiveFactory {
-            return () => {
-                return new SearchBuilderDirective();
-            };
+            return () => new SearchBuilderDirective();
         }
         
     }

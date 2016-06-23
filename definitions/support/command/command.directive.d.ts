@@ -1,6 +1,6 @@
 /**
  * Diretiva que cria um botão com dropdown da lista de ações pertinentes aos
- * recursos, ou cria um botão específico para uma única ação
+ * recursos, ou desabilita um botão, ou link para uma única ação
  *
  * @author Lucas.Rodrigues
  *
@@ -8,8 +8,8 @@
  */
 declare namespace app.support.command {
     interface CommandListDirectiveScope extends ng.IScope {
-        commands: Command[];
-        targets: CommandTarget<any>[];
+        commandsConfig: CommandConfig[];
+        targets: CommandTarget[];
         targetType: string;
         context: string;
         go(index: number): void;
@@ -30,7 +30,7 @@ declare namespace app.support.command {
         static factory(): ng.IDirectiveFactory;
     }
     interface CommandDirectiveScope extends ng.IScope {
-        targets: CommandTarget<any>[];
+        command: Command;
     }
     interface CommandDirectiveAttributes extends ng.IAttributes {
         id: string;

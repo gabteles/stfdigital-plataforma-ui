@@ -1,6 +1,6 @@
 /**
  * Diretiva que cria um botão com dropdown da lista de ações pertinentes aos
- * recursos, ou cria um botão específico para uma única ação
+ * recursos, ou desabilita um botão, ou link para uma única ação
  * 
  * @author Lucas.Rodrigues
  * 
@@ -10,8 +10,8 @@ namespace app.support.command {
 	'use strict';
 	
 	export interface CommandListDirectiveScope extends ng.IScope {
-		commands: Command[];
-		targets: CommandTarget<any>[];
+		commandsConfig: CommandConfig[];
+		targets: CommandTarget[];
 		targetType: string;
 		context: string;
 	
@@ -37,20 +37,22 @@ namespace app.support.command {
 	
 		public link: ng.IDirectiveLinkFn = ($scope: CommandListDirectiveScope): void => {
 			
-			let filter: FilterCommand = null;
+			let filter: CommandFilter = null;
 		
 			if ($scope.context || $scope.targetType) {
-				filter = <FilterCommand> {
+				filter = <CommandFilter> {
 					context: $scope.context,
 					targetType: $scope.targetType
 				};
 			}
+			//remove undefined property
+			filter = _.pickBy(filter);
 			
 			var listCommands = () => {
 				//serviço que lista os comandos
 				this.commandService.listMatched($scope.targets, filter)
-					.then((commands: Command[]) => {
-						$scope.commands = commands;
+					.then((commandsConfig: CommandConfig[]) => {
+						$scope.commandsConfig = commandsConfig;
 					});
 			};
 			
@@ -59,7 +61,7 @@ namespace app.support.command {
 			
 			//vai para o estado de uma ação selecionada, passando o target como parâmetro
 			$scope.go = (index: number) => {
-				let command: Command = $scope.commands[index]; 
+				let commandConfig: CommandConfig = $scope.commandsConfig[index]; 
 				let params: any = {	};
 				let targets = $scope.targets;  
 				
@@ -70,21 +72,19 @@ namespace app.support.command {
 						params.target = targets[0];
 					}
 				}
-				this.$state.go(command.route.stateName, params);
+				this.$state.go(commandConfig.route.stateName, params);
 			};
 		}
 	
 	    public static factory(): ng.IDirectiveFactory {
-	        let directive = (commandService: CommandService, $state: ng.ui.IStateService) => {
-	        	return new CommandListDirective(commandService, $state);
-	        }
-	        directive.$inject = ['app.support.command.CommandService', '$state'];
-	        return directive;
+	        /** @ngInject **/
+	    	let directive = (commandService: CommandService, $state: ng.ui.IStateService) => new CommandListDirective(commandService, $state);
+	    	return directive;
 	    }
 	}
 	
 	export interface CommandDirectiveScope extends ng.IScope {
-		targets: CommandTarget<any>[]
+		command: Command
 	}
 	
 	export interface CommandDirectiveAttributes extends ng.IAttributes {
@@ -107,17 +107,15 @@ namespace app.support.command {
 			attrs.$set('disabled', 'disabled');
 			
 			$scope.$watchCollection('targets', () => {
-				this.commandService.match(attrs.id, $scope.targets)
-					.then(match => (match) ? attrs.$set('disabled', '') : angular.noop());
+				this.commandService.isValid(attrs.id, $scope.command)
+					.then(valid => valid ? attrs.$set('disabled', '') : angular.noop());
 			});
 						
 		}
 		
 	    public static factory(): ng.IDirectiveFactory {
-	        let directive = (commandService: CommandService, $state: ng.ui.IStateService) => {
-	        	return new CommandDirective(commandService, $state);
-	        }
-	        directive.$inject = ['app.support.command.CommandService', '$state'];
+	    	/** @ngInject **/
+	        let directive = (commandService: CommandService, $state: ng.ui.IStateService) => new CommandDirective(commandService, $state);
 	        return directive;
 	    }
 		

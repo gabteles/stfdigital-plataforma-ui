@@ -1,14 +1,39 @@
 namespace app.support.command {
 	
-	export interface CommandTarget<T> {
+	import Properties = app.support.constants.Properties;
+	
+	/**
+	 * Interface para um comando
+	 */
+	export interface Command {	}
+	
+	/**
+	 * Interface para definição de um alvo do comando.
+	 * Ex: Processo, Peticao, etc 
+	 */
+	export interface CommandTarget {
 		type: string;
 		status?: string;
 	}
 	
-	export interface ConditionHandler<T> {
-		match(targets: CommandTarget<T>[]): boolean;
+	/**
+	 * Interface para definição de um matcher
+	 * que verifica se o comando é aplicável para um alvo.
+	 */
+	export interface CommandMatcher {
+		match(targets: CommandTarget[]): boolean;
 	}
 	
+	/**
+	 * Interface para definição de um validador para o comando.
+	 */
+	export interface CommandValidator {
+		isValid(command: Command): boolean;
+	}
+	
+	/**
+	 * Interface da configuração de uma rota. 
+	 */
 	export interface RouteConfig {
 		stateName: string;
 		navigationItem: string;
@@ -17,17 +42,26 @@ namespace app.support.command {
 		src: string;
 	}
 	
+	/**
+	 * Interface da configuração de um alvo de um comando. 
+	 */
 	export interface TargetConfig {
 		type: string;
 		mode: string;
 	}
 	
-	export interface FilterCommand {
+	/**
+	 * Interface para definição de um filtro para os comandos 
+	 */
+	export interface CommandFilter {
 		targetType ?: string;
 		context ?: string;
 	}
 	
-	export class Command {
+	/**
+	 * Classe que define a configuração de um comando. 
+	 */
+	export class CommandConfig {
 		
 		id: string;
 		description: string;
@@ -36,16 +70,31 @@ namespace app.support.command {
 		target: TargetConfig; 
 		listable: boolean;
 		startProcess: boolean;
-		protected handlers: ConditionHandler<any>[] = [];
+		protected matchers: CommandMatcher[] = [];
+		protected validator: CommandValidator;
 	
-		public addHandler(handler: ConditionHandler<any>): void {
-			this.handlers.push(handler);
+		/**
+		 * Adiciona um matcher
+		 */
+		public addMatcher(matcher: CommandMatcher): void {
+			this.matchers.push(matcher);
 		}
 		
-		public match(targets: CommandTarget<any>[], filter ?: FilterCommand): boolean {
+		/**
+		 * Relaciona um validador
+		 */
+		public setValidator(validator: CommandValidator): void {
+			this.validator = validator;
+		}
+		
+		/**
+		 * Varifica se o comando é aplicável ao conjunto de alvos
+		 */
+		public match(targets: CommandTarget[], filter ?: CommandFilter): boolean {
 			// match filter
 			if (filter) {
-				if (this.target.type !== filter.targetType || this.context !== filter.context) {
+				if ((filter.targetType && this.target.type !== filter.targetType) ||
+						(filter.context && this.context !== filter.context)) {
 					return false;
 				}
 			}
@@ -57,20 +106,32 @@ namespace app.support.command {
 				return false
 			}
 			
-			//match handlers
-			if (this.handlers.length === 0) {
+			//match matchers
+			if (this.matchers.length === 0) {
 				return true;	
 			}
 			
-			for (let handler of this.handlers) {
-				if (!handler.match(targets)) {
+			for (let matcher of this.matchers) {
+				if (!matcher.match(targets)) {
 					return false;
 				}
 			}
 			return true;
 		}
 		
-		//Verifica se o modo do comando é compatível com a quantidade de targets
+		/**
+		 * Verifica se um comando é válido
+		 */
+		public isValid(command: Command): boolean {
+			if (this.validator) {
+				return this.validator.isValid(command);
+			}
+			return true;
+		}
+		
+		/**
+		 * Verifica se o modo do comando é compatível com a quantidade de alvos
+		 */
 		private isCompatibleMode(length: number): boolean {
 			let mode = this.target.mode;
 			if ((length === 0 && mode === "None") ||
@@ -82,75 +143,97 @@ namespace app.support.command {
 		}
 	}
 	
+	/**
+	 * Serviço para manipulação das configurações de comando. 
+	 */
 	export class CommandService {
 		
-		private commands: ng.IPromise<Command[]>;
+		private commandsConfig: ng.IPromise<CommandConfig[]>;
 		
 		/** @ngInject **/
-		constructor($http: ng.IHttpService, private $q: ng.IQService, private properties: any) {
-			let commandsDeferred = $q.defer();
-			this.commands = commandsDeferred.promise;
+		constructor($http: ng.IHttpService, private $q: ng.IQService, private properties: Properties) {
+			let commandsConfigDeferred = $q.defer();
+			this.commandsConfig = commandsConfigDeferred.promise;
 			
 			$http.get(this.properties.apiUrl + '/discovery/api/commands')
-				.then((response: ng.IHttpPromiseCallbackArg<Command[]>) => {
-					let commands: Command[] = [];
-					response.data.forEach(commandData => {
-						let command = new Command();
-						angular.extend(command, commandData);
-						commands.push(command);
+				.then((response: ng.IHttpPromiseCallbackArg<CommandConfig[]>) => {
+					let commandsConfig: CommandConfig[] = [];
+					response.data.forEach(commandConfigData => {
+						let commandConfig = new CommandConfig();
+						angular.extend(commandConfig, commandConfigData);
+						commandsConfig.push(commandConfig);
 					});
-					commandsDeferred.resolve(commands);
+					commandsConfigDeferred.resolve(commandsConfig);
 				}, () => {
-					commandsDeferred.reject();
+					commandsConfigDeferred.reject();
 				});
 		}
 		
-		public list(): ng.IPromise<Command[]> {
-			return this.commands;
+		/**
+		 * Lista os comandos
+		 */
+		public list(): ng.IPromise<CommandConfig[]> {
+			return this.commandsConfig;
 		}
 		
-		public addHandlers(id: string, handlers: {new(): ConditionHandler<any> }[]): void {
+		/**
+		 * Adiciona um matcher a uma configuração 
+		 */
+		public addMatcher(id: string, matcher: CommandMatcher): void {
         	this.findById(id)
-        		.then(command => {
-    				for (let handler of handlers) {
-    					command.addHandler(new handler());
-    				}
-    			});
+        		.then(commandConfig => commandConfig.addMatcher(matcher));
 		}
 		
-		public listMatched(targets: CommandTarget<any>[], filter ?: FilterCommand): ng.IPromise<Command[]> {
-			let matched: ng.IDeferred<Command[]> = this.$q.defer();
+		/**
+		 * Relaciona um validador a uma configuração 
+		 */
+		public setValidator(id: string, validator: CommandValidator): void {
+        	this.findById(id)
+        		.then(commandConfig => commandConfig.setValidator(validator));
+		}
+		
+		/**
+		 * Lista os comandos que são aplicáveis à lista de alvos. 
+		 */
+		public listMatched(targets: CommandTarget[], filter ?: CommandFilter): ng.IPromise<CommandConfig[]> {
+			let matched: ng.IDeferred<CommandConfig[]> = this.$q.defer();
 			
-			this.commands
-				.then((commands: Command[]) => {
-					matched.resolve(commands.filter(
-							(command: Command) => command.listable && command.match(targets, filter)));
+			this.commandsConfig
+				.then((commandsConfig: CommandConfig[]) => {
+					matched.resolve(commandsConfig.filter(cmd => cmd.listable && cmd.match(targets, filter)));
 				}, () => {
 					matched.reject();
 				});
 			return matched.promise;
 		}
 		
-		public match(id: string, targets: CommandTarget<any>[], targetType ?: string): ng.IPromise<boolean> {
+		/**
+		 * Verifica se um comando é valido de acordo com sua configuração.
+		 * Um validator deve ser criado para realizar a checagem
+		 */
+		public isValid(id: string, command: Command): ng.IPromise<boolean> {
 			let matched: ng.IDeferred<boolean> = this.$q.defer();
 			
 			this.findById(id)
-				.then(command => {
-					matched.resolve(command.match(targets, targetType));
+				.then(commandConfig => {
+					matched.resolve(commandConfig.isValid(command));
 				}, () => {
 					matched.reject();
 				});
 			return matched.promise;
 		}
 		
-		public findById(id): ng.IPromise<Command> {
-			let found: ng.IDeferred<Command> = this.$q.defer();
+		/**
+		 * Pesquisa uma configuração por id
+		 */
+		public findById(id): ng.IPromise<CommandConfig> {
+			let found: ng.IDeferred<CommandConfig> = this.$q.defer();
 			
-			this.commands
-				.then((commands: Command[]) => {
-					for (let command of commands) {
-						if (command.id === id) {
-							return found.resolve(command);
+			this.commandsConfig
+				.then((commandsConfig: CommandConfig[]) => {
+					for (let commandConfig of commandsConfig) {
+						if (commandConfig.id === id) {
+							return found.resolve(commandConfig);
 						}
 					}
 				}, () => {
@@ -163,5 +246,5 @@ namespace app.support.command {
 	
 	angular
 		.module('app.support.command')
-		.service('app.support.command.CommandService', CommandService);
+		.service('commandService', CommandService);
 }

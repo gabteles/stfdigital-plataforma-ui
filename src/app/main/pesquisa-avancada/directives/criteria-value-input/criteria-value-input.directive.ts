@@ -75,9 +75,7 @@ namespace app.pesquisaAvancada {
         }
 
         public static factory(): IDirectiveFactory {
-            return () => {
-                return new CriteriaValueInputDirective();
-            }
+            return () => new CriteriaValueInputDirective();
         }
     }
 

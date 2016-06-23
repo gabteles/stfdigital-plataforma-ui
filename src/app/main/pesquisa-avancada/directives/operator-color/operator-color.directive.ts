@@ -49,9 +49,7 @@ namespace app.pesquisaAvancada {
         }
 
         public static factory(): ng.IDirectiveFactory {
-            return () => {
-                return new OperatorColor();
-            };
+            return () => new OperatorColor();
         }
     }
 

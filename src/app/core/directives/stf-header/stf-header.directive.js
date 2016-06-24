@@ -26,7 +26,8 @@
                 'fabAriaLabel': '@',
                 'fabIcon': '@',
                 'fabText': '@',
-                'fabActive': '='
+                'fabActive': '=',
+                'path': '='
             },
             templateUrl: 'app/core/directives/stf-header/stf-header.html',
             transclude: true,

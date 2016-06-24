@@ -180,6 +180,8 @@ namespace app.certification {
 						} else {
 							this.callErrorCallback(error);
 						}
+					}).finally(() => {
+						this.manager.signingFinished();
 					});
 			}, (error) => {
 				this.callErrorCallback("O plugin de assinatura não foi encontrado.");

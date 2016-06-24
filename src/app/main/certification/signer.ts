@@ -58,8 +58,8 @@ namespace app.certification {
 					}, (error) => {
 						reject(error);
 					});
-				}, () => {
-
+				}, (error) => {
+					reject(error);
 				});
 				
 			});
@@ -171,8 +171,12 @@ namespace app.certification {
 					.chain(() => this.callSigningCompletedCallback())
 					.promise()
 					.catch((error) => {
-						if (error.message == 'no_implementation') {
-							this.callErrorCallback("O plugin de assinatura não foi encontrado.");
+						if (error.error.message == 'no_implementation') {
+							this.callErrorCallback('O plugin de assinatura não foi encontrado. Por favor instalar em http://www.id.ee/');
+						} else if (error.error.message == 'no_certificates') {
+							this.callErrorCallback('Nenhum certificado encontrado.');
+						} else if (error.error.message == 'user_cancel') {
+							this.callErrorCallback('Usuário cancelou a operação.');
 						} else {
 							this.callErrorCallback(error);
 						}

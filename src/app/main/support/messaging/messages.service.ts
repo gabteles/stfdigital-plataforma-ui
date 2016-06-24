@@ -36,5 +36,5 @@ namespace app.support.messaging {
 		
 	}
 	
-	angular.module('app.support.messaging').service('app.support.messaging.MessagesService', MessagesService);
+	angular.module('app.support.messaging').service('messagesService', MessagesService);
 }

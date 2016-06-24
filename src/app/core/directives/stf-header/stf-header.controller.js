@@ -9,13 +9,15 @@
 
 		init: function() {
 			this.$scope.info = {};
-			this.$scope.info.breadcrumbs = this.generateBreadcrumbs(this.$scope.path);
-			this.$scope.info.title = this.$scope.info.breadcrumbs.current.label;
-
-			this.$rootScope.$on('$stateChangeSuccess', function () {
-				this.$scope.info.breadcrumbs = this.generateBreadcrumbs();
-				this.$scope.info.title = this.$scope.info.breadcrumbs.current.label;				
-			}.bind(this));
+			if(!this.$scope.layoutOnly) {
+				this.$scope.info.breadcrumbs = this.generateBreadcrumbs(this.$scope.path);
+				this.$scope.info.title = this.$scope.info.breadcrumbs.current.label;
+	
+				this.$rootScope.$on('$stateChangeSuccess', function () {
+					this.$scope.info.breadcrumbs = this.generateBreadcrumbs();
+					this.$scope.info.title = this.$scope.info.breadcrumbs.current.label;				
+				}.bind(this));
+			}
 		},
 
 		methods: {

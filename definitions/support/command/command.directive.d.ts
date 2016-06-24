@@ -32,20 +32,18 @@ declare namespace app.support.command {
     interface CommandDirectiveScope extends ng.IScope {
         command: Command;
     }
-    interface CommandDirectiveAttributes extends ng.IAttributes {
-        id: string;
-    }
     /**
      * Bot&atilde;o de um comando espec&iacute;fico
      * Ex. de uso:
-     * &lt;button id="registrar" targets="vm.recursos"&gt;Executar&lt;/button&gt;
+     * &lt;button id="registrar" command="vm.command"&gt;Executar&lt;/button&gt;
      */
     class CommandDirective implements ng.IDirective {
         private commandService;
         private $state;
         restrict: string;
+        scope: Object;
         constructor(commandService: CommandService, $state: ng.ui.IStateService);
-        link($scope: CommandDirectiveScope, element: ng.IAugmentedJQuery, attrs: CommandDirectiveAttributes): void;
+        link: ng.IDirectiveLinkFn;
         static factory(): ng.IDirectiveFactory;
     }
 }

@@ -3,43 +3,22 @@
 var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
+var argv = require('yargs').argv;
 
 var karma = require('karma');
-
-var pathSrcHtml = [
-    path.join(conf.paths.src, '/**/*.html')
-];
-
-var pathSrcJs = [
-    path.join(conf.paths.src, '/**/!(*.spec).js')
-];
+var runSequence = require('run-sequence');
 
 function runTests(singleRun, done)
 {
-    var reporters = ['progress'];
-    var preprocessors = {};
-    /*
-    pathSrcHtml.forEach(function (path)
-    {
-        preprocessors[path] = ['ng-html2js'];
-    });
-
-    if ( singleRun )
-    {
-        pathSrcJs.forEach(function (path)
-        {
-            preprocessors[path] = ['coverage'];
-        });
-        reporters.push('coverage')
-    }
-    */
     var localConfig = {
-        configFile   : path.resolve(path.join(conf.paths.test, 'karma.conf.js')),
+        configFile   : path.resolve(path.join(conf.paths.test, '/karma.conf.js')),
         singleRun    : singleRun,
         autoWatch    : !singleRun
-        //reporters    : reporters,
-        //preprocessors: preprocessors
     };
+
+    if (argv.browsers) {
+        localConfig.browsers = argv.browsers.split(',');
+    }
 
     var server = new karma.Server(localConfig, function (failCount)
     {
@@ -48,14 +27,18 @@ function runTests(singleRun, done)
     server.start();
 }
 
-gulp.task('test:unit', ['compile-ts:for-tdd', 'compile-ts:unit', 'scripts'], function (done)
+gulp.task('test:unit', function (done)
 {
-    runTests(true, done);
+    runSequence('clean-typings:unit', ['compile-ts:for-tdd', 'compile-ts:unit', 'scripts'], function() {
+        runTests(true, done);
+    });
 });
 
-gulp.task('tdd', ['compile-ts:unit', 'watch-sources:for-tdd', 'watch-unit'], function (done)
+gulp.task('tdd', function (done)
 {
-    runTests(false, done);
+    runSequence('clean-typings:unit', ['compile-ts:unit', 'watch-sources:for-tdd', 'watch-unit'], function() {
+        runTests(false, done);
+    });
 });
 
 gulp.task('watch-unit', ['compile-ts:unit'], function() {

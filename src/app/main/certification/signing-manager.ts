@@ -10,7 +10,7 @@ namespace app.certification {
 		private tokens: IDeferred<Certificate>[] = [];
 		private availableParallelSignatures: number;
 
-		constructor(private $q: IQService, private cryptoService: CryptoService, private signatureService: SignatureService, private maximumParallelSignatures: number = 2) {
+		constructor(private $q: IQService, private cryptoService: CryptoService, private signatureService: SignatureService, private maximumParallelSignatures: number) {
 			this.availableParallelSignatures = maximumParallelSignatures;
 		}
 

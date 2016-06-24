@@ -9,7 +9,7 @@
 
 		init: function() {
 			this.$scope.info = {};
-			this.$scope.info.breadcrumbs = this.generateBreadcrumbs();
+			this.$scope.info.breadcrumbs = this.generateBreadcrumbs(this.$scope.path);
 			this.$scope.info.title = this.$scope.info.breadcrumbs.current.label;
 
 			this.$rootScope.$on('$stateChangeSuccess', function () {
@@ -19,8 +19,10 @@
 		},
 
 		methods: {
-			generateBreadcrumbs: function() {
-				var path = this._getBreadcrumbPath();
+			generateBreadcrumbs: function(path) {
+				if (!path) {
+					path = this._getBreadcrumbPath();
+				}
 				return this._getBreadcrumbFromPath(path);
             },
 

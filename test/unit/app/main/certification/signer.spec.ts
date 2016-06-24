@@ -5,23 +5,29 @@ namespace app.certification {
 	import IDeferred = angular.IDeferred;
 	import IRootScopeService = angular.IRootScopeService;
 
-	describe('Signer', () => {
+	describe('Teste do Signer', () => {
 
 		let signer: Signer;
 		let signingManager: SigningManager;
 
-		beforeEach(() => {
-			signingManager = new SigningManager(null, null, null);
-			signer = new Signer(null, null, null, null);
-		});
+		beforeEach(inject((_$q_: IQService) => {
+			let mockCryptoService: CryptoService = <CryptoService>{
 
-		it('TODO: Escrever o teste', () => {
+			};
+			let mockSignatureService: SignatureService = <SignatureService>{
+
+			};
+			signingManager = new SigningManager(_$q_, mockCryptoService, mockSignatureService, 2);
+			signer = signingManager.createSigner();
+		}));
+
+		it('TODO: Deveria testar o método start', () => {
 			expect(true).toEqual(true);
 		});
 		
 	});
 
-	describe('ProgressTracker', () => {
+	describe('Teste do ProgressTracker', () => {
 
 		let progressTracker: ProgressTracker;
 
@@ -46,7 +52,7 @@ namespace app.certification {
 
 	});
 
-	describe('StepsChain', () => {
+	describe('Teste do StepsChain', () => {
 		let $q: IQService;
 		let $rootScope: IRootScopeService;
 

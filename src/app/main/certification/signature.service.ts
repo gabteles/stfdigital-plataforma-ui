@@ -96,8 +96,8 @@ namespace app.certification {
 				});
 		}
 
-		signingManager() {
-			return new SigningManager(this.$q, this.cryptoService, this);
+		signingManager(maximumParallelSignatures: number = 2) {
+			return new SigningManager(this.$q, this.cryptoService, this, maximumParallelSignatures);
 		}
 
 	}

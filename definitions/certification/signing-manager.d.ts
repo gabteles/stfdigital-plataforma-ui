@@ -5,17 +5,18 @@ declare namespace app.certification {
         private $q;
         private cryptoService;
         private signatureService;
-        private certificate;
-        constructor($q: IQService, cryptoService: CryptoService, signatureService: SignatureService);
-        injectCertificate(resolvedObject: any): void;
-        collectCertificate(cert: any): void;
-        injectAlreadySelectedCertificate(): void;
+        private maximumParallelSignatures;
+        private certificateDeferred;
+        private tokens;
+        private availableParallelSignatures;
+        constructor($q: IQService, cryptoService: CryptoService, signatureService: SignatureService, maximumParallelSignatures: number);
         /**
          * Recupera o certificado já selecionado ou
          * pede o usuário para selecionar caso nenhum já tenha sido selecionado.
          *
          */
         recoverCertificate(): IPromise<Certificate>;
+        signingFinished(): void;
         createSigner(): Signer;
     }
 }

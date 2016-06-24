@@ -48,6 +48,6 @@ declare namespace app.certification {
         preSign(command: PreSignCommand): IPromise<PreSignatureDto>;
         postSign(command: PostSignCommand): IPromise<void>;
         save(signerId: string): IPromise<SignedDocumentDto>;
-        signingManager(): SigningManager;
+        signingManager(maximumParallelSignatures?: number): SigningManager;
     }
 }

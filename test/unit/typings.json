@@ -6,6 +6,7 @@
     "angular": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#b76dd8a7f95b71696982befbb7589940d27e940b",
     "angular-mocks": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-mocks.d.ts#5b7257019ae959533341a715b339d2562bbf9b85",
     
+    "app.certification.signature.service": "file:../../definitions/certification/signature.service.d.ts",
     "app.certification.signing-manager": "file:../../definitions/certification/signing-manager.d.ts",
     "app.certification.signer": "file:../../definitions/certification/signer.d.ts",
     "app.certification.crypto.service": "file:../../definitions/certification/crypto.service.d.ts",

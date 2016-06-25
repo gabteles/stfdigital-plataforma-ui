@@ -44,6 +44,15 @@ task createDistFolder() {
     }
 }
 
+// --cache local para permitir executar npm install em paralelo
+// Permitindo parametrizar o registro npm com o objetivo de poder usar um proxy local para melhorar o tempo de construção
+npmInstall {
+    args = ['--cache', 'node_cache', '--loglevel', 'info']
+    if (project.hasProperty('npmRegistry')) {
+        args += ['--registry', project.getProperty('npmRegistry')]
+    }
+}
+
 //npmInstall.dependsOn npm_prune
 gulp_clean.dependsOn tasks.npmInstall
 gulp_build.dependsOn gulp_clean

@@ -21,6 +21,7 @@ data
 # Node
 node_modules
 node
+node_cache
 
 # Bower
 bower_components

@@ -4,6 +4,8 @@ var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
 
+var runSequence = require('run-sequence');
+
 var browserSync = require('browser-sync');
 
 var $ = require('gulp-load-plugins')();
@@ -14,9 +16,11 @@ gulp.task('scripts-reload', function ()
         .pipe(browserSync.stream());
 });
 
-gulp.task('scripts', ['bower:prune', 'compile-ts'], function ()
+gulp.task('scripts', function ()
 {
-    return buildScripts();
+    runSequence('bower:prune', 'compile-ts', function() {
+        return buildScripts();
+    });
 });
 
 function buildScripts()

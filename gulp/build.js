@@ -5,7 +5,7 @@ var gulp = require('gulp');
 var conf = require('./conf');
 
 var $ = require('gulp-load-plugins')({
-    pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
+    pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del', 'lazypipe']
 });
 
 gulp.task('partials', function ()
@@ -42,16 +42,15 @@ gulp.task('html', ['inject', 'partials'], function ()
 
     return gulp.src(path.join(conf.paths.tmp, '/serve/*.html'))
         .pipe($.inject(partialsInjectFile, partialsInjectOptions))
-        .pipe(assets = $.useref.assets())
+        .pipe(assets = $.useref.assets({}, $.lazypipe().pipe($.sourcemaps.init, {loadMaps: true})))
         .pipe($.rev())
         .pipe(jsFilter)
-        .pipe($.sourcemaps.init())
-        .pipe($.ngAnnotate())
-        .pipe($.uglify({preserveComments: $.uglifySaveLicense})).on('error', conf.errorHandler('Uglify'))
+        .pipe($.ngAnnotate({gulpWarnings: false}))
+         // compress foi setado pra false, pois esava quebrando os sourcemaps e a biblioteca js-polyfills
+        .pipe($.uglify({mangle: false, compress: false})).on('error', conf.errorHandler('Uglify'))
         .pipe($.sourcemaps.write('maps'))
         .pipe(jsFilter.restore)
         .pipe(cssFilter)
-        .pipe($.sourcemaps.init())
         .pipe($.minifyCss({processImport: false}))
         .pipe($.sourcemaps.write('maps'))
         .pipe(cssFilter.restore)

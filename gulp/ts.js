@@ -42,7 +42,7 @@ var tsTypingsOutputPath = path.join(conf.paths.unit, 'typings');
  * Install all typings files
  */
 gulp.task('install-typings',function(){
-    gulp.src('typings.json')
+    return gulp.src('typings.json')
         .pipe($.typings());
 });
 
@@ -50,7 +50,7 @@ gulp.task('install-typings',function(){
  * Install e2e typings files
  */
 gulp.task('install-typings:e2e',function(){
-    gulp.src('typings.json', {cwd: conf.paths.e2e})
+    return gulp.src('typings.json', {cwd: conf.paths.e2e})
         .pipe($.typings());
 });
 

@@ -68,7 +68,8 @@
     "superstatic": "~4.0.2",
     "run-sequence": "~1.2.1",
     "gulp-dest-clean": "~0.5.0",
-    "yargs": "~4.7.1"
+    "yargs": "~4.7.1",
+    "lazypipe": "~1.0.1"
   },
   "engines": {
     "node": ">=5.9.0"

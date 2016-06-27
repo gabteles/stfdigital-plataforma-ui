@@ -29,7 +29,6 @@ var buildStyles = function() {
         path.join(conf.paths.src, '/app/core/scss/**/*.scss'),
         path.join(conf.paths.src, '/app/core/**/*.scss'),
         path.join(conf.paths.src, '/app/**/*.scss'),
-        path.join('!' + conf.paths.src, '/app/main/components/material-docs/demo-partials/**/*.scss'),
         path.join('!' + conf.paths.src, '/app/core/scss/partials/**/*.scss'),
         path.join('!' + conf.paths.src, '/app/index.scss')
     ], {read: false});
@@ -49,10 +48,9 @@ var buildStyles = function() {
             path.join(conf.paths.src, '/app/index.scss')
         ])
         .pipe($.inject(injectFiles, injectOptions))
-        .pipe(wiredep(_.extend({}, conf.wiredep)))
         .pipe($.sourcemaps.init())
         .pipe($.sass(sassOptions)).on('error', conf.errorHandler('Sass'))
         .pipe($.autoprefixer()).on('error', conf.errorHandler('Autoprefixer'))
-        .pipe($.sourcemaps.write())
+        .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve/app/')));
 };

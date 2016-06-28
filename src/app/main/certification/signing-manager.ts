@@ -28,7 +28,7 @@ namespace app.certification {
 					this.certificateDeferred.reject({'error': err});
 				});
 			}
-			if (this.availableParallelSignatures == 0) {
+			if (this.availableParallelSignatures === 0) {
 				let token = this.$q.defer<Certificate>();
 				this.tokens.push(token);
 				return token.promise.then(() => {

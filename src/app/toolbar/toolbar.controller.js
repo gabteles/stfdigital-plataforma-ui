@@ -4,14 +4,20 @@
     angular.module('app.toolbar').classy.controller({
         name: 'ToolbarController',
 
-        inject: ['$scope', '$rootScope', '$mdSidenav', '$mdToast', '$mdMedia', 'msNavigationService', '$state'],
+        inject: ['$scope', '$rootScope', '$mdSidenav', '$mdToast', '$mdMedia', 'msNavigationService', '$state', 'AuthService'],
 
         init: function() {
+            var self = this;
+
             this.bodyEl = angular.element('body');
             
             this.$scope.$watch(function() {
                 return this.$mdMedia('gt-sm');
             }.bind(this), this.updateNavigation);
+
+            this.AuthService.user().then(function(response) {
+                self.nome = response.data.name;
+            });
 
             // TODO: Isso deve virar um enum em alguma factory para indicar o tipo de pesquisa
             // 1 = Processo, 2 = Petição
@@ -71,8 +77,8 @@
              * Logout Function
              */
             logout: function () {
+                this.AuthService.logout();
                 this.$state.go('app.login');
-                console.log("TODO: Fazer logout do usuário");
             },
 
             /**

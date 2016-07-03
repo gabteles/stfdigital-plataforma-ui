@@ -27,7 +27,7 @@ namespace app.novoProcesso {
                 .then((response: IHttpPromiseCallbackArg<any>): IProcessoWorkflow[] => {
                 	var processos = response.data;
                 	if (angular.isArray(processos)) {
-	                    return processos.map((processo: any) => {
+	                    return processos.filter(processo => processo.route !== null).map((processo: any) => {
 	                        return new ProcessoWorkflow(processo.description, processo.route.stateName);
 	                    });
                 	} else {

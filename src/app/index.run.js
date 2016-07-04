@@ -1,36 +1,38 @@
-(function ()
-{
+(function () {
     'use strict';
 
-    angular
-        .module('app')
-        .run(runBlock);
+    angular.module('app').run(runBlock);
 
     /** @ngInject */
-    function runBlock($rootScope, $timeout, $state, $log)
-    {
-        // Activate loading indicator
-        var stateChangeStartEvent = $rootScope.$on('$stateChangeStart', function (event, toState, toParams)
-        {
+    function runBlock($rootScope, $timeout, $state, $log, $http, properties, AuthService) {
+
+        var stateChangeStartEvent = $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+
             $rootScope.loadingProgress = true;
 
-            if (toState.redirectTo) {
+            // Se já está logado e solicita a página de login, deve ser redirecionado para o inbox de tarefas    
+            if (AuthService.isAuthenticated() && toState.url === '/login') {
                 event.preventDefault();
-                $state.go(toState.redirectTo, toParams);
+                $state.go('app.tarefas.minhas-tarefas');
+                return;
             }
+
+            // Se não está logado e solicita uma página protegida, deve ser redirecionado para a página de login     
+            if (!AuthService.isAuthenticated() && toState.url !== '/login') {
+                event.preventDefault();
+                $state.go('app.login');
+                return;
+            }
+
         });
 
-        // De-activate loading indicator
-        var stateChangeSuccessEvent = $rootScope.$on('$stateChangeSuccess', function ()
-        {
-            $timeout(function ()
-            {
+        var stateChangeSuccessEvent = $rootScope.$on('$stateChangeSuccess', function () {
+            $timeout(function () {
                 $rootScope.loadingProgress = false;
             });
         });
         
-        var stateChangeErrorEvent = $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error)
-        {
+        var stateChangeErrorEvent = $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         	$log.error(error);
         });
 
@@ -38,8 +40,7 @@
         $rootScope.state = $state;
 
         // Cleanup
-        $rootScope.$on('$destroy', function ()
-        {
+        $rootScope.$on('$destroy', function () {
             stateChangeStartEvent();
             stateChangeSuccessEvent();
             stateChangeErrorEvent();

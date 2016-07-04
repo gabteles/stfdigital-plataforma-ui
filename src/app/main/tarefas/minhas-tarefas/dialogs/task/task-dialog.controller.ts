@@ -37,7 +37,6 @@ namespace app.tarefas.minhasTarefas {
                     completed         : false,
                     starred           : false,
                     important         : false,
-                    deleted           : false,
                     tags              : [],
                     attachments       : []
                 };
@@ -99,7 +98,7 @@ namespace app.tarefas.minhasTarefas {
             this.$mdDialog.show(confirm).then(() => {
                 for ( var i = 0; i < this.tasks.length; i++ ) {
                     if ( this.tasks[i].id === this.task.id ) {
-                        this.tasks[i].deleted = true;
+                        //this.tasks[i].deleted = true;
                         break;
                     }
                 }

@@ -1,9 +1,9 @@
 namespace app.novoProcesso {
 	'use strict';
 
-	import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
-	import IStateProvider = angular.ui.IStateProvider;
-	import IPromise = angular.IPromise;
+	import ITranslatePartialLoaderProvider = ng.translate.ITranslatePartialLoaderProvider;
+	import IStateProvider = ng.ui.IStateProvider;
+	import IPromise = ng.IPromise;
 	
     /** @ngInject * */
     function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider,
@@ -23,7 +23,7 @@ namespace app.novoProcesso {
             },
             resolve : {
                 processos : ['app.novo-processo.NovoProcessoService',
-                    (novoProcessoService: NovoProcessoService): IPromise<IProcessoWorkflow[]> => {
+                    (novoProcessoService: NovoProcessoService): ng.IPromise<IProcessoWorkflow[]> => {
                     return novoProcessoService.list();
                 }]
             }

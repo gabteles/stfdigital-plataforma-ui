@@ -13,12 +13,12 @@
             <div 
             	class="processo-list-item"
             	ng-if="vm.processos.length > 0"
-            	ng-repeat="processo in vm.processos"
+            	ng-repeat="processo in vm.processos track by processo.id"
             	ng-click="vm.itemClick(processo.id)"
             	layout="column"
             	layout-align="center center"
             	layout-wrap
-                ng-attr-ui-sref="{{processo.stateName}}">
+                ng-attr-ui-sref="{{processo.route.stateName}}">
 
                 <md-icon md-font-icon="icon-plus-circle" class="icon s64"></md-icon>
                 <div class="processo-name">{{processo.description}}</div>

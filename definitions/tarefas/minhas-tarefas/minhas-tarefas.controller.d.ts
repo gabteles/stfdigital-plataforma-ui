@@ -4,6 +4,7 @@ declare namespace app.tarefas.minhasTarefas {
     import IFilterService = angular.IFilterService;
     import IScope = angular.IScope;
     import IDocumentService = angular.IDocumentService;
+    import IStateService = angular.ui.IStateService;
     interface ISelectedFilter {
         filter: string;
         dueDate: number | boolean;
@@ -22,6 +23,7 @@ declare namespace app.tarefas.minhasTarefas {
         private $mdSidenav;
         private $filter;
         private $scope;
+        private $state;
         private tasks;
         private tags;
         completed: Array<string>;
@@ -36,14 +38,15 @@ declare namespace app.tarefas.minhasTarefas {
         msScrollOptions: Object;
         collapsed: boolean;
         newTag: string;
-        static $inject: ['$document', '$mdDialog', '$mdSidenav', '$filter', '$scope', 'tasks', 'tags'];
-        constructor($document: IDocumentService, $mdDialog: IDialogService, $mdSidenav: ISidenavService, $filter: IFilterService, $scope: IScope, tasks: ITask[], tags: ITaskTag[]);
+        /** @ngInject **/
+        constructor($document: IDocumentService, $mdDialog: IDialogService, $mdSidenav: ISidenavService, $filter: IFilterService, $scope: IScope, $state: IStateService, tasks: ITask[], tags: ITaskTag[]);
         /**
          * Prevent default
          *
          * @param e
          */
         preventDefault(e: Event): void;
+        openTask(task: ITask): void;
         /**
          * Open new task dialog
          *

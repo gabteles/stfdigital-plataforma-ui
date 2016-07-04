@@ -1,15 +1,13 @@
 namespace app.novoProcesso {
 	'use strict';
 	
-	import IScope = angular.IScope;
-	
     export class NovoProcessoController {
 
         public buscaProcesso: string = "";
         private todosProcessos: IProcessoWorkflow[];
         
         /** @ngInject **/
-        constructor(private $scope: IScope, public processos: IProcessoWorkflow[]) {
+        constructor(private $scope: ng.IScope, public processos: IProcessoWorkflow[]) {
             this.$scope.$watch(() => this.buscaProcesso, () => this.filtrarProcessos());
             this.todosProcessos = angular.copy(processos);
         }

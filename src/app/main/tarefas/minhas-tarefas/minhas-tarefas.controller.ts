@@ -6,6 +6,7 @@ namespace app.tarefas.minhasTarefas {
     import IScope = angular.IScope;
     import IHttpService = angular.IHttpService;
     import IDocumentService = angular.IDocumentService;
+    import IStateService = angular.ui.IStateService;
 
     export interface ISelectedFilter {
         filter: string;
@@ -55,13 +56,13 @@ namespace app.tarefas.minhasTarefas {
         public collapsed: boolean = false;
         public newTag: string;
         
-        static $inject: ['$document', '$mdDialog', '$mdSidenav', '$filter', '$scope', 'tasks', 'tags'];
-        
+        /** @ngInject **/       
         constructor(private $document: IDocumentService,
                     private $mdDialog: IDialogService, 
                     private $mdSidenav: ISidenavService, 
                     private $filter: IFilterService, 
                     private $scope: IScope,
+                    private $state: IStateService,
                     private tasks: ITask[],
                     private tags: ITaskTag[]) {
 
@@ -76,6 +77,12 @@ namespace app.tarefas.minhasTarefas {
         public preventDefault(e: Event): void {
             e.preventDefault();
             e.stopPropagation();
+        }
+        
+        public openTask(task: ITask): void {
+        	this.$state.go(task.state, {
+        		resource: task.id
+        	});
         }
 
         /**

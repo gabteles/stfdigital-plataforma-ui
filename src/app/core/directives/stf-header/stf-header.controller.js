@@ -21,10 +21,8 @@
 		},
 
 		methods: {
-			generateBreadcrumbs: function(path) {
-				if (!path) {
-					path = this._getBreadcrumbPath();
-				}
+			generateBreadcrumbs: function() {
+				var path = this._getBreadcrumbPath();
 				return this._getBreadcrumbFromPath(path);
             },
 
@@ -74,7 +72,7 @@
             _parsePathPart: function(part) {
             	return {
             		label: part.translation,
-            		link: part.uisref 
+            		link: part.uisref
             	};
             }
 		}

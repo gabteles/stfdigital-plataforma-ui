@@ -1,13 +1,13 @@
 declare namespace app.pesquisaAvancada {
-    import IHttpService = angular.IHttpService;
+    import Properties = app.support.constants.Properties;
     class PesquisaAvancadaService {
         private $http;
         private msNavigationService;
         private properties;
         private static apiPesquisas;
         /** @ngInject **/
-        constructor($http: IHttpService, msNavigationService: any, properties: any);
+        constructor($http: ng.IHttpService, msNavigationService: any, properties: Properties);
         load(): void;
-        private list();
+        private addRouteToNavigation(pesquisa);
     }
 }

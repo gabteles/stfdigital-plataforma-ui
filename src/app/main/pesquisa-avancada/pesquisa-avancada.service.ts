@@ -1,15 +1,12 @@
 namespace app.pesquisaAvancada {
 	'use strict';
 	
-	import IHttpService = angular.IHttpService;
-    import IPromise = angular.IPromise;
-    import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
     import RouteConfig = app.support.command.RouteConfig;
+    import Properties = app.support.constants.Properties;
     
-    
-    class PesquisaAvancada {
-        constructor(public description: string,
-        			public route: RouteConfig) {}
+    interface IPesquisaAvancada {
+    	description: string;
+        route: RouteConfig;
     }
 
     export class PesquisaAvancadaService {
@@ -17,38 +14,25 @@ namespace app.pesquisaAvancada {
         private static apiPesquisas: string = '/discovery/api/queries';
 
         /** @ngInject **/
-        constructor(private $http: IHttpService, private msNavigationService, private properties) { }
+        constructor(private $http: ng.IHttpService, private msNavigationService, private properties: Properties) { }
         
         public load(): void {
-        	this.list()
-        		.then((pesquisas: PesquisaAvancada[]) => {
-        			pesquisas.forEach((pesquisa: PesquisaAvancada) => {
-        				let route: RouteConfig = pesquisa.route; 
-        				this.msNavigationService.saveItem(route.navigationItem, {
-        			        title : pesquisa.description,
-        			        icon : 'icon-magnify',
-        			        state : route.stateName,
-        			        translation : route.translation,
-        			        lazy : true,
-        			        weight: 1
-        			    });
-        			})
-        		});
-        }
-
-        private list(): IPromise<PesquisaAvancada[]> {
-            return this.$http.get(this.properties.apiUrl + PesquisaAvancadaService.apiPesquisas)
-                .then((response: IHttpPromiseCallbackArg<any>): PesquisaAvancada[] => {
-                	var pesquisas = response.data;
-                	if (angular.isArray(pesquisas)) {
-	                    return pesquisas.map((pesquisa: any) => {
-	                        return new PesquisaAvancada(pesquisa.description, 
-	                        							pesquisa.route);
-	                    });
-                	} else {
-                		return [];
-                	}
+            this.$http.get(this.properties.apiUrl + PesquisaAvancadaService.apiPesquisas)
+                .then((response: ng.IHttpPromiseCallbackArg<IPesquisaAvancada[]>) => {
+                    response.data
+                            .filter(pesquisa => angular.isDefined(pesquisa.route))
+                            .forEach(pesquisa => this.addRouteToNavigation(pesquisa));
                 });
+        }
+        
+        private addRouteToNavigation(pesquisa: IPesquisaAvancada): void {
+            let route: RouteConfig = pesquisa.route;
+	        this.msNavigationService.saveItem(route.navigationItem, {
+	            title : pesquisa.description,
+	            icon : 'icon-magnify',
+	            state : route.stateName,
+	            translation : route.translation
+	        });
         }
     }
 

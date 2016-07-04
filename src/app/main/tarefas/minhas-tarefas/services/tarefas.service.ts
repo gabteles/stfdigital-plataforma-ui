@@ -17,9 +17,9 @@ namespace app.tarefas.minhasTarefas {
     }
     
     export interface ITask {
-        id?: string,
+        id: string,
         title: string,
-        notes: string,
+        state: string,
         startDate: Date,
         startDateTimestamp: number,
         dueDate: Date,
@@ -27,7 +27,7 @@ namespace app.tarefas.minhasTarefas {
         completed: boolean,
         starred: boolean,
         important: boolean,
-        deleted: boolean,
+        notes: string,
         tags: ITaskTag[],
         attachments: ITaskAttachment[],
         selected?: boolean

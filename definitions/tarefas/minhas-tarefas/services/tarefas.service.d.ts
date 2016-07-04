@@ -12,9 +12,9 @@ declare namespace app.tarefas.minhasTarefas {
         size: number;
     }
     interface ITask {
-        id?: string;
+        id: string;
         title: string;
-        notes: string;
+        state: string;
         startDate: Date;
         startDateTimestamp: number;
         dueDate: Date;
@@ -22,7 +22,7 @@ declare namespace app.tarefas.minhasTarefas {
         completed: boolean;
         starred: boolean;
         important: boolean;
-        deleted: boolean;
+        notes: string;
         tags: ITaskTag[];
         attachments: ITaskAttachment[];
         selected?: boolean;

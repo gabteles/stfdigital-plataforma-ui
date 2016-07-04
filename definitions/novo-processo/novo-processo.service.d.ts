@@ -1,21 +1,18 @@
 declare namespace app.novoProcesso {
-    import IHttpService = angular.IHttpService;
-    import IPromise = angular.IPromise;
+    import Properties = app.support.constants.Properties;
+    import RouteConfig = app.support.command.RouteConfig;
     interface IProcessoWorkflow {
         description: string;
-        stateName: string;
-    }
-    class ProcessoWorkflow implements IProcessoWorkflow {
-        description: string;
-        stateName: string;
-        constructor(description: string, stateName: string);
+        route: RouteConfig;
     }
     class NovoProcessoService {
         private $http;
         private properties;
+        private msNavigationService;
         private static apiProcessos;
+        private: any;
         /** @ngInject **/
-        constructor($http: IHttpService, properties: any);
-        list(): IPromise<IProcessoWorkflow[]>;
+        constructor($http: ng.IHttpService, properties: Properties, msNavigationService: any);
+        list(): ng.IPromise<IProcessoWorkflow[]>;
     }
 }

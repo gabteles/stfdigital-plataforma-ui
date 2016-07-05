@@ -19,7 +19,7 @@ namespace app.tarefas.minhasTarefas {
     export interface ITask {
         id: string,
         title: string,
-        state: string,
+        command: string,
         startDate: Date,
         startDateTimestamp: number,
         dueDate: Date,
@@ -29,6 +29,7 @@ namespace app.tarefas.minhasTarefas {
         important: boolean,
         notes: string,
         tags: ITaskTag[],
+        informationId: number,
         attachments: ITaskAttachment[],
         selected?: boolean
     }
@@ -44,11 +45,16 @@ namespace app.tarefas.minhasTarefas {
             return this.$http.get(this.properties.url + ":" + this.properties.port + MinhasTarefasService.apiTarefas)
                         .then(response => {
                             var tasks: ITask[] = <ITask[]>response.data;
+                            
                             angular.forEach(tasks, task => {
+                            	
+                            	task.informationId = this.getInformationId(task.id);
+                            	
                                 if (angular.isNumber(task.startDate)) {
                                     task.startDate = new Date(task.startDate.valueOf());
                                     task.startDateTimestamp = task.startDate.getTime() / 1000;
                                 }
+                                
                                 if (angular.isNumber(task.dueDate)) {
                                     task.dueDate = new Date(task.dueDate.valueOf());
                                     task.dueDateTimestamp = task.dueDate.getTime() / 1000;
@@ -56,6 +62,10 @@ namespace app.tarefas.minhasTarefas {
                             });
                             return tasks;
                         });
+        }
+        
+        private getInformationId(taskId: string): number {
+        	return parseInt(taskId.split(":").pop());
         }
     }
     

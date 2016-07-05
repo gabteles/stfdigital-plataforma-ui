@@ -7,6 +7,7 @@ namespace app.tarefas.minhasTarefas {
     import IHttpService = angular.IHttpService;
     import IDocumentService = angular.IDocumentService;
     import IStateService = angular.ui.IStateService;
+    import CommandService = app.support.command.CommandService;
 
     export interface ISelectedFilter {
         filter: string;
@@ -63,6 +64,7 @@ namespace app.tarefas.minhasTarefas {
                     private $filter: IFilterService, 
                     private $scope: IScope,
                     private $state: IStateService,
+                    private commandService: CommandService,
                     private tasks: ITask[],
                     private tags: ITaskTag[]) {
 
@@ -80,9 +82,8 @@ namespace app.tarefas.minhasTarefas {
         }
         
         public openTask(task: ITask): void {
-        	this.$state.go(task.state, {
-        		resource: task.id
-        	});
+        	this.commandService.findById(task.command)
+        	   .then(command => this.$state.go(command.route.stateName, { informationId: task.informationId }));
         }
 
         /**

@@ -36,10 +36,10 @@ namespace app.tarefas.minhasTarefas {
             state : 'app.tarefas.minhas-tarefas',
             translation : 'TAREFAS.MEUS-PAINEIS.MEUS-PAINEIS',
             weight : 1,
-            badge : {
+            /*badge : {
                 content : 1,
                 color : '#03A9F3'
-            }
+            }*/
         });
     }
 

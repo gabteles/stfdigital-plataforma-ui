@@ -1,0 +1,24 @@
+# Define a configuração padrão complementar dos serviços
+# As variáveis utilizadas neste arquivo estão definidas no arquivo .env
+version: '2'
+services:
+  discovery:
+    ports:
+     - "8761:8761"
+     - "47961:8000"
+    environment:
+     - JAVA_OPTS=${JAVA_DEBUG_OPTS} ${JAVA_SERVICE_OPTS}
+  gateway:
+    ports:
+     - "8765:8765"
+     - "47965:${JAVA_DEBUG_PORT}"
+    environment:
+     - JAVA_OPTS=${JAVA_DEBUG_OPTS} ${JAVA_SERVICE_OPTS}     
+  userauthentication:
+    ports:
+     - "8095:8095"
+     - "8195:8195"
+     - "47995:${JAVA_DEBUG_PORT}"
+    environment:
+     - spring.profiles.active=development
+     - JAVA_OPTS=${JAVA_DEBUG_OPTS} ${JAVA_SERVICE_OPTS}

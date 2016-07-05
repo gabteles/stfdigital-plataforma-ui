@@ -27,6 +27,7 @@ var allTypeScriptE2E = path.join(conf.paths.e2e, 'app/**/*.ts');
 var libraryTypeScriptE2E = path.join(conf.paths.e2e, 'typings/main/**/*.d.ts');
 var tsOutputPathE2E = path.join(conf.paths.e2e, 'build');
 var tsGenFilesE2E = path.join(conf.paths.e2e, '**/*.js');
+var tsTypingsOutputPathE2E = path.join(conf.paths.e2e, 'typings');
 
 var createTsProjectUnit = function() {
 	return $.typescript.createProject(path.join(conf.paths.unit, 'tsconfig.json'));
@@ -54,6 +55,9 @@ gulp.task('install-typings:e2e',function(){
         .pipe($.typings());
 });
 
+gulp.task('clean-typings:e2e', function() {
+    return $.del(tsTypingsOutputPathE2E);
+});
 /**
  * Install all unit typings files
  */

@@ -47,13 +47,23 @@ task createDistFolder() {
 // --cache local para permitir executar npm install em paralelo
 // Permitindo parametrizar o registro npm com o objetivo de poder usar um proxy local para melhorar o tempo de construção
 npmInstall {
-    args = ['--cache', 'node_cache', '--loglevel', 'info']
+    args = ['--cache', 'node_cache']
     if (project.hasProperty('npmRegistry')) {
         args += ['--registry', project.getProperty('npmRegistry')]
     }
 }
 
-//npmInstall.dependsOn npm_prune
+task gulpTestUnit(type: GulpTask) {
+    args = ['test:unit']
+}
+
+ext.e2eBaseUrl = project.hasProperty('e2eBaseUrl') ? project.getProperty('e2eBaseUrl') : 'https://docker:8443'
+ext.e2eSeleniumAddress = project.hasProperty('e2eSeleniumAddress') ? project.getProperty('e2eSeleniumAddress') : 'http://docker:4444/wd/hub'
+
+task gulpTestE2E(type: GulpTask) {
+    args = ['test:e2e', '--e2eBaseUrl', e2eBaseUrl, '--e2eSeleniumAddress', e2eSeleniumAddress]
+}
+
 gulp_clean.dependsOn tasks.npmInstall
 gulp_build.dependsOn gulp_clean
 dockerPrepare.dependsOn gulp_build
@@ -61,7 +71,7 @@ dockerPrepare.dependsOn gulp_build
 ext.dockerImageTag = project.hasProperty('dockerImageTag') ? project.getProperty('dockerImageTag') : ''
 
 docker {
-    name 'plataforma-ui' + (dockerImageTag ? ':' + dockerImageTag : '')
+    name dockerImageName + (dockerImageTag ? ':' + dockerImageTag : '')
     dockerfile 'Dockerfile'
     files 'dist', '.dockerignore', 'superstatic.json', 'superstatic.js', 'ssl'
 }

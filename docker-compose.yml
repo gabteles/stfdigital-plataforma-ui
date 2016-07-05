@@ -3,18 +3,13 @@ services:
   discovery:
     container_name: discovery
     image: supremotribunalfederal/stfdigital-plataforma-discovery
-    ports:
-     - "8761:8761"
-     - "47961:47961"
-    environment:
-     - JAVA_OPTS=-Xdebug, -Xrunjdwp:server=y,transport=dt_socket,address=47961,suspend=n
   gateway:
     container_name: gateway
     image: supremotribunalfederal/stfdigital-plataforma-gateway
-    ports:
-     - "8765:8765"
-     - "47965:47965"
-    environment:
-     - JAVA_OPTS=-Xdebug, -Xrunjdwp:server=y,transport=dt_socket,address=47965,suspend=n
+    depends_on:
+     - discovery
+  userauthentication:
+    container_name: userauthentication
+    image: supremotribunalfederal/stfdigital-plataforma-userauthentication
     depends_on:
      - discovery

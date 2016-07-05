@@ -4,8 +4,23 @@ jdk:
 - oraclejdk8
 services:
 - docker
-install: true
-script: gradle docker
+addons:
+  hosts:
+    - docker
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - docker save -o $HOME/docker_cache/docker.tar stfdigital-plataforma-ui $(docker history -q stfdigital-plataforma-ui | tail -n +2 | grep -v \<missing\> | tr '\n' ' ')
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - node_cache
+    - node_modules
+    - $HOME/docker_cache
+before_install:
+  - ./scripts/upgrade-docker.sh
+  - mkdir -p $HOME/docker_cache
+install: docker load -i $HOME/docker_cache/docker.tar || true
+script: gradle docker && gradle gulpTestUnit && ./scripts/test-e2e.sh
 notifications:
   slack:
     secure: cO2plplwVctvT9a5u4W1Xld3682p3TwSALDQrSdSncNMAhzykFSxUuy/QWg7G010oLNp6kHLDjNtWCSagYyqtXgpC7ECPD9TAivfBMeSYV1JvNvZ8toAIwhn+rq/OnpohmkZ4MAYvqseeyj8GQb18UBHANlErlO5rDbZ2K3jRpocJf5PiFydOMAquDp505TgiYDAFXoCQBQoEPy6CjNHyNOaKTl2AWdFCGmLdvXXyHo60TKquneiFblX/muqtdVH6cFfIjYPgfZErFHzBvsGrm/JiZXPvWwrJdFLzFgHbtZin84vP0fdHyAXCQHB3QaW2FeyC4x+/iD7NRE0hwo4OZyXjKPSWj+Jizsj7bGzgiIsb2P12Zloq5Vxe9afeaUSVD5gY5eReYDrYMqYJ8QKBVnHK/5FT3A9C4JDA9SAdKuJi/haceXKsgtCh6Z5bx3tIxii15y7rTCmx9cR+ylsvTBZ/4FJKuN4+4kabeQVyhcGPymxwnjz+VnyFZodacWQ+ZcGkw4HnDxmAdfAxRJPwq5st5US0jcoA/Jqy5Ih9oJEs8KA3TCcCnk8pXQ9KMotYr0YAlQoKJ/lTU4dHCdK9i2fsrpqDuRngdgxmYYNWeISaMPRuamUZkhy54Dj0Skf4s4jCBh0/9hHcDbU9rCjaCPxOX9ojqmqeq47omGg+oU=

@@ -26,7 +26,10 @@
 			// No caso de 401, só devemos redirecionar para '/login' se a requisição não for de login. 
 			// 401, no caso do login, significa usuário ou senha inválidos. 
 	        if ((response.status === 401 && !response.config.url.endsWith('/oauth/token')) || response.status === 403) {
-	        	$window.location.href = '/login';
+				/**
+				 * TODO: Verificar melhor antes de comitar.
+				 * $window.location.href = '/login'; 
+				 */
 	        }
 	        return $q.reject(response);
 	    };

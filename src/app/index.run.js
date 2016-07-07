@@ -10,19 +10,19 @@
 
             $rootScope.loadingProgress = true;
 
-            // Se já está logado e solicita a página de login, deve ser redirecionado para o inbox de tarefas    
-            if (AuthService.isAuthenticated() && toState.url === '/login') {
-                event.preventDefault();
-                $state.go('app.tarefas.minhas-tarefas');
-                return;
-            }
-
-            // Se não está logado e solicita uma página protegida, deve ser redirecionado para a página de login     
-            if (!AuthService.isAuthenticated() && toState.url !== '/login') {
-                event.preventDefault();
-                $state.go('app.login');
-                return;
-            }
+            AuthService.isAuthenticated().then(function(user) {
+                // Se já está logado e solicita a página de login, deve ser redirecionado para o inbox de tarefas    
+                if (toState.url === '/login') {
+                    event.preventDefault();
+                    $state.go('app.tarefas.minhas-tarefas');
+                }
+            }).catch(function() {
+                // Se não está logado e solicita uma página protegida, deve ser redirecionado para a página de login     
+                if (toState.url !== '/login') {
+                    event.preventDefault();
+                    $state.go('app.login');
+                }
+            });
 
         });
 

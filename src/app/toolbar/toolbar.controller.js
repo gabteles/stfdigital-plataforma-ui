@@ -15,8 +15,8 @@
                 return this.$mdMedia('gt-sm');
             }.bind(this), this.updateNavigation);
 
-            this.AuthService.user().then(function(response) {
-                self.nome = response.data.name;
+            this.AuthService.isAuthenticated().then(function(user) {
+                self.nome = user.login;
             });
 
             // TODO: Isso deve virar um enum em alguma factory para indicar o tipo de pesquisa

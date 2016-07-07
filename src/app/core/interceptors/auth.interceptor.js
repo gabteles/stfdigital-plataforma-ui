@@ -13,7 +13,7 @@
 	        var accessToken = $cookies.get('access_token');
 
 	        if (accessToken) {
-	            config.headers['Authorization'] = 'Bearer ' + accessToken;
+	            config.headers.Authorization = 'Bearer ' + accessToken;
 	        }
 
 			var csrfToken = $cookies.get('XSRF-TOKEN');

@@ -13,10 +13,10 @@ namespace app.autenticacao {
 		constructor(private $state: IStateService, private $rootScope: any, private $http: IHttpService, private messagesService: MessagesService, private AuthService?: (d: any) => any) { }
 
 		public entrar(): void {
-			this.AuthService.login(this.form.usuario, this.form.senha).then(() => {
+			this.AuthService.authenticate(this.form.usuario, this.form.senha).then(() => {
 				this.$state.go('app.tarefas.minhas-tarefas');
-            }, () => {
-				this.messagesService.error('Usuário e/ou senha inválido(s).'); 
+            }).catch(() => {
+				this.messagesService.error('Usuário ou senha inválido(s).'); 
             });
 		}
 	}

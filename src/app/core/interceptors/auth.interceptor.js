@@ -12,14 +12,11 @@
 	    this.request = function(config) {
 	        var accessToken = $cookies.get('access_token');
 
+			// Para viabilizar a transferência do token CSRF entre domínios diferentes, estamos usando
+			// o token de acesso, gerado no Auth Server como token CSRF
 	        if (accessToken) {
 	            config.headers.Authorization = 'Bearer ' + accessToken;
-	        }
-
-			var csrfToken = $cookies.get('XSRF-TOKEN');
-
-	        if (csrfToken) {
-	            config.headers['X-XSRF-TOKEN'] = csrfToken;
+	            config.headers['X-XSRF-TOKEN'] = accessToken;
 	        }
 
 	        return config;
@@ -29,7 +26,7 @@
 			// No caso de 401, só devemos redirecionar para '/login' se a requisição não for de login. 
 			// 401, no caso do login, significa usuário ou senha inválidos. 
 	        if ((response.status === 401 && !response.config.url.endsWith('/oauth/token')) || response.status === 403) {
-	        	//$window.location.href = '/login';
+	        	$window.location.href = '/login';
 	        }
 	        return $q.reject(response);
 	    };

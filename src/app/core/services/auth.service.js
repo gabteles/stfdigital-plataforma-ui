@@ -11,13 +11,11 @@
 
 		var USER_QUERY_URL = properties.url + ':' + properties.port + '/userauthentication/user';
 
-		var OAUTH_TOKEN_URL = properties.url + ':' + properties.port + '/userauthentication/oauth/token'
+		var OAUTH_TOKEN_URL = properties.url + ':' + properties.port + '/userauthentication/oauth/token';
 
 		var AUTH_POST_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8';
 
 		var ACCESS_TOKEN = 'access_token';
-		
-		var XSRF_TOKEN = 'XSRF-TOKEN';
 
 		/**
 		 * Verifica se o usuário já se autenticou no sistema. A verificação aqui checa se o token de acesso previamente 
@@ -47,7 +45,6 @@
 			
 			return $http(request).then(function(response) {				
 				$cookies.put(ACCESS_TOKEN, response.data.access_token);
-				$cookies.put(XSRF_TOKEN, response.data.access_token);
 				return response.data;
 			});
 		};
@@ -57,7 +54,6 @@
 		 */	
 		this.logout = function() {
 			$cookies.remove(ACCESS_TOKEN);
-			$cookies.remove(XSRF_TOKEN);
 		};
 		
 	});

@@ -1,0 +1,9 @@
+# Define a configuração para rodar esse contexto construído localmente
+version: '2'
+services:
+  ui:
+    extends:
+      file: compose/shared/common.yml
+      service: ui
+    depends_on:
+     - gateway

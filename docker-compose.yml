@@ -1,15 +1,30 @@
+# Define a configuração para rodar com imagens do Docker Hub
 version: '2'
 services:
+  rabbit:
+    extends:
+      file: compose/shared/common.yml
+      service: rabbit
   discovery:
-    container_name: discovery
-    image: supremotribunalfederal/stfdigital-plataforma-discovery
+    extends:
+      file: compose/shared/common.yml
+      service: discovery
   gateway:
-    container_name: gateway
-    image: supremotribunalfederal/stfdigital-plataforma-gateway
+    extends:
+      file: compose/shared/common.yml
+      service: gateway
     depends_on:
      - discovery
+  services:
+    extends:
+      file: compose/shared/common.yml
+      service: services
+    depends_on:
+     - rabbit
+     - discovery
   userauthentication:
-    container_name: userauthentication
-    image: supremotribunalfederal/stfdigital-plataforma-userauthentication
+    extends:
+      file: compose/shared/common.yml
+      service: userauthentication
     depends_on:
      - discovery

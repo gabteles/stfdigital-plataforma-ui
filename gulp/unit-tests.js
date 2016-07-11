@@ -12,7 +12,8 @@ var remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul');
 var $ = require('gulp-load-plugins')();
 
 var pathSrcJs = [
-    path.join(conf.paths.dist, '**/*.js')
+    path.join(conf.paths.unit, '/build/app/**/*.js')//,
+    //path.join(conf.paths.src, '/app/!(main)/**/*.js')
 ];
 
 function runTests(singleRun, done)

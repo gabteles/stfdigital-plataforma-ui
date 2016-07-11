@@ -125,7 +125,7 @@ gulp.task('compile-ts:for-tdd', [], function () {
         .pipe($.sourcemaps.init())
         .pipe($.typescript(createTsProject()))
         .pipe($.ngAnnotate())
-        .pipe($.sourcemaps.write('.'))
+        .pipe($.sourcemaps.write('.', {sourceRoot: conf.paths.src + '/app/main'}))
         .pipe($.destClean(tsOutputPathUnitForApp))
         .pipe(gulp.dest(tsOutputPathUnitForApp));
 });

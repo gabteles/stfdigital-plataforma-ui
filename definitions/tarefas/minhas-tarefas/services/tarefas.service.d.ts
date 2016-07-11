@@ -14,7 +14,7 @@ declare namespace app.tarefas.minhasTarefas {
     interface ITask {
         id: string;
         title: string;
-        state: string;
+        command: string;
         startDate: Date;
         startDateTimestamp: number;
         dueDate: Date;
@@ -24,6 +24,7 @@ declare namespace app.tarefas.minhasTarefas {
         important: boolean;
         notes: string;
         tags: ITaskTag[];
+        informationId: number;
         attachments: ITaskAttachment[];
         selected?: boolean;
     }
@@ -34,5 +35,6 @@ declare namespace app.tarefas.minhasTarefas {
         /** @ngInject **/
         constructor($http: IHttpService, properties: any);
         get(): IPromise<ITask[]>;
+        private getInformationId(taskId);
     }
 }

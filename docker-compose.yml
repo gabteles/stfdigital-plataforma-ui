@@ -3,28 +3,28 @@ version: '2'
 services:
   rabbit:
     extends:
-      file: compose/shared/common.yml
+      file: shared/compose/common.yml
       service: rabbit
   discovery:
     extends:
-      file: compose/shared/common.yml
+      file: shared/compose/common.yml
       service: discovery
   gateway:
     extends:
-      file: compose/shared/common.yml
+      file: shared/compose/common.yml
       service: gateway
     depends_on:
      - discovery
   services:
     extends:
-      file: compose/shared/common.yml
+      file: shared/compose/common.yml
       service: services
     depends_on:
      - rabbit
      - discovery
   userauthentication:
     extends:
-      file: compose/shared/common.yml
+      file: shared/compose/common.yml
       service: userauthentication
     depends_on:
      - discovery

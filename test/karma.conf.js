@@ -82,11 +82,6 @@ module.exports = function(config) {
 
     autoWatchBatchDelay: 2000,
 
-    ngHtml2JsPreprocessor: {
-      stripPrefix: conf.paths.src + '/',
-      moduleName: 'generatorGulpAngular'
-    },
-
     logLevel: 'WARN',
 
     frameworks: ['jasmine', 'angular-filesort'],
@@ -101,37 +96,34 @@ module.exports = function(config) {
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-angular-filesort',
-      //'karma-coverage',
+      'karma-coverage',
       'karma-jasmine',
-      'karma-ng-html2js-preprocessor',
-	    'karma-html-reporter',
-	    'karma-mocha-reporter' 
+      'karma-html-reporter',
+      'karma-mocha-reporter' 
     ],
 
     coverageReporter: {
-      type : 'html',
-      dir : 'coverage/'
+	  reporters: [{
+	    type: 'json',
+	    subdir: '.',
+	    dir: path.join(conf.paths.unit, 'coverage/js'), 
+	    file: 'coverage.json'
+	  }, {
+	    type : 'html',
+	    dir : path.join(conf.paths.unit, 'coverage/js')
+	  }]
     },
 
-    reporters: ['mocha', 'html'],
+    reporters: ['mocha', 'html', 'coverage'],
 
     htmlReporter : {
-		  outputDir : path.join(conf.paths.unit, 'results/html')
+      outputDir : path.join(conf.paths.unit, 'results/html')
     },
 
     proxies: {
       '/assets/': path.join('/base/', conf.paths.src, '/assets/')
     }
   };
-
-  // This is the default preprocessors configuration for a usage with Karma cli
-  // The coverage preprocessor is added in gulp/unit-test.js only for single tests
-  // It was not possible to do it there because karma doesn't let us now if we are
-  // running a single test or not
-  configuration.preprocessors = {};
-  pathSrcHtml.forEach(function(path) {
-    configuration.preprocessors[path] = ['ng-html2js'];
-  });
 
   config.set(configuration);
 };

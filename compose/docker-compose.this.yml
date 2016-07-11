@@ -3,7 +3,8 @@ version: '2'
 services:
   ui:
     extends:
-      file: compose/shared/common.yml
+      file: shared/compose/common.yml
       service: ui
+    image: stfdigital-plataforma-ui
     depends_on:
      - gateway

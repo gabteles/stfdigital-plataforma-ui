@@ -41,6 +41,7 @@ src/app/main/**/*.js.map
 test/unit/build
 test/unit/typings
 test/unit/results
+test/unit/coverage
 test/unit/app/main/**/*.js
 test/unit/app/main/**/*.js.map
 

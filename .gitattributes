@@ -1,3 +1,4 @@
 *.key binary
 *.crt binary
 *.d.ts text eol=lf
+*.sh text eol=lf

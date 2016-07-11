@@ -28,6 +28,7 @@ var libraryTypeScriptE2E = path.join(conf.paths.e2e, 'typings/main/**/*.d.ts');
 var tsOutputPathE2E = path.join(conf.paths.e2e, 'build');
 var tsGenFilesE2E = path.join(conf.paths.e2e, '**/*.js');
 var tsTypingsOutputPathE2E = path.join(conf.paths.e2e, 'typings');
+var sharedOutputPathE2E = path.join(conf.paths.e2e, 'app/shared');
 
 var createTsProjectUnit = function() {
 	return $.typescript.createProject(path.join(conf.paths.unit, 'tsconfig.json'));
@@ -58,6 +59,16 @@ gulp.task('install-typings:e2e',function(){
 gulp.task('clean-typings:e2e', function() {
     return $.del(tsTypingsOutputPathE2E);
 });
+
+/**
+ * Install the shared e2e files
+ */
+gulp.task('install-shared:e2e', function() {
+    return gulp.src(path.join(conf.paths.root, 'shared/e2e/**'))
+        .pipe($.destClean(sharedOutputPathE2E))
+        .pipe(gulp.dest(sharedOutputPathE2E));
+});
+
 /**
  * Install all unit typings files
  */

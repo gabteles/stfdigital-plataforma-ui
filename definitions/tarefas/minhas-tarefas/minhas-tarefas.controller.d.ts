@@ -5,6 +5,7 @@ declare namespace app.tarefas.minhasTarefas {
     import IScope = angular.IScope;
     import IDocumentService = angular.IDocumentService;
     import IStateService = angular.ui.IStateService;
+    import CommandService = app.support.command.CommandService;
     interface ISelectedFilter {
         filter: string;
         dueDate: number | boolean;
@@ -24,6 +25,7 @@ declare namespace app.tarefas.minhasTarefas {
         private $filter;
         private $scope;
         private $state;
+        private commandService;
         private tasks;
         private tags;
         completed: Array<string>;
@@ -39,7 +41,7 @@ declare namespace app.tarefas.minhasTarefas {
         collapsed: boolean;
         newTag: string;
         /** @ngInject **/
-        constructor($document: IDocumentService, $mdDialog: IDialogService, $mdSidenav: ISidenavService, $filter: IFilterService, $scope: IScope, $state: IStateService, tasks: ITask[], tags: ITaskTag[]);
+        constructor($document: IDocumentService, $mdDialog: IDialogService, $mdSidenav: ISidenavService, $filter: IFilterService, $scope: IScope, $state: IStateService, commandService: CommandService, tasks: ITask[], tags: ITaskTag[]);
         /**
          * Prevent default
          *

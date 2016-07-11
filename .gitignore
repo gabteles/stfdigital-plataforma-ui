@@ -50,6 +50,7 @@ test/e2e/build
 test/e2e/typings
 test/e2e/results
 test/e2e/app/**/*.js
+test/e2e/app/shared
 
 # WebStorm
 .idea

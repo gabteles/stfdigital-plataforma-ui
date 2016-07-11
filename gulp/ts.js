@@ -93,7 +93,7 @@ gulp.task('ts-lint', ['install-typings'], function () {
 /**
  * Lint e2e custom TypeScript files.
  */
-gulp.task('ts-lint:e2e', ['install-typings:e2e'], function() {
+gulp.task('ts-lint:e2e', ['install-typings:e2e', 'install-shared:e2e'], function() {
     return gulp.src(allTypeScriptE2E)
     			.pipe($.tslint())
     			.pipe($.tslint.report('prose'));

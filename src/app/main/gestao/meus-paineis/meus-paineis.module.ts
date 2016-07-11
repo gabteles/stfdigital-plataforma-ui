@@ -50,7 +50,7 @@ namespace app.gestao.meusPaineis {
         });
 
         msNavigationServiceProvider.saveItem('gestao.meus-paineis', {
-            title      : 'Meus Paineis',
+            title      : 'Meus Painéis',
             icon       : 'icon-view-dashboard',
             state      : 'app.gestao.meus-paineis',
             translation: 'GESTAO.MEUS-PAINEIS.MEUS-PAINEIS',

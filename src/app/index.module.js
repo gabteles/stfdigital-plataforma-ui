@@ -26,8 +26,8 @@
 
             'app.novo-processo',
 
-            //'app.gestao',
-            //'app.gestao.meus-paineis',
+            'app.gestao',
+            'app.gestao.meus-paineis',
 
             //'app.ultimos-acessos',
             'app.pesquisa-avancada',

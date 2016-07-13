@@ -5,12 +5,17 @@ namespace app.autenticacao {
 	import IHttpService = angular.IHttpService;
 	import MessagesService = app.support.messaging.MessagesService;
 	
+	export interface FormLogin {
+		usuario: string;
+	    senha: string;
+	}
+	
 	export class LoginController {
 	
-		public form: any;
+		public form: FormLogin;
 		
 		/** @ngInject **/
-		constructor(private $state: IStateService, private $rootScope: any, private $http: IHttpService, private messagesService: MessagesService, private AuthService?: (d: any) => any) { }
+		constructor(private $state: IStateService, private messagesService: MessagesService, private AuthService: any) { }
 
 		public entrar(): void {
 			this.AuthService.authenticate(this.form.usuario, this.form.senha).then(() => {

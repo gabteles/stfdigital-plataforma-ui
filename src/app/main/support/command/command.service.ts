@@ -38,6 +38,7 @@ namespace app.support.command {
 		stateName: string;
 		navigationItem: string;
 		translation: string;
+	    url: string;
 		urlPrefix: string;
 		src: string;
 	}
@@ -189,7 +190,8 @@ namespace app.support.command {
 		 */
 		public setValidator(id: string, validator: CommandValidator): void {
         	this.findById(id)
-        		.then(commandConfig => commandConfig.setValidator(validator));
+        		.then(commandConfig => commandConfig.setValidator(validator))
+        		.catch(reason => { throw new Error(reason); });
 		}
 		
 		/**
@@ -202,7 +204,7 @@ namespace app.support.command {
 				.then((commandsConfig: CommandConfig[]) => {
 					matched.resolve(commandsConfig.filter(cmd => cmd.listable && cmd.match(targets, filter)));
 				}, () => {
-					matched.reject();
+					matched.reject("Erro ao carregar comandos!");
 				});
 			return matched.promise;
 		}
@@ -218,7 +220,7 @@ namespace app.support.command {
 				.then(commandConfig => {
 					matched.resolve(commandConfig.isValid(command));
 				}, () => {
-					matched.reject();
+					matched.resolve(false);
 				});
 			return matched.promise;
 		}
@@ -236,8 +238,9 @@ namespace app.support.command {
 							return found.resolve(commandConfig);
 						}
 					}
+					return found.reject("Identificador não encontrado: " + id);
 				}, () => {
-				found.reject();
+				found.reject("Erro ao carregar comandos!");
 			});
 			return found.promise;
 		}

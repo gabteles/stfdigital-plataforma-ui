@@ -8,6 +8,7 @@ namespace app.tarefas.minhasTarefas {
     import IDocumentService = angular.IDocumentService;
     import IStateService = angular.ui.IStateService;
     import CommandService = app.support.command.CommandService;
+    import MessagesService = app.support.messaging.MessagesService;
 
     export interface ISelectedFilter {
         filter: string;
@@ -65,6 +66,7 @@ namespace app.tarefas.minhasTarefas {
                     private $scope: IScope,
                     private $state: IStateService,
                     private commandService: CommandService,
+                    private messagesService: MessagesService, 
                     private tasks: ITask[],
                     private tags: ITaskTag[]) {
 
@@ -83,7 +85,12 @@ namespace app.tarefas.minhasTarefas {
         
         public openTask(task: ITask): void {
         	this.commandService.findById(task.command)
-        	   .then(command => this.$state.go(command.route.stateName, { informationId: task.informationId }));
+        	   .then(command => {
+        		   this.$state.go(command.route.stateName, { informationId: task.informationId });
+        	   }).catch(reason => {
+        		   this.messagesService.error("Erro ao abrir tarefa: " + task.title);
+                   throw new Error(reason);
+        	   });
         }
 
         /**

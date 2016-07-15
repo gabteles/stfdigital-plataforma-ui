@@ -1,0 +1,16 @@
+
+<div ng-repeat="row in vm.layout.rows" class="widget-group" layout="row" flex="100" layout-wrap>
+    <ms-widget ng-repeat="column in row.columns" layout="column" flex="100" flex-gt-sm="50">
+        <ms-widget-front class="white-bg">
+            <div class="h3 p-16">
+                {{column.dashlet.nome | translate}}
+            </div>
+
+            <md-divider></md-divider>
+
+            <div class="p-16">
+                <dashlet value="column.dashlet.id">
+            </div>
+        </ms-widget-front>
+    </ms-widget>
+</div>

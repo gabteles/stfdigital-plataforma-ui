@@ -21,8 +21,10 @@
 		},
 
 		methods: {
-			generateBreadcrumbs: function() {
-				var path = this._getBreadcrumbPath();
+			generateBreadcrumbs: function(path) {
+				if (!path) {
+					path = this._getBreadcrumbPath();
+				}
 				return this._getBreadcrumbFromPath(path);
             },
 

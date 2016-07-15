@@ -4,15 +4,25 @@ namespace app.gestao.meusPaineis {
 	
 	export class PaineisController {
 
-		/** @ngInject **/
-		constructor(private $state: IStateService) { }
+		private currentDashboardId: string;
 
-        public foo(): void {
-            console.log("bar");
+		/** @ngInject **/
+		constructor(private $state: IStateService, public dashboards: app.support.dashboards.Dashboard[], $stateParams: ng.ui.IStateParamsService) {
+			if ($stateParams['dashboardId']) {
+				this.currentDashboardId = $stateParams['dashboardId'];
+			} else {
+				if (dashboards.length > 0) {
+					this.currentDashboardId = this.dashboards[0].id;
+				}
+			}
+		}
+
+        public configure(): void {
+            console.log("// TODO configure");
         }
 
-		public isTabActive(stateName: string): boolean {
-			return this.$state.current.name === stateName;
+		public isTabActive(dashboardId: string): boolean {
+			return this.currentDashboardId === dashboardId;
 		}
 
 	}

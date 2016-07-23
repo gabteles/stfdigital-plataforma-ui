@@ -31,4 +31,5 @@ services:
       service: userauthentication
     image: stfdigital-plataforma-userauthentication
     depends_on:
+     - rabbit
      - discovery

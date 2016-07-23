@@ -22,9 +22,17 @@ namespace app.novoProcesso {
                 }
             },
             resolve : {
-                processos : ['app.novo-processo.NovoProcessoService',
-                    (novoProcessoService: NovoProcessoService): ng.IPromise<IProcessoWorkflow[]> => {
-                    return novoProcessoService.list();
+                processos : ['app.novo-processo.NovoProcessoService', '$futureState',
+                    (novoProcessoService: NovoProcessoService, $futureState/** // TODO Encontrar typings */): ng.IPromise<IProcessoWorkflow[]> => {
+                    return novoProcessoService.list().then((processos) => {
+                        // Registra o future state que porventura não tenha sido já registrado.
+                        for (let processo of processos) {
+                            let route: any = processo.route;
+                            route.type = 'load';
+                            $futureState.futureState(route);
+                        }
+                        return processos;
+                    });
                 }]
             }
         });

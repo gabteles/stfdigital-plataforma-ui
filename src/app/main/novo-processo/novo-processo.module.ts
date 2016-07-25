@@ -28,8 +28,10 @@ namespace app.novoProcesso {
                         // Registra o future state que porventura não tenha sido já registrado.
                         for (let processo of processos) {
                             let route: any = processo.route;
-                            route.type = 'load';
-                            $futureState.futureState(route);
+                            if (route) {
+                                route.type = 'load';
+                                $futureState.futureState(route);
+                            }
                         }
                         return processos;
                     });

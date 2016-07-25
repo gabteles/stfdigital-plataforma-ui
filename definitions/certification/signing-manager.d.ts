@@ -17,6 +17,7 @@ declare namespace app.certification {
          */
         recoverCertificate(): IPromise<Certificate>;
         signingFinished(): void;
+        getAvailableParallelSignatures(): number;
         createSigner(): Signer;
     }
 }

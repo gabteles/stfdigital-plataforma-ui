@@ -1,16 +1,17 @@
 declare namespace app.autenticacao {
     import IStateService = angular.ui.IStateService;
-    import IHttpService = angular.IHttpService;
     import MessagesService = app.support.messaging.MessagesService;
+    interface FormLogin {
+        usuario: string;
+        senha: string;
+    }
     class LoginController {
         private $state;
-        private $rootScope;
-        private $http;
         private messagesService;
         private AuthService;
-        form: any;
+        form: FormLogin;
         /** @ngInject **/
-        constructor($state: IStateService, $rootScope: any, $http: IHttpService, messagesService: MessagesService, AuthService?: (d: any) => any);
+        constructor($state: IStateService, messagesService: MessagesService, AuthService: any);
         entrar(): void;
     }
 }

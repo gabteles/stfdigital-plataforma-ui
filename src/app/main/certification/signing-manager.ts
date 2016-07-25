@@ -48,6 +48,10 @@ namespace app.certification {
 			this.availableParallelSignatures++;
 		}
 
+		getAvailableParallelSignatures(): number {
+			return this.availableParallelSignatures;
+		}
+
 		createSigner() {
 			return new Signer(this, this.cryptoService, this.signatureService, this.$q);
 		}

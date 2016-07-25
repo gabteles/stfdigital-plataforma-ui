@@ -33,6 +33,7 @@ declare namespace app.support.command {
         stateName: string;
         navigationItem: string;
         translation: string;
+        url: string;
         urlPrefix: string;
         src: string;
     }

@@ -4,11 +4,11 @@ namespace app.support.dashboards {
 		rows: DashboardRow[]
 	}
 
-	interface DashboardRow {
+	export interface DashboardRow {
 		columns: DashboardColumn[];
 	}
 
-	interface DashboardColumn {
+	export interface DashboardColumn {
 		dashlet: Dashlet;
 	}
 

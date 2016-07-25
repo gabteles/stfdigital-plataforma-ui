@@ -57,15 +57,18 @@ namespace app.certification {
 
 				signingManager.recoverCertificate();
 				$rootScope.$apply();
+				expect(mockCryptoService.getCertificate).toHaveBeenCalledTimes(1);
 
 				signingManager.recoverCertificate();
 				$rootScope.$apply();
+				expect(mockCryptoService.getCertificate).toHaveBeenCalledTimes(1);
 
 				expect(signingManager.getAvailableParallelSignatures()).toEqual(0);
 
 				signingManager.recoverCertificate().then(handler.success, handler.error);
 				$rootScope.$apply();
 
+				expect(mockCryptoService.getCertificate).toHaveBeenCalledTimes(1);
 				expect(handler.success).not.toHaveBeenCalled();
 
 				signingManager.signingFinished();
@@ -73,6 +76,19 @@ namespace app.certification {
 				$rootScope.$apply();
 
 				expect(handler.success).toHaveBeenCalledWith(certificate);
+				expect(signingManager.getAvailableParallelSignatures()).toEqual(1);
+			});
+
+			it('Deveria rejeitar a promise de certificado caso dê erro ao recuperar o certificado do cryptoService', () => {
+				spyOn(mockCryptoService, 'getCertificate').and.returnValue($q.reject('erro'));
+
+				signingManager.recoverCertificate().then(handler.success, handler.error);
+
+				$rootScope.$apply();
+
+				expect(mockCryptoService.getCertificate).toHaveBeenCalledWith({lang: 'en'});
+				expect(handler.success).not.toHaveBeenCalled();
+				expect(handler.error).toHaveBeenCalledWith({error: 'erro'});
 			});
 
 		});

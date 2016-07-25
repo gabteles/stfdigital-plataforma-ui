@@ -60,7 +60,7 @@ function listFiles() {
       pattern: pattern,
       included: false,
       served: true,
-      watched: false
+      watched: true
     };
   });
 

@@ -7,22 +7,75 @@ namespace app.certification {
 
 	describe('Teste do Signer', () => {
 
+		let $q: IQService;
+		let $rootScope: IRootScopeService;
+
 		let signer: Signer;
 		let signingManager: SigningManager;
 
-		beforeEach(inject((_$q_: IQService) => {
-			let mockCryptoService: CryptoService = <CryptoService>{
+		let mockCryptoService: any;
+		let mockSignatureService: any;
 
-			};
-			let mockSignatureService: SignatureService = <SignatureService>{
+		let callbacks;
+		let certificate: Certificate;
 
-			};
-			signingManager = new SigningManager(_$q_, mockCryptoService, mockSignatureService, 2);
-			signer = signingManager.createSigner();
+		beforeEach(inject((_$q_: IQService, _$rootScope_: IRootScopeService) => {
+			$q = _$q_;
+			$rootScope = _$rootScope_;
 		}));
 
-		it('TODO: Deveria testar o método start', () => {
-			expect(true).toEqual(true);
+		beforeEach(() => {
+			certificate = {encoded: new Uint8Array(123), hex: '1234567890'};
+
+			mockCryptoService = {
+				use: () => $q.when(true),
+				getCertificate: () => $q.when(certificate),
+				sign: () => $q.when({value: new Uint8Array(123), hex: '1234567890'})
+			};
+			mockSignatureService = {
+				prepare: () => $q.when({signerId: '123'}),
+				preSign: () => $q.when({data: 123, hash: '123456789', hashType: 'SHA-256'}),
+				postSign: () => $q.when(null)
+			};
+			callbacks = {
+				onSignerReady: () => {},
+				onSigningCompleted: () => {}
+			};
+			signingManager = new SigningManager($q, mockCryptoService, mockSignatureService, 2);
+			signer = signingManager.createSigner();
+		});
+
+		it('Deveria testar o método start', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callThrough();
+			spyOn(signingManager, 'signingFinished').and.callThrough();
+			spyOn(mockSignatureService, 'prepare').and.callThrough();
+			spyOn(mockSignatureService, 'preSign').and.callThrough();
+			spyOn(mockSignatureService, 'postSign').and.callThrough();
+			spyOn(mockCryptoService, 'sign').and.callThrough();
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.triggerDocumentProvided()});
+			spyOn(callbacks, 'onSigningCompleted').and.callThrough();
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			expect(signingManager.recoverCertificate).toHaveBeenCalledWith();
+
+			expect(mockSignatureService.prepare).toHaveBeenCalledWith(new PrepareCommand('1234567890'));
+
+			expect(callbacks.onSignerReady).toHaveBeenCalledWith({signerId: '123'});
+
+			expect(mockSignatureService.preSign).toHaveBeenCalledWith(new PreSignCommand('123'));
+
+			expect(mockCryptoService.sign).toHaveBeenCalledWith(certificate, {data: 123, type: 'SHA-256', hex: '123456789'}, {lang: 'en'});
+
+			expect(callbacks.onSigningCompleted).toHaveBeenCalled();
+
+			console.log('teste');
+			console.log('teste2');
 		});
 		
 	});
@@ -121,6 +174,71 @@ namespace app.certification {
 			$rootScope.$digest();
 			expect(progressTracker.currentProgress()).toEqual(100);
 			expect(hostObject.receiveFinalValue).toHaveBeenCalledWith(resolve2);
+		});
+
+		it('Deveria interromper a cadeia de passos caso ocorra algum erro', () => {
+			class Class1 {
+				constructor (public data1: string) { }
+			}
+
+			class Class2 {
+				constructor (public data2: string) { }
+			}
+
+			let deferred1: IDeferred<Class1> = $q.defer<Class1>();
+			let deferred2: IDeferred<Class2> = $q.defer<Class2>();
+
+			class HostClass {
+				recoverObjectOfClass1FromSomewhere(): IPromise<Class1> {
+					return deferred1.promise;
+				}
+
+				recoverObjectOfClass2ReceivingObjectOfClass1(arg: Class1): IPromise<Class2> {
+					return deferred2.promise;
+				}
+
+				receiveFinalValue(arg: Class2) {
+
+				}
+
+				errorOcurred(error) {
+
+				}
+			}
+
+			let hostObject = new HostClass();
+
+			spyOn(hostObject, 'recoverObjectOfClass1FromSomewhere').and.callThrough();
+			spyOn(hostObject, 'recoverObjectOfClass2ReceivingObjectOfClass1').and.callThrough();
+			spyOn(hostObject, 'receiveFinalValue').and.callThrough();
+			spyOn(hostObject, 'errorOcurred').and.callThrough();
+
+			let promise: IPromise<Class2> = stepsChain.chain(() => hostObject.recoverObjectOfClass1FromSomewhere())
+				.chain((param) => hostObject.recoverObjectOfClass2ReceivingObjectOfClass1(param))
+				.promise();
+			
+			promise.then((finalVal) => {
+				hostObject.receiveFinalValue(finalVal);
+			}, (error) => {
+				hostObject.errorOcurred(error);
+			});
+
+			expect(progressTracker.getTotalSteps()).toEqual(2);
+			expect(progressTracker.currentProgress()).toEqual(0);
+
+			let resolve1 = new Class1('value1');
+			deferred1.reject('error');
+			$rootScope.$digest();
+			expect(progressTracker.currentProgress()).toEqual(0);
+			expect(hostObject.errorOcurred).toHaveBeenCalledWith('error');
+			expect(hostObject.recoverObjectOfClass1FromSomewhere).toHaveBeenCalledWith();
+			expect(hostObject.recoverObjectOfClass2ReceivingObjectOfClass1).not.toHaveBeenCalled();
+
+			let resolve2 = new Class2('value2');
+			deferred2.resolve(resolve2);
+			$rootScope.$digest();
+			expect(progressTracker.currentProgress()).toEqual(0);
+			expect(hostObject.receiveFinalValue).not.toHaveBeenCalled();
 		});
 	});
 }

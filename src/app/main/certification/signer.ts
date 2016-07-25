@@ -179,10 +179,12 @@ namespace app.certification {
 							} else if (error.error.message == 'user_cancel') {
 								this.callErrorCallback('Usuário cancelou a operação.');
 							} else {
-								this.callErrorCallback(error);
+								console.error(error);
+								this.callErrorCallback('Erro desconhecido.');
 							}
 						} else {
-							this.callErrorCallback(error);
+							console.error(error);
+							this.callErrorCallback('Erro desconhecido.');
 						}
 					}).finally(() => {
 						this.manager.signingFinished();

@@ -35,25 +35,32 @@ namespace app.certification {
 			mockSignatureService = {
 				prepare: () => $q.when({signerId: '123'}),
 				preSign: () => $q.when({data: 123, hash: '123456789', hashType: 'SHA-256'}),
-				postSign: () => $q.when(null)
+				postSign: () => $q.when(null),
+				save: () => {},
+				provideToSign: () => $q.when()
 			};
 			callbacks = {
 				onSignerReady: () => {},
-				onSigningCompleted: () => {}
+				onSigningCompleted: () => {},
+				onErrorCallback: () => {}
 			};
 			signingManager = new SigningManager($q, mockCryptoService, mockSignatureService, 2);
 			signer = signingManager.createSigner();
-		});
 
-		it('Deveria testar o método start', () => {
-			spyOn(signingManager, 'recoverCertificate').and.callThrough();
 			spyOn(signingManager, 'signingFinished').and.callThrough();
 			spyOn(mockSignatureService, 'prepare').and.callThrough();
 			spyOn(mockSignatureService, 'preSign').and.callThrough();
 			spyOn(mockSignatureService, 'postSign').and.callThrough();
-			spyOn(mockCryptoService, 'sign').and.callThrough();
-			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.triggerDocumentProvided()});
+			spyOn(mockSignatureService, 'save').and.callThrough();
+			spyOn(mockSignatureService, 'provideToSign').and.callThrough();
 			spyOn(callbacks, 'onSigningCompleted').and.callThrough();
+			spyOn(callbacks, 'onErrorCallback').and.callThrough();
+			spyOn(mockCryptoService, 'sign').and.callThrough();
+		});
+
+		it('Deveria realizar a assinatura', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callThrough();
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.triggerDocumentProvided()});			
 
 			signer.onSignerReady(callbacks.onSignerReady);
 			signer.onSigningCompleted(callbacks.onSigningCompleted);
@@ -74,10 +81,124 @@ namespace app.certification {
 
 			expect(callbacks.onSigningCompleted).toHaveBeenCalled();
 
-			console.log('teste');
-			console.log('teste2');
+			signer.saveSignedDocument();
+
+			expect(mockSignatureService.save).toHaveBeenCalledWith('123');
 		});
 		
+		it('Deveria retornar o progressTracker', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callThrough();
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			let progressTracker = signer.getProgressTracker();
+
+			expect(progressTracker).toBeDefined();
+
+			expect(mockSignatureService.provideToSign).toHaveBeenCalledWith(new ProvideToSignCommand('123', 7));
+		});
+
+		it('Deveria chamar o callback de erro do tipo no_implementation', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callFake(() => $q.reject({error: {message: 'no_implementation'}}));
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			let progressTracker = signer.getProgressTracker();
+
+			expect(progressTracker).toBeDefined();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('O plugin de assinatura não foi encontrado. Por favor instalar em http://www.id.ee/'));
+		});
+
+		it('Deveria chamar o callback de erro do tipo no_certificates', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callFake(() => $q.reject({error: {message: 'no_certificates'}}));
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			let progressTracker = signer.getProgressTracker();
+
+			expect(progressTracker).toBeDefined();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Nenhum certificado encontrado.'));
+		});
+
+		it('Deveria chamar o callback de erro do tipo user_cancel', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callFake(() => $q.reject({error: {message: 'user_cancel'}}));
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			let progressTracker = signer.getProgressTracker();
+
+			expect(progressTracker).toBeDefined();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Usuário cancelou a operação.'));
+		});
+
+		it('Deveria chamar o callback de erro do genérico', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callFake(() => $q.reject({error: {message: 'my-error'}}));
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			let progressTracker = signer.getProgressTracker();
+
+			expect(progressTracker).toBeDefined();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Erro desconhecido.'));
+		});
+
+		it('Deveria chamar o callback de erro do genérico 2', () => {
+			spyOn(signingManager, 'recoverCertificate').and.callFake(() => $q.reject({message: 'my-error-obj'}));
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			let progressTracker = signer.getProgressTracker();
+
+			expect(progressTracker).toBeDefined();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Erro desconhecido.'));
+		});
+
 	});
 
 	describe('Teste do ProgressTracker', () => {

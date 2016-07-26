@@ -18,7 +18,8 @@ var createTsProjectForDefinition = function() {
 };
 var allTypeScript = path.join(conf.paths.src, '/app/main/**/*.ts');
 var libraryTypeScript = 'typings/main/**/*.d.ts';
-var tsOutputPath = path.join(conf.paths.src, 'app/main');
+var tsOutputPath = path.join(conf.paths.src, 'build/main');
+var danglingJsOutputPath = path.join(conf.paths.src, 'app/main');
 var tsGenFiles = path.join(conf.paths.src, 'app/main/**/*.js');
 var tsGenMapFiles = path.join(conf.paths.src, 'app/main/**/*.js.map');
 
@@ -108,10 +109,14 @@ gulp.task('ts-lint:unit', ['install-typings:unit'], function() {
     			.pipe($.tslint.report('prose'));
 });
 
+gulp.task('clean-dangling-js', function() {
+    $.del([path.join(danglingJsOutputPath, '**/*.js'), path.join(danglingJsOutputPath, '**/*.js.map')]);
+});
+
 /**
  * Compile TypeScript and include references to library and app .d.ts files.
  */
-gulp.task('compile-ts', ['ts-lint'], function () {
+gulp.task('compile-ts', ['ts-lint', 'clean-dangling-js'], function () {
     return gulp.src([allTypeScript, libraryTypeScript])
         .pipe($.sourcemaps.init())
         .pipe($.typescript(createTsProject()))

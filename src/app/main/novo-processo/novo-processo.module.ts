@@ -5,7 +5,7 @@ namespace app.novoProcesso {
 	import IStateProvider = ng.ui.IStateProvider;
 	import IPromise = ng.IPromise;
 	
-    /** @ngInject * */
+    /** @ngInject */
     function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider,
                     $stateProvider: IStateProvider) {
 
@@ -22,8 +22,10 @@ namespace app.novoProcesso {
                 }
             },
             resolve : {
-                processos : ['app.novo-processo.NovoProcessoService', '$futureState',
-                    (novoProcessoService: NovoProcessoService, $futureState/** // TODO Encontrar typings */): ng.IPromise<IProcessoWorkflow[]> => {
+                processos : ['app.novo-processo.NovoProcessoService', '$futureState', 'commandService',
+                        (novoProcessoService: NovoProcessoService, $futureState/** // TODO Encontrar typings */,
+                        commandService: app.support.command.CommandService): ng.IPromise<IProcessoWorkflow[]> => {
+                    commandService.loadCommands(); // Recarrega os commands, pois algum novo serviço pode ter se registrado.
                     return novoProcessoService.list().then((processos) => {
                         // Registra o future state que porventura não tenha sido já registrado.
                         for (let processo of processos) {
@@ -40,7 +42,17 @@ namespace app.novoProcesso {
         });
     }
 
+    /** @ngInject */
+    function run(stfBreadcrumbsService: app.core.StfBreadcrumbsService) {
+        stfBreadcrumbsService.registerPath({
+            id: 'novo-processo',
+            translation: 'Iniciar Processo',
+            uisref: 'app.novo-processo'
+        });
+    }
+
     angular
         .module('app.novo-processo', ['app.autenticado'])
-        .config(config);
+        .config(config)
+        .run(run);
 }

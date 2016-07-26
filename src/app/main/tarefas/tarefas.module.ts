@@ -24,7 +24,17 @@ namespace app.tarefas {
         });
     }
 
+    /** @ngInject */
+    function run(stfBreadcrumbsService: app.core.StfBreadcrumbsService) {
+        stfBreadcrumbsService.registerPath({
+            id: 'tarefas',
+            translation: 'Tarefas',
+            uisref: 'app.tarefas.minhas-tarefas'
+        });
+    }
+
     angular
         .module('app.tarefas', ['app.autenticado', 'app.support'])
-        .config(config);
+        .config(config)
+        .run(run);
 }

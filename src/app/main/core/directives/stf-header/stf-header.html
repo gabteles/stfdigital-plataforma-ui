@@ -2,12 +2,12 @@
 
 	<div class="header-content" ng-if="!layoutOnly" layout="row" layout-align="space-between">
 		<div layout="column">
-			<div ng-if="hasBreadcrumb()" class="breadcrumb" layout="row" layout-align="start center">
+			<div ng-if="vm.hasBreadcrumbs()" class="breadcrumb" layout="row" layout-align="start center">
 			    <md-icon md-font-icon="icon-home" class="s16"></md-icon>
 			    <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
 			    
 			    <span 
-			    	ng-repeat-start="item in stfBreadcrums.breadcrumbs.parents" 
+			    	ng-repeat-start="item in vm.breadcrumbs().parents" 
 			    	class="parent" 
 			    	translate="{{ item.label }}"
 			    	ng-if="item.link.length == 0">
@@ -25,12 +25,12 @@
 			    <span 
 			    	class="current" 
 			    	flex 
-			    	translate="{{ stfBreadcrums.breadcrumbs.current.label }}" 
-			    	ng-attr-ui-sref="{{ stfBreadcrums.breadcrumbs.current.link.length == 0 ? undefined : stfBreadcrums.breadcrumbs.current.link }}">
+			    	translate="{{ vm.breadcrumbs().current.label }}" 
+			    	ng-attr-ui-sref="{{ vm.breadcrumbs().current.link.length == 0 ? undefined : vm.breadcrumbs().current.link }}">
 			    </span>
 			</div>
 		    
-		    <span ng-if="hasBreadcrumb()" class="md-display-1 font-weight-400" translate="{{ stfBreadcrums.breadcrumbs.current.label }}"></span>
+		    <span ng-if="vm.hasBreadcrumbs()" class="md-display-1 font-weight-400" translate="{{ vm.breadcrumbs().current.label }}"></span>
 		</div>
 		
 	    <div flex ng-transclude></div>
@@ -38,7 +38,7 @@
    	<md-button
    		class="fab md-warn" 
    		ng-class="{'md-fab' : !fabText, 'md-raised with-text': fabText}"
-   		ng-click="fabAction()"
+   		ng-click="vm.fabAction()"
         aria-label="fabAriaLabel"
         ng-if="hasFabAction"
         ng-disabled="!fabActive">

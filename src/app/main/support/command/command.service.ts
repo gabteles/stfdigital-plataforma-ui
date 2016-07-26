@@ -152,11 +152,15 @@ namespace app.support.command {
 		private commandsConfig: ng.IPromise<CommandConfig[]>;
 		
 		/** @ngInject **/
-		constructor($http: ng.IHttpService, private $q: ng.IQService, private properties: Properties) {
-			let commandsConfigDeferred = $q.defer();
+		constructor(private $http: ng.IHttpService, private $q: ng.IQService, private properties: Properties) {
+			this.loadCommands();
+		}
+		
+		public loadCommands(): void {
+			let commandsConfigDeferred = this.$q.defer();
 			this.commandsConfig = commandsConfigDeferred.promise;
 			
-			$http.get(this.properties.apiUrl + '/discovery/api/commands')
+			this.$http.get(this.properties.apiUrl + '/discovery/api/commands')
 				.then((response: ng.IHttpPromiseCallbackArg<CommandConfig[]>) => {
 					let commandsConfig: CommandConfig[] = [];
 					response.data.forEach(commandConfigData => {
@@ -169,7 +173,7 @@ namespace app.support.command {
 					commandsConfigDeferred.reject();
 				});
 		}
-		
+
 		/**
 		 * Lista os comandos
 		 */

@@ -8,6 +8,7 @@ var argv = require('yargs').argv;
 var karma = require('karma');
 var runSequence = require('run-sequence');
 var remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul');
+var lcovFilter = require('lcov-filter');
 
 var $ = require('gulp-load-plugins')();
 
@@ -82,7 +83,16 @@ gulp.task('remap-istanbul', function () {
         }));
 });
 
-gulp.task('publish-unit-coverage', function() {
-    return gulp.src(path.join(conf.paths.unit, 'coverage/ts/lcov.info'))
+var lcovOutputFile = path.join(conf.paths.unit, 'coverage/ts/lcov.info');
+var lcovFilteredOutputFile = path.join(conf.paths.unit, 'coverage/ts/lcov-filter');
+var regexIgnoreCoverage = '.*\.js';
+
+gulp.task('filter-js-from-lcov', function() {
+    return $.run('lcov-filter ' + lcovOutputFile + ' ' + regexIgnoreCoverage).exec()
+    .pipe(gulp.dest(path.join(conf.paths.unit, 'coverage/ts')))
+});
+
+gulp.task('publish-unit-coverage', ['filter-js-from-lcov'], function() {
+    return gulp.src(lcovFilteredOutputFile)
         .pipe($.coveralls());
 });

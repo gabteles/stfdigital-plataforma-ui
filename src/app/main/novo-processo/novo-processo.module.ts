@@ -22,10 +22,8 @@ namespace app.novoProcesso {
                 }
             },
             resolve : {
-                processos : ['app.novo-processo.NovoProcessoService', '$futureState', 'commandService',
-                        (novoProcessoService: NovoProcessoService, $futureState/** // TODO Encontrar typings */,
-                        commandService: app.support.command.CommandService): ng.IPromise<IProcessoWorkflow[]> => {
-                    commandService.loadCommands(); // Recarrega os commands, pois algum novo serviço pode ter se registrado.
+                processos : ['app.novo-processo.NovoProcessoService', '$futureState',
+                        (novoProcessoService: NovoProcessoService, $futureState/** // TODO Encontrar typings */): ng.IPromise<IProcessoWorkflow[]> => {
                     return novoProcessoService.list().then((processos) => {
                         // Registra o future state que porventura não tenha sido já registrado.
                         for (let processo of processos) {

@@ -11,6 +11,7 @@
     "app.certification.signer": "file:../../definitions/certification/signer.d.ts",
     "app.certification.crypto.service": "file:../../definitions/certification/crypto.service.d.ts",
     "app.support.constants": "file:../../definitions/support/constants/constants.module.d.ts",
-    "app.support.command.service": "file:../../definitions/support/command/command.service.d.ts"
+    "app.support.command.service": "file:../../definitions/support/command/command.service.d.ts",
+    "app.support.dashboards.DashletRegistry": "file:../../definitions/support/dashboards/dashlet.service.d.ts"
   }
 }

@@ -36,7 +36,7 @@ function listFiles() {
   var patternsToWatch = [
     path.join(conf.paths.unit, '/build/app/**/*.module.js'),
     path.join(conf.paths.unit, '/build/app/**/*.js'),
-    path.join(conf.paths.unit, '/build/test/**/*.spec.js')
+    path.join(conf.paths.unit, '/build/test/**/*.js')
   ];
 
   var filesToWatch = patternsToWatch.map(function(pattern) {

@@ -5,44 +5,36 @@ namespace app.support.dashboards {
 
 		let dashletRegistry: DashletRegistry;
 
+		let dashletsMockData: DashletsMockData;
+
 		beforeEach(() => {
 			dashletRegistry = new DashletRegistry();
+
+			dashletsMockData = new DashletsMockData();
 		});
 
 		it('Deveria registrar e recuperar dashlets', () => {
-			let dashlet01: DashletDefinition = {
-				template: '<div>Dashlet 01</div>',
-				controller: 'Dashlet01Controller',
-				controllerAs: 'vm'
-			};
+			let dashlet01: DashletDefinition = dashletsMockData.DASHLET_01.value;
 
-			let dashlet02 = {
-				template: '<div>Dashlet 02</div>',
-				controller: 'Dashlet01Controller',
-				controllerAs: 'vm'
-			};
+			let dashlet02: DashletDefinition = dashletsMockData.DASHLET_02.value;
 
-			let fluidDashletRegistry = dashletRegistry.registerDashlet('dashlet-01', dashlet01);
+			let fluidDashletRegistry = dashletRegistry.registerDashlet(dashletsMockData.DASHLET_01.id, dashlet01);
 
 			expect(fluidDashletRegistry).toEqual(dashletRegistry);
 
-			fluidDashletRegistry.registerDashlet('dashlet-02', dashlet02);
+			fluidDashletRegistry.registerDashlet(dashletsMockData.DASHLET_02.id, dashlet02);
 
-			let recoveredDashlet01 = dashletRegistry.recoverDashlet('dashlet-01');
+			let recoveredDashlet01 = dashletRegistry.recoverDashlet(dashletsMockData.DASHLET_01.id);
 			
 			expect(recoveredDashlet01).toEqual(dashlet01);
 
-			let recoveredDashlet02 = dashletRegistry.recoverDashlet('dashlet-02');
+			let recoveredDashlet02 = dashletRegistry.recoverDashlet(dashletsMockData.DASHLET_02.id);
 
 			expect(recoveredDashlet02).toEqual(dashlet02);
 		});
 
 		it('Deveria lançar erro ao tentar recuperar dashlet não registrado', () => {
-			let dashlet01: DashletDefinition = {
-				template: '<div>Dashlet 01</div>',
-				controller: 'Dashlet01Controller',
-				controllerAs: 'vm'
-			};
+			let dashlet01: DashletDefinition = dashletsMockData.DASHLET_01.value;
 
 			dashletRegistry.registerDashlet('dashlet-01', dashlet01)
 

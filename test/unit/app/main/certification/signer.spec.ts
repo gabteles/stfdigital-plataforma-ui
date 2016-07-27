@@ -52,7 +52,6 @@ namespace app.certification {
 			spyOn(mockSignatureService, 'preSign').and.callThrough();
 			spyOn(mockSignatureService, 'postSign').and.callThrough();
 			spyOn(mockSignatureService, 'save').and.callThrough();
-			spyOn(mockSignatureService, 'provideToSign').and.callThrough();
 			spyOn(callbacks, 'onSigningCompleted').and.callThrough();
 			spyOn(callbacks, 'onErrorCallback').and.callThrough();
 			spyOn(mockCryptoService, 'sign').and.callThrough();
@@ -89,6 +88,7 @@ namespace app.certification {
 		it('Deveria retornar o progressTracker', () => {
 			spyOn(signingManager, 'recoverCertificate').and.callThrough();
 			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+			spyOn(mockSignatureService, 'provideToSign').and.callThrough();
 
 			signer.onSignerReady(callbacks.onSignerReady);
 			signer.onSigningCompleted(callbacks.onSigningCompleted);
@@ -162,7 +162,7 @@ namespace app.certification {
 		});
 
 		it('Deveria chamar o callback de erro do genérico', () => {
-			spyOn(signingManager, 'recoverCertificate').and.callFake(() => $q.reject({error: {message: 'my-error'}}));
+			spyOn(signingManager, 'recoverCertificate').and.callFake(() => $q.reject({error: 'my-error'}));
 			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
 
 			signer.onSignerReady(callbacks.onSignerReady);
@@ -177,7 +177,7 @@ namespace app.certification {
 
 			expect(progressTracker).toBeDefined();
 
-			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Erro desconhecido.'));
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('my-error'));
 		});
 
 		it('Deveria chamar o callback de erro do genérico 2', () => {
@@ -197,6 +197,50 @@ namespace app.certification {
 			expect(progressTracker).toBeDefined();
 
 			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Erro desconhecido.'));
+		});
+
+		it('Deveria detectar que o plugin de assinatura não está instalado', () => {
+			spyOn(mockCryptoService, 'use').and.callFake(() => $q.reject('erro'));
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			let progressTracker = signer.getProgressTracker();
+
+			expect(progressTracker).toBeDefined();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('O plugin de assinatura não foi encontrado.'));
+		});
+
+		it('Deveria chamar callback com erro ao prover documento para assinatura', () => {
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+			spyOn(mockSignatureService, 'provideToSign').and.callFake(() => $q.reject('Erro ao prover documento para assinatura.'));
+
+			signer.onSignerReady(callbacks.onSignerReady);
+			signer.onSigningCompleted(callbacks.onSigningCompleted);
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Erro ao prover documento para assinatura.'));
+		});
+
+		it('Deveria chamar callback com erro de que o callback SignerCreated não está definido', () => {
+			spyOn(callbacks, 'onSignerReady').and.callFake(() => {signer.provideExistingDocument(7)});
+			signer.onErrorCallback(callbacks.onErrorCallback);
+
+			signer.start();
+
+			$rootScope.$apply();
+
+			expect(callbacks.onErrorCallback).toHaveBeenCalledWith(new SigningError('Callback SignerCreated não definido.'));
 		});
 
 	});

@@ -180,7 +180,7 @@ namespace app.certification {
 								this.callErrorCallback('Usuário cancelou a operação.');
 							} else {
 								console.error(error);
-								this.callErrorCallback('Erro desconhecido.');
+								this.callErrorCallback(error.error);
 							}
 						} else {
 							console.error(error);

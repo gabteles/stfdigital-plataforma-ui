@@ -89,11 +89,13 @@ declare namespace app.support.command {
      * Serviço para manipulação das configurações de comando.
      */
     class CommandService {
+        private $http;
         private $q;
         private properties;
         private commandsConfig;
         /** @ngInject **/
         constructor($http: ng.IHttpService, $q: ng.IQService, properties: Properties);
+        loadCommands(): void;
         /**
          * Lista os comandos
          */

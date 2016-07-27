@@ -2,7 +2,7 @@ namespace app.core {
 
 	export interface StfProcessingScope extends ng.IScope {
 		stfProcessing: any;
-		$stfDecorateNgClickHandler: (promise: ng.IPromise<any>) => ng.IPromise<any>;
+		$stfDecorateNgClickHandler: (promise: ng.IPromise<any>, event) => ng.IPromise<any>;
 		$stfDecorateNgSubmitHandler: (promise: ng.IPromise<any>) => ng.IPromise<any>;
 	}
 
@@ -25,16 +25,16 @@ namespace app.core {
 			this.element = element;
 			this.attrs = attrs;
 
-			$scope.$stfDecorateNgClickHandler = (promise: ng.IPromise<any>) => this.$stfDecorateNgClickHandler(promise);
+			$scope.$stfDecorateNgClickHandler = (promise: ng.IPromise<any>, event) => this.$stfDecorateNgClickHandler(promise, event);
 			$scope.$stfDecorateNgSubmitHandler = (promise: ng.IPromise<any>) => this.$stfDecorateNgSubmitHandler(promise);
 		}
 
-		private $stfDecorateNgClickHandler(promise: ng.IPromise<any>): ng.IPromise<any> {
+		private $stfDecorateNgClickHandler(promise: ng.IPromise<any>, event): ng.IPromise<any> {
 			if (promise) {
-				this.element.prop('disabled', true);
+				$(event.currentTarget).prop('disabled', true);
 				(<any>this.$scope.$root).loadingProgress = true;
 				promise.finally(() => {
-					this.element.prop('disabled', false);
+					$(event.currentTarget).prop('disabled', false);
 					(<any>this.$scope.$root).loadingProgress = false;
 				});
 			}

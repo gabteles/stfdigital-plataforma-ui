@@ -18,7 +18,7 @@ namespace app.core {
 						}
 					}
 					element.on('click', handleDuplicateRequests);
-					attrs['ngClick'] = '$stfDecorateNgClickHandler(' + attrs['ngClick'] + ')';
+					attrs['ngClick'] = '$stfDecorateNgClickHandler(' + attrs['ngClick'] + ', $event)';
 					return originalCompile(element, attrs, transclude);
 				} else {
 					return originalCompile(element, attrs, transclude);

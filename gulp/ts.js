@@ -122,6 +122,7 @@ gulp.task('compile-ts', ['ts-lint', 'clean-dangling-js'], function () {
         .pipe($.typescript(createTsProject()))
         .pipe($.ngAnnotate())
         .pipe($.sourcemaps.write('.'))
+        .pipe($.destClean(tsOutputPath))
         .pipe(gulp.dest(tsOutputPath));
 });
 

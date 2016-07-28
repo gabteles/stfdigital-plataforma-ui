@@ -6,6 +6,7 @@
     "angular": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#b76dd8a7f95b71696982befbb7589940d27e940b",
     "angular-mocks": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-mocks.d.ts#5b7257019ae959533341a715b339d2562bbf9b85",
     "oclazyload": "github:DefinitelyTyped/DefinitelyTyped/oclazyload/oclazyload.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd",
+    "systemjs": "github:DefinitelyTyped/DefinitelyTyped//systemjs/systemjs.d.ts#66999f382f7c5fa29dcab9130f40433476a37855",
     
     "app.certification.signature.service": "file:../../definitions/certification/signature.service.d.ts",
     "app.certification.signing-manager": "file:../../definitions/certification/signing-manager.d.ts",

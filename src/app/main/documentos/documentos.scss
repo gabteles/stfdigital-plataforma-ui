@@ -48,3 +48,38 @@
     margin: 0 20px
 }
 /* Fim de animação do editor */
+
+/* Uploader */
+.my-drop-zone {
+	border: dotted 3px lightgray;
+	background-color: rgba(0,0,0,0.03); 
+	min-height: 180px;
+	background-image: url("/app/main/documentos/img/dropzone.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.my-drop-zone-single {
+	border: dotted 1px lightgray;
+	background-color: rgba(0,0,0,0.03); 
+	min-height: 360px;
+	background-image: url("/app/main/documentos/img/dropzone_stf_sem_arraste.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.nv-file-over { 
+	border: dotted 3px red; 
+}
+
+.another-file-over-class {
+	border: dotted 3px green;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.force-pointer {
+	cursor: pointer;
+}

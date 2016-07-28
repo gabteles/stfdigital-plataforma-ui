@@ -22,7 +22,7 @@ namespace app.novoProcesso {
                 .then((response: ng.IHttpPromiseCallbackArg<IProcessoWorkflow[]>): IProcessoWorkflow[] => {
                 	let processos: IProcessoWorkflow[] = [];
                 	response.data
-                	        .filter(processo => angular.isDefined(processo.route))
+                	        .filter(processo => angular.isDefined(processo.route) && processo.route != null)
                 	        .forEach(processo => processos.push(processo));
                 	return processos;
                 });

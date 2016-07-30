@@ -49,6 +49,14 @@
 }
 /* Fim de animação do editor */
 
+.onlyoffice-iframe-container {
+    position: relative;
+}
+
+.onlyoffice-iframe-container iframe {
+    position: absolute;
+}
+
 /* Uploader */
 .my-drop-zone {
 	border: dotted 3px lightgray;

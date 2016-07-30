@@ -76,10 +76,10 @@ namespace app.documentos {
 				let callbackUrl = $scope.config.document.callbackUrl;
 				
 				let config: DocsAPI.OnlyofficeConfig = {
-					documentType : documentType,
-					height : '100%',
 					type : "desktop",
 					width : '100%',
+					height : '100%',
+					documentType : documentType,
 					document : {
 						fileType : docType,
 						key : $scope.config.document.key || docKey,
@@ -88,6 +88,7 @@ namespace app.documentos {
 						permissions : {
 							edit : true,
 							download : false,
+							reader : true,
 							print: true
 						},
 					},

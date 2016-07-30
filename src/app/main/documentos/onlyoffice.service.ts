@@ -79,7 +79,7 @@ namespace app.documentos {
 					};
 				}
 			}).then((response: any) => {
-				return response.data.url + '/OfficeWeb/apps/api/documents/api.js';
+				return response.data.url + '/web-apps/apps/api/documents/api.js';
 			});
 		}
 	}

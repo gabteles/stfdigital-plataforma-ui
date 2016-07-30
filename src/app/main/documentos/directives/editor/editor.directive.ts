@@ -11,6 +11,7 @@ namespace app.documentos {
 		edicaoIniciada: Function;
 		edicaoTimeout: any;
 		aguardarConclusao: any;
+		editorHeight: string;
 	}
 	
 	class EditorDirective implements IDirective {
@@ -24,7 +25,8 @@ namespace app.documentos {
 			edicaoConcluida: "&",
 			edicaoIniciada: "&",
 			edicaoTimeout: "&",
-			aguardarConclusao: "@"
+			aguardarConclusao: "@",
+			editorHeight: "@"
 		};
 	
 		public controller: any = EditorController;

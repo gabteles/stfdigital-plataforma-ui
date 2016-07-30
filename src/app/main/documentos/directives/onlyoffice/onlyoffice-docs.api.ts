@@ -7,118 +7,533 @@ namespace DocsAPI {
 	}
 	
 	export interface OnlyofficeConfig {
-		documentType: string;
-		height: string;
+		/**
+		 * 'desktop or mobile'
+		 */
 		type: string;
-		width: "100%";
+
+		/**
+		 * '100% by default'
+		 */
+		width: string;
+
+		/**
+		 * '100% by default'
+		 */
+		height: string;
+
+		/**
+		 * 'text' | 'spreadsheet' | 'presentation'
+		 */
+		documentType: string;
+
 		document: OnlyofficeDocument;
+
 		editorConfig: OnlyofficeEditorConfig;
+
 		events?: OnlyofficeEventConfig;
 	}
 	
 	export interface OnlyofficeDocument {
-		fileType: string;
-		key: string;
+		/**
+		 * 'document title'
+		 */
 		title: string;
+
+		/**
+		 * 'document url'
+		 */
 		url: string;
+
+		/**
+		 * 'document file type'
+		 */
+		fileType: string;
+
+		/**
+		 * <advanced options>
+		 */
+		options?: {};
+
+		/**
+		 * 'key'
+		 */
+		key: string;
+
+		/**
+		 * 'vkey'
+		 */
+		vkey?: string;
+
 		info?: OnlyofficeDocumentInfo;
+
 		permissions: OnlyofficeDocumentPermission;
 	}
 	
 	export interface OnlyofficeDocumentInfo {
+		/**
+		 * 'author name'
+		 */
 		author: string;
-		created: string;
+
+		/**
+		 * 'path to document'
+		 */
 		folder: string;
+
+		/**
+		 * '<creation date>'
+		 */
+		created: string;
+
 		sharingSettings: OnlyofficeSharingSetting[];
 	}
 	
 	export interface OnlyofficeSharingSetting {
-		permissions: string;
+		/**
+		 * 'user name'
+		 */
 		user: string;
+
+		/**
+		 * '<permissions>'
+		 */
+		permissions: string;
+
+		/**
+		 * false
+		 */
+		isLink: boolean;
 	}
 	
 	export interface OnlyofficeDocumentPermission {
+		/**
+		 * <can edit>, // default = true
+		 */
+		edit?: boolean;
+
+		/**
+		 * <can download>
+		 */
 		download: boolean;
-		edit: boolean;
-		print: boolean;
+		
+		/**
+		 * <can view in readable mode>
+		 */
+		reader: boolean;
+
+		/**
+		 * <can review> // default = edit
+		 */
+		review?: boolean;
+
+		/**
+		 * <can print> // default = true
+		 */
+		print?: boolean;
 	}
 	
 	export interface OnlyofficeEditorConfig {
-		callbackUrl: string;
-		createUrl?: string;
-		lang: string;
+		/**
+		 * 'view or edit'
+		 */
 		mode: string;
-		customization?: OnlyofficeEditorCustomization;
-		embedded?: OnlyofficeEmbeddedConfig;
-		recent?: OnlyofficeRecentDocument[];
+
+		/**
+		 * <language code>
+		 */
+		lang: string;
+
+		/**
+		 * <location>
+		 */
+		location?: string;
+
+		/**
+		 * <can coauthoring documents>
+		 */
+		canCoAuthoring?: boolean;
+
+		/**
+		 * <can autosave documents>
+		 */
+		canAutosave?: boolean;
+
+		/**
+		 * <can return to folder> - deprecated. use "customization.goback" parameter
+		 */
+		canBackToFolder?: boolean;
+
+		/**
+		 * 'create document url'
+		 */
+		createUrl?: string;
+
+		/**
+		 * 'document sharing settings url'
+		 */
+		sharingSettingsUrl?: string;
+
+		/**
+		 * 'mail merge sources url'
+		 */
+		fileChoiceUrl?: string;
+
+		/**
+		 * <url for connection between sdk and portal>
+		 */
+		callbackUrl: string;
+
+		/**
+		 * 'folder for saving merged file'
+		 */
+		mergeFolderUrl?: string;
+
+		/**
+		 * <url for license>
+		 */
+		licenseUrl?: string;
+
+		/**
+		 * <customer id>
+		 */
+		customerId?: string;
+
 		user?: OnlyofficeUser;
-	}
-	
-	export interface OnlyofficeEditorCustomization {
-		about?: boolean;
-		chat?: boolean;
-		comments?: boolean;
-		customer?: OnlyofficeCustomerConfig;
-		feedback?: OnlyofficeFeedbackConfig;
-		goback?: OnlyofficeGobackConfig;
-		logo?: OnlyofficeLogoConfig;
-	}
-	
-	export interface OnlyofficeCustomerConfig {
-		address: string;
-		info: string;
-		logo: string;
-		mail: string;
-		name: string;
-		www: string;
-	}
-	
-	export interface OnlyofficeFeedbackConfig {
-		url: string;
-		visible: boolean;
-	}
-	
-	export interface OnlyofficeGobackConfig {
-		text: string;
-		url: string;
-	}
-	
-	export interface OnlyofficeLogoConfig {
-		image: string;
-		imageEmbeddded: string;
-		url: string;
-	}
-	
-	export interface OnlyofficeEmbeddedConfig {
-		embedUrl: string;
-		fullscreenUrl: string;
-		saveUrl: string;
-		shareUrl: string;
-		toolbarDocked: string;
-	}
-	
-	export interface OnlyofficeRecentDocument {
-		folder: string;
-		title: string;
-		url: string;
+
+		recent?: OnlyofficeRecentDocument[];
+
+		templates?: OnlyofficeTemplate[];
+
+		customization?: OnlyofficeEditorCustomization;
+
+		plugins?: OnlyofficePluginsConfig;
+
+		embedded?: OnlyofficeEmbeddedConfig;
+		
 	}
 	
 	export interface OnlyofficeUser {
-		firstname: string;
+		/**
+		 * 'user id'
+		 */
 		id: string;
+
+		/**
+		 * 'user first name'
+		 */
+		firstname: string;
+		
+		/**
+		 * 'user last name'
+		 */
 		lastname: string;
+	}
+
+	export interface OnlyofficeRecentDocument {
+		/**
+		 * 'document title'
+		 */
+		title: string;
+
+		/**
+		 * 'document url'
+		 */
+		url: string;
+
+		/**
+		 * 'path to document'
+		 */
+		folder: string;
+	}
+
+	export interface OnlyofficeTemplate {
+		/**
+		 * 'template name'
+		 */
+		name: string;
+
+		/**
+		 * 'template icon url'
+		 */
+		icon: string;
+
+		/**
+		 * 'http://...'
+		 */
+		url: string;
+	}
+
+	export interface OnlyofficeEditorCustomization {
+		logo?: OnlyofficeLogoConfig;
+
+		/**
+		 * 'header background color'
+		 */
+		backgroundColor?: string;
+
+		/**
+		 * 'header text color'
+		 */
+		textColor?: string;
+
+		customer?: OnlyofficeCustomerConfig;
+
+		/**
+		 * false
+		 */
+		about?: boolean;
+
+		feedback?: OnlyofficeFeedbackConfig;
+
+		goback?: OnlyofficeGobackConfig;
+
+		/**
+		 * false
+		 */
+		chat?: boolean;
+
+		/**
+		 * false
+		 */
+		comments?: boolean;
+	}
+	
+	export interface OnlyofficeLogoConfig {
+		/**
+		 * url
+		 */
+		image: string;
+
+		/**
+		 * url
+		 */
+		imageEmbeddded: string;
+
+		/**
+		 * http://...
+		 */
+		url: string;
+	}
+
+	export interface OnlyofficeCustomerConfig {
+		/**
+		 * 'SuperPuper'
+		 */
+		name: string;
+
+		/**
+		 * 'New-York, 125f-25'
+		 */
+		address: string;
+
+		/**
+		 * 'support@gmail.com'
+		 */
+		mail: string;
+
+		/**
+		 * 'www.superpuper.com'
+		 */
+		www: string;
+
+		/**
+		 * 'Some info'
+		 */
+		info: string;
+
+		/**
+		 * ''
+		 */
+		logo: string;
+	}
+	
+	export interface OnlyofficeFeedbackConfig {
+		/**
+		 * false
+		 */
+		visible: boolean;
+
+		/**
+		 * http://...
+		 */
+		url: string;
+	}
+	
+	export interface OnlyofficeGobackConfig {
+		/**
+		 * 'http://...'
+		 */
+		url: string;
+
+		/**
+		 * 'Go to London'
+		 */
+		text: string;
+	}
+	
+	export interface OnlyofficePluginsConfig {
+		/**
+		 * '../../../../sdkjs-plugins/'
+		 */
+		url: string;
+
+		pluginsData: OnlyofficePluginData[];
+	}
+
+	export interface OnlyofficePluginData {
+		/**
+		 * "chess (fen)"
+		 */
+		name: string;
+
+		/**
+		 * "asc.{FFE1F462-1EA2-4391-990D-4CC84940B754}"
+		 */
+		guid: string;
+
+		/**
+		 * ""
+		 */
+		baseUrl: string;
+
+		variations: OnlyofficePluginVariation[];
+	}
+
+	export interface OnlyofficePluginVariation {
+		/**
+		 * "chess"
+		 */
+		description: string;
+
+		/**
+		 * "chess/index.html"
+		 */
+		url: string;
+
+		/**
+		 * ["chess/icon.png", "chess/icon@2x.png"]
+		 */
+		icons: string[];
+
+		/**
+		 * true
+		 */
+		isViewer: boolean;
+
+		/**
+		 * ["word", "cell", "slide"]
+		 */
+		EditorsSupport: string[];
+
+		/**
+		 * true
+		 */
+		isVisual: boolean;
+
+		/**
+		 * true
+		 */
+		isModal: boolean;
+
+		/**
+		 * false
+		 */
+		isInsideMode: boolean;
+
+		/**
+		 * "ole"
+		 */
+		initDataType: string;
+
+		/**
+		 * ""
+		 */
+		initData: string;
+
+		/**
+		 * true
+		 */
+		isUpdateOleOnResize: boolean;
+
+		buttons: OnlyofficeButton[];
+	}
+
+	export interface OnlyofficeButton {
+		/**
+		 * "Ok"
+		 */
+		text: string;
+
+		/**
+		 * true
+		 */
+		primary: boolean;
+	}
+
+	export interface OnlyofficeEmbeddedConfig {
+		/**
+		 * 'url'
+		 */
+		embedUrl: string;
+
+		/**
+		 * 'url'
+		 */
+		fullscreenUrl: string;
+
+		/**
+		 * 'url'
+		 */
+		saveUrl: string;
+
+		/**
+		 * 'url'
+		 */
+		shareUrl: string;
+
+		/**
+		 * 'top or bottom'
+		 */
+		toolbarDocked: string;
 	}
 	
 	export interface OnlyofficeEventConfig {
+
 		onCollaborativeChanges?: Function;
+
+		/**
+		 * <document state changed callback>
+		 */
 		onDocumentStateChange?: Function;
+
 	    onDownloadAs?: Function;
+
 	    onError?: Function;
+
+		/**
+		 * <document ready callback>
+		 */
 	    onReady?: Function;
+
 	    onRequestEditRights?: Function;
+
 	    onRequestHistory?: Function;
+
 	    onRequestHistoryData?: Function;
+
 	    onRequestHistoryClose?: Function;
+
+		/**
+		 * <back to folder callback>
+		 */
+		onBack?: Function;
+
+		/**
+		 * <save request callback>
+		 */
+		onSave?: Function;
+
 	}
 	
 	export interface DocEditorFactory {

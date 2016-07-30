@@ -1,6 +1,6 @@
-<div class="editor-directive" ng-class="{'edicao-iniciada': vm.edicaoIniciada}">
-    <div ng-if="vm.showEditor" onlyoffice="vm.config" save="save(url, close)" style="height: 700px;"></div>
-    <div ng-if="vm.showProgress" style="height: 700px;">
+<div class="editor-directive" ng-class="{'edicao-iniciada': vm.edicaoIniciada}" ng-style="editorHeight ? {height: editorHeight} : ''" layout-fill>
+    <div ng-if="vm.showEditor" onlyoffice="vm.config" save="save(url, close)" class="onlyoffice-iframe-container" layout-fill></div>
+    <div ng-if="vm.showProgress">
         <div class="loadmask">
             <div class="loader-page">
                 <div class="asc-loadmask-body" role="presentation" tabindex="-1">
@@ -9,6 +9,5 @@
                 </div>
             </div>
         </div>
-        
     </div>
 </div>

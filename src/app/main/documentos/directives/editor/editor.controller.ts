@@ -57,7 +57,7 @@ namespace app.documentos {
 							user: {
 								id: 'usuario-teste',
 								name: 'Usuário Teste'
-							},
+							}
 						},
 						document: {
 							src: urls[0],

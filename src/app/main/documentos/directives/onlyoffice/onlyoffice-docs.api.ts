@@ -392,11 +392,6 @@ namespace DocsAPI {
 		 */
 		guid: string;
 
-		/**
-		 * ""
-		 */
-		baseUrl: string;
-
 		variations: OnlyofficePluginVariation[];
 	}
 

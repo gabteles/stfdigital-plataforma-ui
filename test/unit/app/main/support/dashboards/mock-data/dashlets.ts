@@ -20,7 +20,7 @@ namespace app.support.dashboards {
 			id: 'dashlet-02',
 			value: {
 				template: '<div>Dashlet 02</div>',
-				controller: 'Dashlet01Controller',
+				controller: 'Dashlet02Controller',
 				controllerAs: 'vm'
 			}
 		};

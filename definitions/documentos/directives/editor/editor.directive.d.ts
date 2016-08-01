@@ -7,5 +7,6 @@ declare namespace app.documentos {
         edicaoIniciada: Function;
         edicaoTimeout: any;
         aguardarConclusao: any;
+        editorHeight: string;
     }
 }

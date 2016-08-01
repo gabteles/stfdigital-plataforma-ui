@@ -32,6 +32,27 @@ namespace app.support.dashboards {
 			}
 		};
 
+
+		public DASHLET_03: MockDashlet = {
+			id: 'dashlet-03',
+			value: {
+				id: 'dashlet-03',
+				context: 'context-03',
+				src: 'context-03/dashlets',
+				nome: 'Dashlet 03'
+			}
+		};
+
+		public DASHLET_04: MockDashlet = {
+			id: 'dashlet-04',
+			value: {
+				id: 'dashlet-04',
+				context: 'context-04',
+				src: 'context-04/dashlets',
+				nome: 'Dashlet 04'
+			}
+		};
+
 		public DASHBOARD_01: MockDashboard = {
 			id: 'dashboard-01',
 			value: {

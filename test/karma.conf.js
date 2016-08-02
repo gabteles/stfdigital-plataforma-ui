@@ -93,6 +93,7 @@ module.exports = function(config) {
     browsers : ['PhantomJS'],
 
     plugins : [
+      'karma-ng-html2js-preprocessor',
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-angular-filesort',
@@ -102,16 +103,21 @@ module.exports = function(config) {
       'karma-mocha-reporter' 
     ],
 
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'src/',
+      moduleName: 'templates'
+    },
+
     coverageReporter: {
-	  reporters: [{
-	    type: 'json',
-	    subdir: '.',
-	    dir: path.join(conf.paths.unit, 'coverage/js'), 
-	    file: 'coverage.json'
-	  }, {
-	    type : 'html',
-	    dir : path.join(conf.paths.unit, 'coverage/js')
-	  }]
+      reporters: [{
+        type: 'json',
+        subdir: '.',
+        dir: path.join(conf.paths.unit, 'coverage/js'), 
+        file: 'coverage.json'
+      }, {
+        type : 'html',
+        dir : path.join(conf.paths.unit, 'coverage/js')
+      }]
     },
 
     reporters: ['mocha', 'html', 'coverage'],

@@ -26,6 +26,7 @@ function runTests(singleRun, done)
             preprocessors[path] = ['coverage'];
         });
     }
+    preprocessors['**/*.html'] = ['ng-html2js'];
 
     var localConfig = {
         configFile   : path.resolve(path.join(conf.paths.test, '/karma.conf.js')),

@@ -13,7 +13,7 @@ namespace app.support.dashboards {
 
 		constructor(private $scope: DashboardScope, private dashboardLayoutManager: DashboardLayoutManager) {
 			this.$scope.$watch('value', () => {
-				let dashlets = angular.isDefined($scope.value) ? this.$scope.value.dashlets : [];
+				let dashlets = angular.isDefined(this.$scope.value) ? this.$scope.value.dashlets : [];
 				this.layout = dashboardLayoutManager.defaultLayout(dashlets);
 			});
 		}

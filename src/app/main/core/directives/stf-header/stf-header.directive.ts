@@ -8,6 +8,7 @@ namespace app.core {
 		fabText: any;
 		fabActive: any;
         path: any;
+        hasFabAction: boolean;
 	}
 
     /**
@@ -42,6 +43,10 @@ namespace app.core {
 
         constructor(private msNavigationService) {
 
+        }
+
+        public link($scope: StfHeaderScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) {
+            $scope.hasFabAction = angular.isDefined(attrs.$attr['fabAction']);
         }
 
 		public static factory(): ng.IDirectiveFactory {

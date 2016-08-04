@@ -16,6 +16,7 @@ namespace app.pesquisaAvancada {
         public searchComplete: boolean;
         public editEnabled: boolean;
         public resultsDtOptions: any;
+        public searchResults: any;
         
         /** @ngInject **/
         constructor(private $scope: IScope,
@@ -24,14 +25,14 @@ namespace app.pesquisaAvancada {
                     private $mdToast: IToastService,
                     private $mdSidenav: ISidenavService,
                     public traits: ITrait[],
-                    public savedSearchs: ISearch[],
-                    public searchResults: any) {
+                    public savedSearchs: ISearch[]) {
 
             this.defaultSearch = <ISearch>{id: null, label: '', criterias: []};
 
             this.newSearch = angular.copy(this.defaultSearch);
             this.loadedSearch = angular.copy(this.defaultSearch);
             this.resultSearch = angular.copy(this.defaultSearch);
+            this.searchResults = [];
             this.selectedTab = 0;
             this.searchComplete = false;
             this.editEnabled = false;

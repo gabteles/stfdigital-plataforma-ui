@@ -18,33 +18,31 @@ namespace app.pesquisaAvancada {
         public scope: Object = {
             criteria : "="
         };
-        public link: Function = () => {
-            return ($scope: CriteriaValueInputScope, el: IAugmentedJQuery, attrs: IAttributes) => {
+        public link: Function = ($scope: CriteriaValueInputScope, el: IAugmentedJQuery, attrs: IAttributes) => {
 
-                $scope.$watch('criteria.value', function() {
-                    CriteriaValueInputDirective.updateCriteriaValidity($scope.criteria);
-                });
+            $scope.$watch('criteria.value', function() {
+                CriteriaValueInputDirective.updateCriteriaValidity($scope.criteria);
+            });
 
-                $scope.$watch('criteria.value[0]', function() {
-                    CriteriaValueInputDirective.updateCriteriaValidity($scope.criteria);
-                });
+            $scope.$watch('criteria.value[0]', function() {
+                CriteriaValueInputDirective.updateCriteriaValidity($scope.criteria);
+            });
 
-                $scope.$watch('criteria.value[1]', function() {
-                    CriteriaValueInputDirective.updateCriteriaValidity($scope.criteria);
-                });
+            $scope.$watch('criteria.value[1]', function() {
+                CriteriaValueInputDirective.updateCriteriaValidity($scope.criteria);
+            });
 
-                $scope.$watch('criteria.comparisonOperator', (op: ComparisionOperator) => {
-                    var criteria: ICriteria = $scope.criteria,
-                        value = criteria.value;
+            $scope.$watch('criteria.comparisonOperator', (op: ComparisionOperator) => {
+                var criteria: ICriteria = $scope.criteria,
+                    value = criteria.value;
 
-                    if (op == ComparisionOperator.ENTRE) {
-                        criteria.value = _.isArray(value) ? value : [value];
-                    } else {
-                        criteria.value = _.isArray(value) ? value[0] : value;
-                    }
-                    CriteriaValueInputDirective.updateCriteriaValidity(criteria);
-                });
-            }
+                if (op == ComparisionOperator.ENTRE) {
+                    criteria.value = _.isArray(value) ? value : [value];
+                } else {
+                    criteria.value = _.isArray(value) ? value[0] : value;
+                }
+                CriteriaValueInputDirective.updateCriteriaValidity(criteria);
+            });
         };
 
         private static updateCriteriaValidity(criteria: ICriteria): void {

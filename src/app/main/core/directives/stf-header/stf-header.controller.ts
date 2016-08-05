@@ -16,10 +16,6 @@ namespace app.core {
 				(this.localBreadcrumbs || (this.stfBreadcrumbsService.breadcrumbs != this.stfBreadcrumbsService.EMPTY_BREADCRUMB));
 		}
 
-		public hasFabAction(): boolean {
-			return angular.isDefined(this.$scope.fabAction);
-		}
-
 		public breadcrumbs(): any {
 			if (this.localBreadcrumbs) {
 				return this.localBreadcrumbs;

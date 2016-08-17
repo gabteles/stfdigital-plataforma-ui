@@ -23,7 +23,8 @@ namespace app.support.command {
 		}
 		
 		class TestValidator implements CommandValidator {
-			isValid(command: RegistrarRemessaCommand): boolean {
+			public id: string = 'registrar';
+			public isValid(command: RegistrarRemessaCommand): boolean {
 				return command != null;
 			}
 		}
@@ -46,7 +47,7 @@ namespace app.support.command {
 			http.flush();
 			commandService = _commandService_;
 			
-			commandConfig = new CommandConfig();
+			commandConfig = <CommandConfig> {};
 			commandConfig.id = "registrar";
 			commandConfig.context = "recebimento";
 			commandConfig.description = "Registrar";
@@ -58,12 +59,6 @@ namespace app.support.command {
 			
 			remessa = new Remessa();
 		}));
-
-		it('O target deve ser válido para o comando', () => {
-			commandConfig.addMatcher(new TestMatcher());
-		
-			expect(commandConfig.match([remessa])).toBeTruthy();
-		});
 		
 		it('O matcher deve invalidar o target', () => {
 			remessa.type = "Recursal"
@@ -82,23 +77,9 @@ namespace app.support.command {
 				.then(comando => expect(comando).toEqual(commandConfig));
 		});
 		
-		it('O serviço deve adicionar o matcher ao comando', () => {
-			commandService.addMatcher('registrar', new TestMatcher());
-			spyOn(commandConfig, "addMatcher").and.callThrough();
-			commandService.list()
-				.then(comandos => expect(comandos[0].addMatcher).toHaveBeenCalled());
-		});
-		
-		it('O serviço deve adicionar o validador ao comando', () => {
-			commandService.setValidator('registrar', new TestValidator());
-			spyOn(commandConfig, "setValidator").and.callThrough();
-			commandService.list()
-				.then(comandos => expect(comandos[0].setValidator).toHaveBeenCalled());
-		});
-		
 		it('O serviço deve validar o comando', () => {
-			commandService.setValidator('registrar', new TestValidator());
-			commandService.isValid('registrar', new RegistrarRemessaCommand())
+			commandService.addValidator(new TestValidator());
+			commandService.isValid('registrar', 'registrar', new RegistrarRemessaCommand())
 				.then(valid => expect(valid).toBeTruthy());
 		});
 		

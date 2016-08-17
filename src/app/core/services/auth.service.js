@@ -7,7 +7,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app.core').service('AuthService', function($http, $cookies, $httpParamSerializer, $q, properties) {
+	angular.module('app.core').service('AuthService', function($http, $cookies, $httpParamSerializer, $q, $rootScope, properties) {
 
 		var USER_QUERY_URL = properties.url + ':' + properties.port + '/userauthentication/user';
 
@@ -45,6 +45,7 @@
 			
 			return $http(request).then(function(response) {				
 				$cookies.put(ACCESS_TOKEN, response.data.access_token);
+				$rootScope.$broadcast('user:logged');
 				return response.data;
 			});
 		};
@@ -53,6 +54,7 @@
 		 * Invalida a seção no serviço de autenticação e remove o cookie com o token de acesso.
 		 */	
 		this.logout = function() {
+			$rootScope.$broadcast('user:exited');
 			$cookies.remove(ACCESS_TOKEN);
 		};
 		

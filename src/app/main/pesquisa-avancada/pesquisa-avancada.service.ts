@@ -11,7 +11,7 @@ namespace app.pesquisaAvancada {
 
     export class PesquisaAvancadaService {
 
-        private static apiPesquisas: string = '/discovery/api/queries';
+        private static apiPesquisas: string = '/discovery/api/queries/searchs';
 
         /** @ngInject **/
         constructor(private $http: ng.IHttpService, private msNavigationService, private properties: Properties) { }

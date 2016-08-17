@@ -17,7 +17,7 @@ declare namespace app.support.command {
     /**
      * Diretiva de lista de comandos
      * Ex. de uso:
-     * &lt;commands targets="vm.recursos" context="autuacao" targetType="Processo"&gt;&lt;/commands&gt;
+     * &lt;commands targets="vm.recursos" context="autuacao" target-type="Processo"&gt;&lt;/commands&gt;
      */
     class CommandListDirective implements ng.IDirective {
         private commandService;
@@ -31,11 +31,12 @@ declare namespace app.support.command {
     }
     interface CommandDirectiveScope extends ng.IScope {
         command: Command;
+        validator: string;
     }
     /**
      * Bot&atilde;o de um comando espec&iacute;fico
      * Ex. de uso:
-     * &lt;button id="registrar" command="vm.command"&gt;Executar&lt;/button&gt;
+     * &lt;button id="registrar" command="vm.command" validator="validadorRegistro"&gt;Executar&lt;/button&gt;
      */
     class CommandDirective implements ng.IDirective {
         private commandService;

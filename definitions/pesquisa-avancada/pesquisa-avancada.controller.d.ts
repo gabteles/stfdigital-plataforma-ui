@@ -12,7 +12,6 @@ declare namespace app.pesquisaAvancada {
         private $mdSidenav;
         traits: ITrait[];
         savedSearchs: ISearch[];
-        searchResults: any;
         defaultSearch: ISearch;
         newSearch: ISearch;
         loadedSearch: ISearch;
@@ -21,8 +20,9 @@ declare namespace app.pesquisaAvancada {
         searchComplete: boolean;
         editEnabled: boolean;
         resultsDtOptions: any;
+        searchResults: any;
         /** @ngInject **/
-        constructor($scope: IScope, $translate: ITranslateService, $mdDialog: IDialogService, $mdToast: IToastService, $mdSidenav: ISidenavService, traits: ITrait[], savedSearchs: ISearch[], searchResults: any);
+        constructor($scope: IScope, $translate: ITranslateService, $mdDialog: IDialogService, $mdToast: IToastService, $mdSidenav: ISidenavService, traits: ITrait[], savedSearchs: ISearch[]);
         private defineResultsDtOptions();
         canSearch(): boolean;
         doSearch(): void;

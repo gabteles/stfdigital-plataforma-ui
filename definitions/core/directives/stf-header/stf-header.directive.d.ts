@@ -7,5 +7,6 @@ declare namespace app.core {
         fabText: any;
         fabActive: any;
         path: any;
+        hasFabAction: boolean;
     }
 }

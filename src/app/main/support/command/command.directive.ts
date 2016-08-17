@@ -21,7 +21,7 @@ namespace app.support.command {
 	/**
 	 * Diretiva de lista de comandos
 	 * Ex. de uso: 
-	 * &lt;commands targets="vm.recursos" context="autuacao" targetType="Processo"&gt;&lt;/commands&gt;
+	 * &lt;commands targets="vm.recursos" context="autuacao" target-type="Processo"&gt;&lt;/commands&gt;
 	 */
 	export class CommandListDirective implements ng.IDirective {
 		
@@ -84,42 +84,54 @@ namespace app.support.command {
 	}
 	
 	export interface CommandDirectiveScope extends ng.IScope {
-		command: Command
+		command: Command;
+	    validator: string;
 	}
 	
 	/**
 	 * Bot&atilde;o de um comando espec&iacute;fico
 	 * Ex. de uso: 
-	 * &lt;button id="registrar" command="vm.command"&gt;Executar&lt;/button&gt; 
+	 * &lt;button id="registrar" command="vm.command" validator="validadorRegistro"&gt;Executar&lt;/button&gt; 
 	 */
 	export class CommandDirective implements ng.IDirective {
 		
 		public restrict: string = 'A';
 		public scope: Object = {
-			command : '=', //obrigatório, comando que será validado	
+			command : '=', //obrigatório, comando que será validado
+			validator: '@' //opcional, validador para o comando, caso não informado procura por um com mesmo id do comando
 		};
 		
 		public constructor(private commandService: CommandService, private $state: ng.ui.IStateService) { }
 		
 		public link: ng.IDirectiveLinkFn = ($scope: CommandDirectiveScope, element: ng.IAugmentedJQuery): void => {
 			
+			if (angular.isUndefined($scope.command)) {
+				throw new Error("Comando não definido!");
+			}
+			
 			let stopClick = (event: JQueryEventObject) => {
 				event.preventDefault();
 				event.stopPropagation();
 			}
 			
-			$scope.$watch('command', () => {
-				this.commandService.isValid(element.attr('id'), $scope.command)
-					.then(valid => {
-						if (valid) {
-							element.removeAttr('disabled');
-							element.unbind('click', stopClick)
-						} else {
-							element.attr('disabled', 'disabled');
-							element.bind('click', stopClick);
-						}
-					});
-			}, true);				
+			let commandId: string = element.attr('id');
+			let validatorId: string = angular.isString($scope.validator) ? $scope.validator : commandId;
+			
+			if (angular.isString(commandId) && commandId.length > 0) {
+			
+				$scope.$watch('command', () => {
+					this.commandService.isValid(validatorId, commandId, $scope.command)
+						.then(valid => {
+							if (valid) {
+								element.removeAttr('disabled');
+								element.unbind('click', stopClick)
+							} else {
+								element.attr('disabled', 'disabled');
+								element.bind('click', stopClick);
+							}
+						});
+				}, true);
+			}
 		}
 		
 	    public static factory(): ng.IDirectiveFactory {

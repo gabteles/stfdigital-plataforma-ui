@@ -1,0 +1,17 @@
+<md-autocomplete
+    md-input-id = "input-{{id}}"
+    md-selected-item-change="vm.selectedItemChange(item)"
+    md-search-text-change = "vm.searchTextChange()"
+    md-search-text = "vm.searchText"
+    md-items = "item in vm.items"
+    md-item-text = "vm.itemText(item)"
+    md-min-length = "3"
+    md-delay = "500"
+    md-menu-class="autocomplete-custom-template"
+    md-floating-label="{{vm.placeholder}}"
+    flex>
+  <md-item-template>
+    <span md-highlight-text="vm.searchText" md-highlight-flags="^i">{{vm.itemText(item)}}</span>
+  </md-item-template>
+  <md-not-found>Nenhum item encontrado com o texto: "{{vm.searchText}}"</md-not-found>
+</md-autocomplete>

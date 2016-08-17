@@ -6,7 +6,6 @@ declare namespace app.core {
         /**  @ngInject */
         constructor($scope: StfHeaderScope, stfBreadcrumbsService: StfBreadcrumbsService);
         hasBreadcrumbs(): boolean;
-        hasFabAction(): boolean;
         breadcrumbs(): any;
     }
 }

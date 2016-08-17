@@ -24,6 +24,7 @@ declare namespace app.support.command {
      * Interface para definição de um validador para o comando.
      */
     interface CommandValidator {
+        id: string;
         isValid(command: Command): boolean;
     }
     /**
@@ -54,7 +55,7 @@ declare namespace app.support.command {
     /**
      * Classe que define a configuração de um comando.
      */
-    class CommandConfig {
+    interface CommandConfig {
         id: string;
         description: string;
         context: string;
@@ -62,28 +63,6 @@ declare namespace app.support.command {
         target: TargetConfig;
         listable: boolean;
         startProcess: boolean;
-        protected matchers: CommandMatcher[];
-        protected validator: CommandValidator;
-        /**
-         * Adiciona um matcher
-         */
-        addMatcher(matcher: CommandMatcher): void;
-        /**
-         * Relaciona um validador
-         */
-        setValidator(validator: CommandValidator): void;
-        /**
-         * Varifica se o comando é aplicável ao conjunto de alvos
-         */
-        match(targets: CommandTarget[], filter?: CommandFilter): boolean;
-        /**
-         * Verifica se um comando é válido
-         */
-        isValid(command: Command): boolean;
-        /**
-         * Verifica se o modo do comando é compatível com a quantidade de alvos
-         */
-        private isCompatibleMode(length);
     }
     /**
      * Serviço para manipulação das configurações de comando.
@@ -91,10 +70,13 @@ declare namespace app.support.command {
     class CommandService {
         private $http;
         private $q;
+        private $log;
         private properties;
-        private commandsConfig;
+        private commandConfigs;
+        private commandValidators;
+        private commandMatchers;
         /** @ngInject **/
-        constructor($http: ng.IHttpService, $q: ng.IQService, properties: Properties);
+        constructor($http: ng.IHttpService, $q: ng.IQService, $log: ng.ILogService, $rootScope: ng.IRootScopeService, properties: Properties);
         loadCommands(): void;
         /**
          * Lista os comandos
@@ -103,11 +85,11 @@ declare namespace app.support.command {
         /**
          * Adiciona um matcher a uma configuração
          */
-        addMatcher(id: string, matcher: CommandMatcher): void;
+        addMatcher(commandId: string, matcher: CommandMatcher): void;
         /**
-         * Relaciona um validador a uma configuração
+         * Armazena um validador para verificação
          */
-        setValidator(id: string, validator: CommandValidator): void;
+        addValidator(validator: CommandValidator): void;
         /**
          * Lista os comandos que são aplicáveis à lista de alvos.
          */
@@ -116,10 +98,26 @@ declare namespace app.support.command {
          * Verifica se um comando é valido de acordo com sua configuração.
          * Um validator deve ser criado para realizar a checagem
          */
-        isValid(id: string, command: Command): ng.IPromise<boolean>;
+        isValid(validatorId: string, commandId: string, command: Command): ng.IPromise<boolean>;
         /**
          * Pesquisa uma configuração por id
          */
         findById(id: any): ng.IPromise<CommandConfig>;
+        /**
+         * Verifica se um comando é válido
+         */
+        private verify(validatorId, command);
+        /**
+         * Retorna os matchers de um command
+         */
+        private findMatchersById(id);
+        /**
+         * Varifica se um comando é aplicável ao conjunto de alvos
+         */
+        private match(command, targets, filter?);
+        /**
+         * Verifica se o modo do comando é compatível com a quantidade de alvos
+         */
+        private isCompatibleMode(mode, length);
     }
 }

@@ -13,11 +13,9 @@ namespace app.support.dashboards {
 			value: '='
 		};
 
-		constructor(private $timeout: ng.ITimeoutService, private dashletRegistry: DashletRegistry, private $compile: ng.ICompileService) {
+		constructor(private $timeout: ng.ITimeoutService, private dashletRegistry: DashletRegistry, private $compile: ng.ICompileService) {	}
 
-		}
-
-		public link(scope: DashletScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) {
+		public link: ng.IDirectiveLinkFn = (scope: DashletScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes): void => {
 			this.$timeout(() => {
 				let dashletName = scope.value;
 				let dashlet: DashletDefinition = this.dashletRegistry.recoverDashlet(dashletName);

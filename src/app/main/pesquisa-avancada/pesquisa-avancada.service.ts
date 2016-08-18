@@ -14,15 +14,24 @@ namespace app.pesquisaAvancada {
         private static apiPesquisas: string = '/discovery/api/queries/searchs';
 
         /** @ngInject **/
-        constructor(private $http: ng.IHttpService, private msNavigationService, private properties: Properties) { }
+        constructor(private $http: ng.IHttpService, private msNavigationService,
+        		$rootScope: ng.IRootScopeService, private properties: Properties) {
+            $rootScope.$on('user:logged', () => this.loadQueries());
+            $rootScope.$on('user:exited', () => this.resetQueries());
+        }
         
-        public load(): void {
+        public loadQueries(): void {
             this.$http.get(this.properties.apiUrl + PesquisaAvancadaService.apiPesquisas)
                 .then((response: ng.IHttpPromiseCallbackArg<IPesquisaAvancada[]>) => {
                     response.data
                             .filter(pesquisa => angular.isDefined(pesquisa.route))
                             .forEach(pesquisa => this.addRouteToNavigation(pesquisa));
                 });
+        }
+        
+        public resetQueries(): void {
+            let navigation: Array<any> = this.msNavigationService.getNavigationObject();
+            navigation.filter(nav => nav._id === "pesquisa-avancada").forEach(nav => nav.children = []);
         }
         
         private addRouteToNavigation(pesquisa: IPesquisaAvancada): void {

@@ -17,7 +17,7 @@ namespace app.support.dashboards {
 
 		let dashboardLayoutManager: DashboardLayoutManager;
 
-		beforeEach(angular.mock.module('templates', 'app.core', 'app.support', 'app.support.dashboards'));
+		beforeEach(angular.mock.module('templates', 'app.core', 'app.support.dashboards'));
 
 		beforeEach(angular.mock.module((_$compileProvider_: ng.ICompileProvider) => {
 			$compileProvider = _$compileProvider_;

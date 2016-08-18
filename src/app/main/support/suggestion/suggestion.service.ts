@@ -16,24 +16,15 @@ namespace app.support.suggestion {
     	private suggestions: ng.IPromise<Suggestion[]>;
     	
         /** @ngInject **/
-        constructor(private $http: ng.IHttpService, private properties: Properties, private $q: ng.IQService) {
+        constructor(private $http: ng.IHttpService, private properties: Properties,
+        		$rootScope: ng.IRootScopeService, private $q: ng.IQService) {
         	this.loadSuggestions();
+            $rootScope.$on('user:logged', () => this.loadSuggestions());
+            $rootScope.$on('user:exited', () => this.resetSuggestions());
         }
 
         public list(): ng.IPromise<Suggestion[]> {
             return this.suggestions;
-        }
-
-        /**
-         * Carrega os componentes de sugestão
-         */
-        public loadSuggestions(): void {
-        	let suggestionsDeferred: ng.IDeferred<Suggestion[]> = this.$q.defer();
-        	this.suggestions = suggestionsDeferred.promise;
-        	
-        	this.$http.get(this.properties.apiUrl + SuggestionService.apiSuggestions)
-        	   .then((response: ng.IHttpPromiseCallbackArg<Suggestion[]>) => suggestionsDeferred.resolve(response.data),
-        			 () => suggestionsDeferred.reject());
         }
         
         /**
@@ -54,6 +45,27 @@ namespace app.support.suggestion {
                 found.reject("Erro ao carregar componentes de sugestão!");
             });
             return found.promise;
+        }
+        
+        /**
+         * Carrega os componentes de sugestão
+         */
+        private loadSuggestions(): void {
+            let suggestionsDeferred: ng.IDeferred<Suggestion[]> = this.$q.defer();
+            this.suggestions = suggestionsDeferred.promise;
+            
+            this.$http.get(this.properties.apiUrl + SuggestionService.apiSuggestions)
+               .then((response: ng.IHttpPromiseCallbackArg<Suggestion[]>) => suggestionsDeferred.resolve(response.data),
+                     () => suggestionsDeferred.reject());
+        }
+        
+        /**
+         * Limpa as sugestões carregadas
+         */
+        private resetSuggestions(): void {
+            let suggestionConfigsDeferred = this.$q.defer();
+            this.suggestions = suggestionConfigsDeferred.promise;
+            suggestionConfigsDeferred.resolve([]);
         }
 
     }

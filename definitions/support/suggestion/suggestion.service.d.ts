@@ -12,15 +12,19 @@ declare namespace app.support.suggestion {
         private static apiSuggestions;
         private suggestions;
         /** @ngInject **/
-        constructor($http: ng.IHttpService, properties: Properties, $q: ng.IQService);
+        constructor($http: ng.IHttpService, properties: Properties, $rootScope: ng.IRootScopeService, $q: ng.IQService);
         list(): ng.IPromise<Suggestion[]>;
-        /**
-         * Carrega os componentes de sugestão
-         */
-        loadSuggestions(): void;
         /**
          * Pesquisa uma configuração de sugestão por id
          */
         findById(id: any): ng.IPromise<Suggestion>;
+        /**
+         * Carrega os componentes de sugestão
+         */
+        private loadSuggestions();
+        /**
+         * Limpa as sugestões carregadas
+         */
+        private resetSuggestions();
     }
 }

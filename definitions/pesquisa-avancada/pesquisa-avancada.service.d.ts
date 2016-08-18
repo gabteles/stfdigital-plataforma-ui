@@ -6,8 +6,9 @@ declare namespace app.pesquisaAvancada {
         private properties;
         private static apiPesquisas;
         /** @ngInject **/
-        constructor($http: ng.IHttpService, msNavigationService: any, properties: Properties);
-        load(): void;
+        constructor($http: ng.IHttpService, msNavigationService: any, $rootScope: ng.IRootScopeService, properties: Properties);
+        loadQueries(): void;
+        resetQueries(): void;
         private addRouteToNavigation(pesquisa);
     }
 }

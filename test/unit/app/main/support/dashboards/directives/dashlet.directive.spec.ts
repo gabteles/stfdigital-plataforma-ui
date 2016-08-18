@@ -16,7 +16,7 @@ namespace app.support.dashboards {
 
 		let dashlet01: MockDashletDefinition;
 
-		beforeEach(angular.mock.module('app.core', 'app.support', 'app.support.dashboards'));
+		beforeEach(angular.mock.module('app.core', 'app.support.dashboards'));
 
 		beforeEach(angular.mock.module((_$provide_: ng.auto.IProvideService, _$controllerProvider_: ng.IControllerProvider) => {
 			$controllerProvider = _$controllerProvider_;
@@ -44,7 +44,7 @@ namespace app.support.dashboards {
 			$controllerProvider.register(dashlet01.value.controller, dashlet01.mockController);
 		})
 
-		xit('Deveria compilar a diretiva', () => {
+		it('Deveria compilar a diretiva', () => {
 			scope.dashletName = dashlet01.id;
 			let element = $compile('<dashlet value="dashletName"></dashlet>')(scope);
 

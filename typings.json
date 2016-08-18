@@ -9,6 +9,7 @@
     "angular-material": "github:DefinitelyTyped/DefinitelyTyped/angular-material/angular-material.d.ts#f4af4e83a45f72d8fba6e72d482f8e61dad87b36",
     "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#68187beb94cf85c2763e258849ea63ddcbf9ad03",
     "oclazyload": "github:DefinitelyTyped/DefinitelyTyped/oclazyload/oclazyload.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd",
-    "systemjs": "github:DefinitelyTyped/DefinitelyTyped//systemjs/systemjs.d.ts#66999f382f7c5fa29dcab9130f40433476a37855"
+    "systemjs": "github:DefinitelyTyped/DefinitelyTyped/systemjs/systemjs.d.ts#66999f382f7c5fa29dcab9130f40433476a37855",
+    "ui-router-extras": "github:DefinitelyTyped/DefinitelyTyped/ui-router-extras/ui-router-extras.d.ts#64e780546b9a6de3c9ca4594e73c8fde2bb8218d"
   }
 }

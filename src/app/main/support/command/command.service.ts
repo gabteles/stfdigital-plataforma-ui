@@ -28,7 +28,6 @@ namespace app.support.command {
 	 * Interface para definição de um validador para o comando.
 	 */
 	export interface CommandValidator {
-		id: string;
 		isValid(command: Command): boolean;
 	}
 	
@@ -86,23 +85,28 @@ namespace app.support.command {
 		/** @ngInject **/
 		constructor(private $http: ng.IHttpService, private $q: ng.IQService, private $log: ng.ILogService,
 				$rootScope: ng.IRootScopeService, private properties: Properties) {
-			this.loadCommands();
 			$rootScope.$on('user:logged', () => this.loadCommands());
-			$rootScope.$on('user:exited', () => this.loadCommands());
+			$rootScope.$on('user:exited', () => this.resetCommands());
 		}
 		
-		public loadCommands(): void {
-			let commandConfigsDeferred = this.$q.defer();
-			this.commandConfigs = commandConfigsDeferred.promise;
-			
-			this.$http.get(this.properties.apiUrl + '/discovery/api/commands')
-				.then((response: ng.IHttpPromiseCallbackArg<CommandConfig[]>) => {
-					commandConfigsDeferred.resolve(response.data);
-				}, (reason) => {
-					this.$log.error("Erro ao carregar comandos:" + reason);
-					commandConfigsDeferred.resolve([]);
-				});
-		}
+        public loadCommands(): void {
+            let commandConfigsDeferred = this.$q.defer();
+            this.commandConfigs = commandConfigsDeferred.promise;
+            
+            this.$http.get(this.properties.apiUrl + '/discovery/api/commands')
+                .then((response: ng.IHttpPromiseCallbackArg<CommandConfig[]>) => {
+                    commandConfigsDeferred.resolve(response.data);
+                }, (reason) => {
+                    this.$log.error("Erro ao carregar comandos:" + reason);
+                    commandConfigsDeferred.resolve([]);
+                });
+        }
+        
+        public resetCommands(): void {
+            let commandConfigsDeferred = this.$q.defer();
+            this.commandConfigs = commandConfigsDeferred.promise;
+            commandConfigsDeferred.resolve([]);
+        }
 
 		/**
 		 * Lista os comandos
@@ -129,15 +133,15 @@ namespace app.support.command {
 		/**
 		 * Armazena um validador para verificação 
 		 */
-		public addValidator(validator: CommandValidator): void {
-            if (!angular.isString(validator.id) || validator.id.length === 0) {
+		public addValidator(id: string, validator: CommandValidator): void {
+            if (!angular.isString(id) || id.length === 0) {
                 throw new Error("Não foi definido um identificador para o validador");
             }
-            let exists = this.commandValidators.hasOwnProperty(validator.id);
+            let exists = this.commandValidators.hasOwnProperty(id);
             if (exists) {
-                throw new Error("Já existe um validador com o id: "+ validator.id);
+                throw new Error("Já existe um validador com o id: "+ id);
             }
-            this.commandValidators[validator.id] = validator;
+            this.commandValidators[id] = validator;
 		}
 		
 		/**

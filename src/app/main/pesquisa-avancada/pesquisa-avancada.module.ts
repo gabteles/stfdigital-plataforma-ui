@@ -26,12 +26,10 @@ namespace app.pesquisaAvancada {
         });
     }
     
-    function run(pesquisaAvancadaService: PesquisaAvancadaService, $rootScope: ng.IRootScopeService) {
-    	pesquisaAvancadaService.load();
-    	$rootScope.$on('user:logged', () => pesquisaAvancadaService.load());
-    	$rootScope.$on('user:exited', () => pesquisaAvancadaService.load());
+    function run(pesquisaAvancadaService: PesquisaAvancadaService) {
+    	pesquisaAvancadaService.loadQueries();
     }
-    run.$inject = ['app.pesquisa-avancada.PesquisaAvancadaService', '$rootScope'];
+    run.$inject = ['app.pesquisa-avancada.PesquisaAvancadaService'];
 
     angular
         .module('app.pesquisa-avancada', ['app.autenticado', 'app.support'])

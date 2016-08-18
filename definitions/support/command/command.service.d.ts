@@ -24,7 +24,6 @@ declare namespace app.support.command {
      * Interface para definição de um validador para o comando.
      */
     interface CommandValidator {
-        id: string;
         isValid(command: Command): boolean;
     }
     /**
@@ -78,6 +77,7 @@ declare namespace app.support.command {
         /** @ngInject **/
         constructor($http: ng.IHttpService, $q: ng.IQService, $log: ng.ILogService, $rootScope: ng.IRootScopeService, properties: Properties);
         loadCommands(): void;
+        resetCommands(): void;
         /**
          * Lista os comandos
          */
@@ -89,7 +89,7 @@ declare namespace app.support.command {
         /**
          * Armazena um validador para verificação
          */
-        addValidator(validator: CommandValidator): void;
+        addValidator(id: string, validator: CommandValidator): void;
         /**
          * Lista os comandos que são aplicáveis à lista de alvos.
          */

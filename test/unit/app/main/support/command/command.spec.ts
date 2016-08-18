@@ -2,7 +2,7 @@ namespace app.support.command {
 	
 	import Properties = app.support.constants.Properties;
 	
-	describe('Command', () => {
+	describe('Teste do CommandService', () => {
 		
 		class Remessa implements CommandTarget {
 			type: string = "Originario";
@@ -23,7 +23,6 @@ namespace app.support.command {
 		}
 		
 		class TestValidator implements CommandValidator {
-			public id: string = 'registrar';
 			public isValid(command: RegistrarRemessaCommand): boolean {
 				return command != null;
 			}
@@ -78,7 +77,7 @@ namespace app.support.command {
 		});
 		
 		it('O serviço deve validar o comando', () => {
-			commandService.addValidator(new TestValidator());
+			commandService.addValidator('registrar', new TestValidator());
 			commandService.isValid('registrar', 'registrar', new RegistrarRemessaCommand())
 				.then(valid => expect(valid).toBeTruthy());
 		});

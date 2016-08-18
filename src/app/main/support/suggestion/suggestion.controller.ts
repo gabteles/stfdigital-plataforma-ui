@@ -3,7 +3,7 @@ namespace app.support.suggestion {
     export class SuggestionDirectiveController {
 
         public searchText: string = "";
-        public itemText: Function = (item: Object) => item.toString();
+        public itemText: Function;
         public items: Array<Object> = [];
         public placeholder: string = "Digite aqui para pesquisar";
         private suggestion: Suggestion = <Suggestion>{ description: "" };
@@ -19,6 +19,8 @@ namespace app.support.suggestion {
                 	}
                     if (angular.isFunction($scope.itemText)) {
                         this.itemText = $scope.itemText;
+                    } else {
+                    	this.itemText = this.defaultItemText;
                     }
                 }, (error) => {throw new Error(error)});
         }
@@ -35,6 +37,10 @@ namespace app.support.suggestion {
             };
         	this.$http.get("/" + this.suggestion.context + this.$scope.api, config)
         	   .success((items:Array<Object>) => this.items = items);
+        }
+        
+        private defaultItemText(item: Object) : string {
+            return (angular.isDefined(item)) ? item.toString() : "";    
         }
 
     }

@@ -18,7 +18,7 @@ namespace app.support.dashboards {
 
 		let handler;
 
-		beforeEach(angular.mock.module('app.core', 'app.support', 'app.support.dashboards'));
+		beforeEach(angular.mock.module('app.core', 'app.support.constants', 'app.support.dashboards'));
 
 		beforeEach(inject(['app.support.dashboards.DashboardService', '$httpBackend', 'properties', '$rootScope', '$q', '$ocLazyLoad',
 				(_dashboardService_: DashboardService, _$httpBackend_: ng.IHttpBackendService, _properties_: Properties, _$rootScope_: ng.IRootScopeService, _$q_: ng.IQService, _$ocLazyLoad_: oc.ILazyLoad) => {

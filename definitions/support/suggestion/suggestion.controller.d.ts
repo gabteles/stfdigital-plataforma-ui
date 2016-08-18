@@ -11,5 +11,6 @@ declare namespace app.support.suggestion {
         constructor($scope: SuggestionDirectiveScope, $http: ng.IHttpService, suggestionService: SuggestionService);
         selectedItemChange(item: Object): void;
         searchTextChange(): void;
+        private defaultItemText(item);
     }
 }

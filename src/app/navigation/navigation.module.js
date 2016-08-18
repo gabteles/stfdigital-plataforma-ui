@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app.navigation', ['app.support'])
+        .module('app.navigation', ['app.support.constants'])
         .config(config);
 
     /** @ngInject **/
@@ -60,20 +60,28 @@
 		 * possibilitando a garantia de que o estado estará carregado antes da transição
 		 * de estados ocorrer
 		 */
-		$futureStateProvider.addResolve(/** @ngInject **/ function($q, $http) {
+		$futureStateProvider.addResolve(/** @ngInject **/ function($q, $http, $rootScope) {
 			
 			var deferredRoutes = $q.defer();
 			
-	    	$http.get(properties.apiUrl + '/discovery/api/routes').then(function(response) {
-				angular.forEach(response.data, function(route) {
-					route.type = "load";
-					$futureStateProvider.futureState(route);
-				});
-				deferredRoutes.resolve();
-			}, function() {
-				deferredRoutes.reject();
-			});
-	    	return deferredRoutes.promise;
+			function loadFutureRoutes() {	
+		    	$http.get(properties.apiUrl + '/discovery/api/routes').then(function(response) {
+					angular.forEach(response.data, function(route) {
+						route.type = "load";
+						$futureStateProvider.futureState(route);
+					});
+					deferredRoutes.resolve();
+				}, function() {
+					deferredRoutes.reject();
+				});	
+		    	
+			}
+			loadFutureRoutes();
+			$rootScope.$on('user:logged', loadFutureRoutes);
+			$rootScope.$on('user:exited', loadFutureRoutes);
+			
+			return deferredRoutes.promise;
+			
 		});
 		
 		//Configura o SystemJS para importar os arquivos através do gateway

@@ -86,6 +86,7 @@ namespace app.support.command {
 	export interface CommandDirectiveScope extends ng.IScope {
 		command: Command;
 	    validator: string;
+        id: string;
 	}
 	
 	/**
@@ -98,7 +99,8 @@ namespace app.support.command {
 		public restrict: string = 'A';
 		public scope: Object = {
 			command : '=', //obrigatório, comando que será validado
-			validator: '@' //opcional, validador para o comando, caso não informado procura por um com mesmo id do comando
+			validator: '@', //opcional, validador para o comando, caso não informado procura por um com mesmo id do comando
+			id: '@'
 		};
 		
 		public constructor(private commandService: CommandService, private $state: ng.ui.IStateService) { }
@@ -114,7 +116,7 @@ namespace app.support.command {
 				event.stopPropagation();
 			}
 			
-			let commandId: string = element.attr('id');
+			let commandId: string = $scope.id;
 			let validatorId: string = angular.isString($scope.validator) ? $scope.validator : commandId;
 			
 			if (angular.isString(commandId) && commandId.length > 0) {

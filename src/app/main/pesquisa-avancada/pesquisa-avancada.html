@@ -28,60 +28,16 @@
 					<table class=" row-border hover" datatable="ng" dt-options="vm.resultsDtOptions">
 						<thead>
 							<tr>
-								<th class="secondary-text">
+								<th ng-repeat="rc in vm.resultColumns track by $index" class="secondary-text">
 	                    			<div class="table-header">
-	                        			<span class="column-title" translate="PESQUISA-AVANCADA.PROCESSO">Processo</span>
-	                    			</div>
-	                			</th>
-								<th class="secondary-text">
-	                    			<div class="table-header">
-	                        			<span class="column-title" translate="PESQUISA-AVANCADA.TEXTO">Texto</span>
-	                    			</div>
-	                			</th>
-								<th class="secondary-text">
-	                    			<div class="table-header">
-	                        			<span class="column-title" translate="PESQUISA-AVANCADA.OBSERVACAO">Observação</span>
-	                    			</div>
-	                			</th>
-								<th class="secondary-text">
-	                    			<div class="table-header">
-	                        			<span class="column-title text-center" translate="PESQUISA-AVANCADA.FASE">Fase</span>
-	                    			</div>
-	                			</th>
-								<th class="secondary-text">
-	                    			<div class="table-header">
-	                        			<span class="column-title text-center" translate="PESQUISA-AVANCADA.MINISTRO">Ministro</span>
-	                    			</div>
-	                			</th>
-								<th class="secondary-text">
-	                    			<div class="table-header">
-	                        			<span class="column-title text-center" translate="PESQUISA-AVANCADA.RESPONSAVEL">Responsável</span>
-	                    			</div>
-	                			</th>
-								<th class="secondary-text">
-	                    			<div class="table-header">
-	                        			<span class="column-title text-center" translate="PESQUISA-AVANCADA.DATA-INICIO">Data Início</span>
-	                    			</div>
-	                			</th>
-								<th class="secondary-text">
-	                    			<div class="table-header">
-	                        			<span class="column-title text-center" translate="PESQUISA-AVANCADA.CONTROLE-DE-VOTO">Controle de Voto</span>
+	                        			<span ng-class="'column-title ' + rc.header.css" translate="{{rc.header.translate}}">{{rc.header.title}}</span>
 	                    			</div>
 	                			</th>
 							</tr>
 						</thead>
 
 						<tbody>
-							<tr ng-repeat="result in vm.searchResults">
-								<td>{{ result.processo }}</td>
-								<td>{{ result.texto }}</td>
-								<td>{{ result.observacao }}</td>
-								<td class="text-center">{{ result.fase }}</td>
-								<td class="text-center">{{ result.ministro }}</td>
-								<td class="text-center">{{ result.responsavel }}</td>
-								<td class="text-center">{{ result.dataInicio * 1000 | date:'longDate' }}</td>
-								<td class="text-center">{{ 'PESQUISA-AVANCADA.CONTROLE-VOTO.' + (result.controleVoto ? 'SIM' : 'NAO') | translate }}</td>
-							</tr>
+							<tr ng-repeat="result in vm.searchResults track by $index" bind-html-compile="vm.resultTemplate()"></tr>
 						</tbody>
 					</table>
 				</div>

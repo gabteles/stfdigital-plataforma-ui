@@ -24,11 +24,14 @@ namespace app.pesquisaAvancada {
                     private $mdDialog: IDialogService,
                     private $mdToast: IToastService,
                     private $mdSidenav: ISidenavService,
+                    private $sce: ng.ISCEService,
+                    private $http,
+                    private properties,
                     public traits: ITrait[],
+                    public resultColumns: IResultColumn[],
                     public savedSearchs: ISearch[]) {
 
             this.defaultSearch = <ISearch>{id: null, label: '', criterias: []};
-
             this.newSearch = angular.copy(this.defaultSearch);
             this.loadedSearch = angular.copy(this.defaultSearch);
             this.resultSearch = angular.copy(this.defaultSearch);
@@ -61,6 +64,8 @@ namespace app.pesquisaAvancada {
                 angular.copy(this.defaultSearch, this.newSearch);
             } else {
                 angular.copy(this.loadedSearch, this.resultSearch);
+                this.$http.get(this.properties.apiUrl + '/services/pesquisa-avancada/processos/sample/results.json')
+                    .then(response => this.searchResults = response.data);
             }
             this.selectedTab = 1;
             this.searchComplete = true;
@@ -122,6 +127,16 @@ namespace app.pesquisaAvancada {
             this.selectedTab = 2;
             this.editEnabled = true;
         }
+        
+        public resultTemplate(): string {
+            
+            let template : string = "";
+            this.resultColumns.forEach(rc => {
+                template += "<td" + ((rc.result.css) ? " class='" + rc.result.css + "'" : "") + ">"
+                         + "{{" + rc.result.field + "}}</td>";
+            });
+            return this.$sce.trustAsHtml(template);
+        } 
     }
     
     angular

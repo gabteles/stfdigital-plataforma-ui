@@ -36,6 +36,18 @@ namespace app.pesquisaAvancada {
         values: string[];
     }
     
+    export interface IResultColumn {
+        header: {
+            title : string;
+            css : string;
+            translate: string;
+        },
+        result: {
+            field: string;
+            css : string;
+        }
+    }
+    
     class SearchBuilderDirective implements IDirective {
         
         public restrict: string = 'E';

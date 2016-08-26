@@ -26,6 +26,7 @@
                 'ng-sortable',
                 'xeditable',
                 'classy',
-                'ui.select'
+                'ui.select',
+                'angular-bind-html-compile'
             ]);
 })();

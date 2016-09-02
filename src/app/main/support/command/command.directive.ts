@@ -15,7 +15,7 @@ namespace app.support.command {
 		targetType: string;
 		context: string;
 	
-		go(index: number): void;
+		go(commandConfig: CommandConfig): void;
 	}
 	
 	/**
@@ -60,17 +60,14 @@ namespace app.support.command {
 			$scope.$watchCollection(() => $scope.targets, listCommands);
 			
 			//vai para o estado de uma ação selecionada, passando o target como parâmetro
-			$scope.go = (index: number) => {
-				let commandConfig: CommandConfig = $scope.commandsConfig[index]; 
+			$scope.go = (commandConfig: CommandConfig) => { 
 				let params: any = {	};
 				let targets = $scope.targets;  
 				
 				if (angular.isArray(targets)) {
-					if (targets.length > 1) {
-						params.targets = targets;
-					} else if (targets.length === 1) {
-						params.target = targets[0];
-					}
+					params.targets = targets;
+				} else {
+					params.target = targets;
 				}
 				this.$state.go(commandConfig.route.stateName, params);
 			};

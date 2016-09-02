@@ -66,7 +66,10 @@
 			
 			function loadFutureRoutes() {	
 		    	$http.get(properties.apiUrl + '/discovery/api/routes').then(function(response) {
-					angular.forEach(response.data, function(route) {
+		    		response.data.sort(function(r1, r2) {
+		    		    return r1.stateName.localeCompare(r2.stateName);
+		    		});
+					response.data.forEach(function(route) {
 						route.type = "load";
 						$futureStateProvider.futureState(route);
 					});

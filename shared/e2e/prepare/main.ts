@@ -1,4 +1,5 @@
 import mockMessagingModule from '../mocks/messaging';
+import debugInfoModule from '../mocks/debug-info';
 
 function prepare() {
     console.info('Preparando ambiente para o teste');
@@ -8,6 +9,7 @@ function prepare() {
 
 function addMockModules() {
     browser.addMockModule('e2e.mocks.messaging', mockMessagingModule);
+    browser.addMockModule('e2e.debug.info', debugInfoModule);
 }
 
 function extendProtractor() {

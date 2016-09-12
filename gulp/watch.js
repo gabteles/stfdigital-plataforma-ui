@@ -27,7 +27,7 @@ gulp.task('watch', ['inject'], function ()
         }
     });
 
-    gulp.watch(path.join(conf.paths.src, 'app/**/*.js'), function (event)
+    gulp.watch(path.join(conf.paths.src, '{app,build}/**/*.js'), function (event)
     {
         if ( isOnlyChange(event) )
         {

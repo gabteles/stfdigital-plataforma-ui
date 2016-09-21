@@ -2,15 +2,21 @@
 
 var path = require('path');
 var gulp = require('gulp');
+var merge = require('merge2');
 var conf = require('./conf');
 
 var $ = require('gulp-load-plugins')({
 		pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 
-var createTsProject = function() {
-    return $.typescript.createProject('tsconfig.json');
+
+var createTsProject = function(dev) {
+    return $.typescript.createProject('tsconfig.json', {
+        declaration: dev ? true : false,
+        noExternalResolve: dev? true : false,
+    });
 };
+
 var createTsProjectForDefinition = function() {
     return $.typescript.createProject('tsconfig.json', {
     	declaration: true
@@ -23,6 +29,7 @@ var danglingJsOutputPath = path.join(conf.paths.src, 'app/main');
 var tsGenFiles = path.join(conf.paths.src, 'app/main/**/*.js');
 var tsGenMapFiles = path.join(conf.paths.src, 'app/main/**/*.js.map');
 
+var tsProjectDev = createTsProject(true);
 var tsProjectE2E = $.typescript.createProject(path.join(conf.paths.e2e, 'tsconfig.json'));
 var allTypeScriptE2E = path.join(conf.paths.e2e, 'app/**/*.ts');
 var libraryTypeScriptE2E = path.join(conf.paths.e2e, 'typings/main/**/*.d.ts');
@@ -116,14 +123,26 @@ gulp.task('clean-dangling-js', function() {
 /**
  * Compile TypeScript and include references to library and app .d.ts files.
  */
-gulp.task('compile-ts', ['ts-lint', 'clean-dangling-js'], function () {
-    return gulp.src([allTypeScript, libraryTypeScript])
-        .pipe($.sourcemaps.init())
-        .pipe($.typescript(createTsProject()))
+var compileTS = function(){
+    var resultTs = gulp.src([allTypeScript, libraryTypeScript])
+        .pipe($.typescript(tsProjectDev));
+        
+    var resultSM = resultTs.js.pipe($.sourcemaps.init())
         .pipe($.ngAnnotate())
-        .pipe($.sourcemaps.write('.'))
-        .pipe($.destClean(tsOutputPath))
-        .pipe(gulp.dest(tsOutputPath));
+        .pipe($.sourcemaps.write('.'));
+
+    return merge([
+            resultSM.pipe($.destClean(tsOutputPath))
+                 .pipe(gulp.dest(tsOutputPath)),
+            resultTs.dts.pipe($.destClean('definitions'))
+                 .pipe(gulp.dest('definitions'))
+    ]);
+}
+gulp.task('compile-ts', ['ts-lint'], function () {
+    return compileTS();
+});
+gulp.task('compile-dev-ts', function(){
+    return compileTS();
 });
 
 gulp.task('compile-ts:for-tdd', [], function () {

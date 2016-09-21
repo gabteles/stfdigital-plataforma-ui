@@ -19,7 +19,7 @@ gulp.task('scripts', ['bower:prune', 'compile-ts'], function ()
     return buildScripts();
 });
 
-gulp.task('scripts-ts', ['compile-ts'], function ()
+gulp.task('scripts-ts', ['compile-dev-ts'], function ()
 {
     return gulp.start('scripts-reload');
 });

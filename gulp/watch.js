@@ -27,7 +27,7 @@ gulp.task('watch', ['inject'], function ()
         }
     });
 
-    gulp.watch(path.join(conf.paths.src, '{app,build}/**/*.js'), function (event)
+    gulp.watch(path.join(conf.paths.src, 'app/**/*.js'), function (event)
     {
         if ( isOnlyChange(event) )
         {
@@ -44,5 +44,5 @@ gulp.task('watch', ['inject'], function ()
         browserSync.reload(event.path);
     });
 
-    gulp.watch(path.join(conf.paths.src, 'app/main/**/*.ts'), ['compile-ts']);
+    gulp.watch(path.join(conf.paths.src, 'app/main/**/*.ts'), ['scripts-ts']);
 });

@@ -64,10 +64,10 @@ namespace app.support.command {
 				let params: any = {	};
 				let targets = $scope.targets;  
 				
-				if (angular.isArray(targets)) {
+				if (angular.isArray(targets) && commandConfig.target.mode !== "One") {
 					params.targets = targets;
 				} else {
-					params.target = targets;
+					params.target = angular.isArray(targets) ? targets[0]: targets;
 				}
 				this.$state.go(commandConfig.route.stateName, params);
 			};

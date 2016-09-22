@@ -43,7 +43,8 @@ function browserSyncInit(baseDir, browser)
         startPath: '/',
         server   : server,
         browser  : browser,
-        https: true
+        https: true,
+        reloadDelay: 1000,
     });
 }
 

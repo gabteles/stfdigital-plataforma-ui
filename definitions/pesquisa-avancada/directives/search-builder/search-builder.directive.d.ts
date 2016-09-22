@@ -27,4 +27,15 @@ declare namespace app.pesquisaAvancada {
         dataType: string;
         values: string[];
     }
+    interface IResultColumn {
+        header: {
+            title: string;
+            css: string;
+            translate: string;
+        };
+        result: {
+            field: string;
+            css: string;
+        };
+    }
 }

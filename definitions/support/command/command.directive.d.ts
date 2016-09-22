@@ -12,7 +12,7 @@ declare namespace app.support.command {
         targets: CommandTarget[];
         targetType: string;
         context: string;
-        go(index: number): void;
+        go(commandConfig: CommandConfig): void;
     }
     /**
      * Diretiva de lista de comandos
@@ -32,6 +32,7 @@ declare namespace app.support.command {
     interface CommandDirectiveScope extends ng.IScope {
         command: Command;
         validator: string;
+        id: string;
     }
     /**
      * Bot&atilde;o de um comando espec&iacute;fico

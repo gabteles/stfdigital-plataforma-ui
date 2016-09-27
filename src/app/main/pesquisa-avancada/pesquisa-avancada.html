@@ -3,7 +3,7 @@
 		fab-icon="{{ vm.selectedTab == 1 ? 'icon-content-save' : 'icon-magnify' }}" 
 		fab-text="{{ 'PESQUISA-AVANCADA.' + (vm.selectedTab == 1 ? 'SALVAR-PESQUISA' : 'BUSCAR') | translate }}"
 		fab-action="vm.selectedTab == 1 ? vm.saveSearch($event) : vm.doSearch()"
-		fab-active="vm.selectedTab == 0 ? vm.canSearch() : true">
+		fab-active="vm.activateActionHeader()">
 
 		<div class="text-right header-saved-search-button">
 			<md-button class="md-raised" ng-click="vm.openSavedSearchs()">
@@ -18,17 +18,17 @@
 	 	<md-tabs md-dynamic-height md-border-bottom md-selected="vm.selectedTab">
       		<md-tab label="{{ 'PESQUISA-AVANCADA.NOVA-PESQUISA' | translate }}">
 				<criterias-summary class="md-whiteframe-1dp md-block" criterias="vm.newSearch.criterias"></criterias-summary>
-				<search-builder traits="vm.traits" search="vm.newSearch">
+				<search-builder traits="vm.searchConfig.traits" search="vm.newSearch">
 			</md-tab>
 
 			<md-tab label="{{ 'PESQUISA-AVANCADA.RESULTADOS' | translate }}" ng-disabled="!vm.searchComplete">
-				<criterias-summary class="md-whiteframe-1dp md-block" criterias="vm.resultSearch.criterias"></criterias-summary>
+				<criterias-summary class="md-whiteframe-1dp md-block" criterias="vm.search.criterias"></criterias-summary>
 				
 				<div class="dataTables_noTop">
-					<table class=" row-border hover" datatable="ng" dt-options="vm.resultsDtOptions">
+					<table class="row-border hover" datatable="ng" dt-options="vm.tableOptions">
 						<thead>
 							<tr>
-								<th ng-repeat="rc in vm.resultColumns track by $index" class="secondary-text">
+								<th ng-repeat="rc in vm.searchConfig.resultColumns track by $index" class="secondary-text">
 	                    			<div class="table-header">
 	                        			<span ng-class="'column-title ' + rc.header.css" translate="{{rc.header.translate}}">{{rc.header.title}}</span>
 	                    			</div>
@@ -37,15 +37,15 @@
 						</thead>
 
 						<tbody>
-							<tr ng-repeat="result in vm.searchResults track by $index" bind-html-compile="vm.resultTemplate()"></tr>
+							<tr ng-repeat="result in ::vm.searchResults" bind-html-compile="vm.resultTemplate()"></tr>
 						</tbody>
 					</table>
 				</div>
 			</md-tab>
 
 			<md-tab label="{{ 'PESQUISA-AVANCADA.EDITAR-CRITERIOS' | translate }}" ng-disabled="!vm.editEnabled">
-				<criterias-summary class="md-whiteframe-1dp md-block" criterias="vm.loadedSearch.criterias"></criterias-summary>
-				<search-builder traits="vm.traits" search="vm.loadedSearch">
+				<criterias-summary class="md-whiteframe-1dp md-block" criterias="vm.search.criterias"></criterias-summary>
+				<search-builder traits="vm.searchConfig.traits" search="vm.search">
 			</md-tab>
 		</md-tabs>
 	</div>

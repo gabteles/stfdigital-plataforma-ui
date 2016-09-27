@@ -1,73 +1,64 @@
 namespace app.pesquisaAvancada {
     'use strict';
     import IScope = angular.IScope;
-    import ITranslateService = angular.translate.ITranslateService;
-    import IToastService = angular.material.IToastService;
     import ISidenavService = angular.material.ISidenavService;
     import IDialogService = angular.material.IDialogService;
+    import Properties = app.support.constants.Properties;
+    import CommandService = app.support.command.CommandService;
+    import ISCEService = angular.ISCEService;
+    import IHttpService = angular.IHttpService;
+    
+    enum Tab {
+        NEW_SEARCH, RESULT, EDIT_SEARCH 
+    }
     
     export class PesquisaAvancadaController {
 
         public defaultSearch: ISearch;
         public newSearch: ISearch;
-        public loadedSearch: ISearch;
-        public resultSearch: ISearch;
-        public selectedTab: number;
-        public searchComplete: boolean;
-        public editEnabled: boolean;
-        public resultsDtOptions: any;
-        public searchResults: any;
+        public search: ISearch;
+        public selectedTab: number = Tab.NEW_SEARCH;
+        public searchComplete: boolean = false;
+        public editEnabled: boolean = false;
+        public tableOptions: Object;
+        public tableColumnDefs: Array<Object>;
+        public searchResults: Array<any> = [];
+        public savedSearchs: ISearch[] = [];
+        private activeSaveAction: boolean = false;
         
         /** @ngInject **/
         constructor(private $scope: IScope,
-                    private $translate: ITranslateService,
                     private $mdDialog: IDialogService,
-                    private $mdToast: IToastService,
                     private $mdSidenav: ISidenavService,
-                    private $sce: ng.ISCEService,
-                    private $http,
-                    private properties,
-                    public traits: ITrait[],
-                    public resultColumns: IResultColumn[],
-                    public savedSearchs: ISearch[]) {
+                    private $sce: ISCEService,
+                    private $http: IHttpService,
+                    private DTColumnDefBuilder: any,
+                    private pesquisaAvancadaService: PesquisaAvancadaService,
+                    private properties: Properties,
+                    commandService: CommandService,
+                    public searchConfig: ISearchConfig) {
 
-            this.defaultSearch = <ISearch>{id: null, label: '', criterias: []};
+            this.defaultSearch = <ISearch>{id: null, context: searchConfig.context, label: '', criterias: []};
             this.newSearch = angular.copy(this.defaultSearch);
-            this.loadedSearch = angular.copy(this.defaultSearch);
-            this.resultSearch = angular.copy(this.defaultSearch);
-            this.searchResults = [];
-            this.selectedTab = 0;
-            this.searchComplete = false;
-            this.editEnabled = false;
-            this.resultsDtOptions = this.defineResultsDtOptions();
-        }
-
-        private defineResultsDtOptions(): any {
-             return {
-                dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
-                pagingType: 'simple',
-                autoWidth: true,
-                responsive: false,
-                searching: false
-            };
+            this.search = angular.copy(this.defaultSearch);
+            this.configureDatatables();
+            this.loadSavedSearchs();
+            commandService.findById('salvar-pesquisa-avancada').then(() => this.activeSaveAction = true);
         }
 
         public canSearch(): boolean {
-            var search = (this.selectedTab === 0 ? this.newSearch : this.loadedSearch);
+            var search = (this.selectedTab === Tab.NEW_SEARCH ? this.newSearch : this.search);
             return ((search.criterias.length > 0) && (_.every(search.criterias, 'valid')));
         }
 
         public doSearch(): void {
-            if (this.selectedTab === 0) {
-                angular.copy(this.newSearch, this.resultSearch);
-                angular.copy(this.newSearch, this.loadedSearch);
+            if (this.selectedTab === Tab.NEW_SEARCH) {
+                angular.copy(this.newSearch, this.search);
                 angular.copy(this.defaultSearch, this.newSearch);
-            } else {
-                angular.copy(this.loadedSearch, this.resultSearch);
-                this.$http.get(this.properties.apiUrl + '/services/pesquisa-avancada/processos/sample/results.json')
-                    .then(response => this.searchResults = response.data);
             }
-            this.selectedTab = 1;
+            this.pesquisaAvancadaService.executeSearch(this.searchConfig.api, this.search)
+                .then(result => this.searchResults = result);
+            this.selectedTab = Tab.RESULT;
             this.searchComplete = true;
             this.editEnabled = true;
         }
@@ -75,44 +66,24 @@ namespace app.pesquisaAvancada {
         public saveSearch(event): void {
             this.$mdDialog.show({
                 clickOutsideToClose: true,
-                controller: /** @ngInject */ function ($rootScope, $mdDialog, searchName) {
-                    var vm = this;
-                    vm.searchName = searchName;
-                    vm.cancel = function () {
-                        $mdDialog.hide();
-                    };
-                    vm.confirm = function () {
-                        $rootScope.$broadcast('save-search:confirm', vm.searchName);
-                        $mdDialog.cancel();
-                    };
-                },
-                resolve: {
-                    searchName: function() {
-                        return (this.resultSearch.id === null ? '' : this.resultSearch.label);
-                    }.bind(this)
+                controller: 'app.pesquisa-avancada.SaveSearchController',
+                locals: {
+                    search: this.search
                 },
                 controllerAs: 'vm',
-                templateUrl: 'app/main/pesquisa-avancada/modals/save-search-name/save-search-name.html',
+                templateUrl: 'app/main/pesquisa-avancada/modals/save-search/save-search.html',
                 parent: angular.element(document.body),
                 targetEvent: event
             });
 
-            var removeListener = this.$scope.$on('save-search:confirm', function(event, label) {
-                if (this.resultSearch.id === null) {
-                    var id = this.savedSearchs.length;
-                    this.savedSearchs.push(angular.copy(this.resultSearch));
-                    this.savedSearchs[id].id = id;
-                    this.savedSearchs[id].label = label;
+            var removeListener = this.$scope.$on('save-search:confirm', () => {
+                let foundIndex: number = this.savedSearchs.findIndex(savedSearch => savedSearch.id === this.search.id)
+                
+                if (foundIndex > 0) {
+                    angular.copy(this.search, this.savedSearchs[foundIndex]);
                 } else {
-                    angular.copy(this.resultSearch, this.savedSearchs[this.resultSearch.id]);
-                    this.savedSearchs[this.resultSearch.id].label = label;
+                    this.savedSearchs.unshift(angular.copy(this.search));
                 }
-                this.$mdToast.show(
-                    this.$mdToast.simple()
-                        .textContent(this.$translate("PESQUISA-AVANCADA.PESQUISA-SALVA"))
-                        .position('top right')
-                        .hideDelay(3000)
-                );
                 removeListener();
             });
         }
@@ -122,21 +93,56 @@ namespace app.pesquisaAvancada {
         }
 
         public loadSearch(savedSearch: ISearch): void {
-            angular.copy(savedSearch, this.loadedSearch);
+            angular.copy(savedSearch, this.search);
             this.$mdSidenav('sidenav').close();
-            this.selectedTab = 2;
             this.editEnabled = true;
+            
+            if (this.search.executable) {
+                this.doSearch();
+            } else {
+                this.selectedTab = Tab.EDIT_SEARCH;
+                this.searchResults = [];
+                this.searchComplete = false;
+            }
+        }
+        
+        public activateActionHeader(): boolean {
+            let active = false;
+            
+            if (this.selectedTab === Tab.NEW_SEARCH) { 
+                active = this.canSearch();
+            } else if (this.selectedTab === Tab.RESULT) {
+                active = this.activeSaveAction;
+            } else {
+                active = true;
+            }
+            return active;
         }
         
         public resultTemplate(): string {
             
             let template : string = "";
-            this.resultColumns.forEach(rc => {
+            this.searchConfig.resultColumns.forEach(rc => {
                 template += "<td" + ((rc.result.css) ? " class='" + rc.result.css + "'" : "") + ">"
                          + "{{" + rc.result.field + "}}</td>";
             });
             return this.$sce.trustAsHtml(template);
-        } 
+        }
+        
+        private configureDatatables(): void {
+            this.tableOptions = {
+               dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+               pagingType: 'simple',
+               autoWidth: true,
+               responsive: false,
+               searching: false
+            };
+       }
+        
+       private loadSavedSearchs(): void {
+           this.pesquisaAvancadaService.loadSavedSearchs(this.searchConfig.context)
+               .then(searchs => this.savedSearchs = searchs);
+       }
     }
     
     angular

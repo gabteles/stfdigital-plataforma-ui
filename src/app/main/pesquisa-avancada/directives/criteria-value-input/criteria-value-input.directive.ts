@@ -33,7 +33,7 @@ namespace app.pesquisaAvancada {
             });
 
             $scope.$watch('criteria.comparisonOperator', (op: ComparisionOperator) => {
-                var criteria: ICriteria = $scope.criteria,
+                let criteria: ICriteria = $scope.criteria,
                     value = criteria.value;
 
                 if (op == ComparisionOperator.ENTRE) {
@@ -54,7 +54,7 @@ namespace app.pesquisaAvancada {
                     if (criteria.trait.dataType == 'date') {
                         criteria.valid = (!!criteria.value);
                     } else {
-                        criteria.valid = ((!!criteria.value) && (criteria.value.length > 0));
+                        criteria.valid = ((!!criteria.value) && ((<Array<any>> criteria.value).length > 0));
                     }
                     break;
 

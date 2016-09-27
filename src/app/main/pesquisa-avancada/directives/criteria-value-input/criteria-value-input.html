@@ -17,8 +17,8 @@
 
     <div ng-if="criteria.trait.dataType === 'list'">
         <md-select placeholder="Escolha..." ng-model="criteria.value">
-            <md-option ng-repeat="val in criteria.trait.values" value="{{val}}">
-                {{:: val }}
+            <md-option ng-repeat="item in criteria.trait.values" value="{{item.id}}">
+                {{:: item.value}}
             </md-option>
         </md-select>
     </div>

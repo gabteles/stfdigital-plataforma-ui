@@ -8,6 +8,16 @@ namespace app.pesquisaAvancada {
     	description: string;
         route: RouteConfig;
     }
+    
+    class SalvarPesquisaCommand {
+        
+        public criterio: string;
+        
+        constructor(public pesquisaId: number, public descricao: string, public contexto: string, 
+                public execucaoAutomatica: boolean, criterio: Array<Object>) {
+            this.criterio = JSON.stringify(criterio);
+        }
+    }
 
     export class PesquisaAvancadaService {
 
@@ -15,7 +25,7 @@ namespace app.pesquisaAvancada {
 
         /** @ngInject **/
         constructor(private $http: ng.IHttpService, private msNavigationService,
-        		$rootScope: ng.IRootScopeService, private properties: Properties) {
+        		$rootScope: ng.IRootScopeService, private properties: Properties, private $q) {
             $rootScope.$on('user:logged', () => this.loadQueries());
             $rootScope.$on('user:exited', () => this.resetQueries());
         }
@@ -32,6 +42,25 @@ namespace app.pesquisaAvancada {
         public resetQueries(): void {
             let navigation: Array<any> = this.msNavigationService.getNavigationObject();
             navigation.filter(nav => nav._id === "pesquisa-avancada").forEach(nav => nav.children = []);
+        }
+        
+        public executeSearch(searchApi: string, search: ISearch): ng.IPromise<Array<any>> {
+            return this.$http.post(searchApi, search).then(response => response.data);
+        }
+        
+        public saveSearch(search: ISearch): ng.IPromise<ISearch> {
+            let command = new SalvarPesquisaCommand(search.id, search.label, search.context, search.executable, search.criterias);
+            return this.$http.post(this.properties.apiUrl + '/userauthentication/api/pesquisas', command)
+                        .then((response: ng.IHttpPromiseCallbackArg<number>) => {
+                            search.id = response.data;
+                            return search;
+                        });
+        }
+        
+        public loadSavedSearchs(context: string): ng.IPromise<ISearch[]> {
+            let config = {params: {contexto: context}};
+            return this.$http.get(this.properties.apiUrl + '/userauthentication/api/pesquisas', config)
+                        .then(response => response.data);
         }
         
         private addRouteToNavigation(pesquisa: IPesquisaAvancada): void {

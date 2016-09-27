@@ -1,6 +1,8 @@
 namespace app.pesquisaAvancada {
     'use strict';
     import IScope = angular.IScope;
+    import Properties = app.support.constants.Properties;
+    import IHttpService = ng.IHttpService;
 
     export interface SearchBuilderScope extends IScope {
         traits: ITrait[];
@@ -34,17 +36,14 @@ namespace app.pesquisaAvancada {
         };
         
         /** @ngInject **/
-        constructor($scope: SearchBuilderScope) {
+        constructor(private $scope: SearchBuilderScope, private $http: IHttpService, private properties: Properties) {
+            $scope.traits.forEach(trait => this.loadTraitValuesIfNeeded(trait));
             this.traits = $scope.traits;
             this.search = $scope.search;
         }
 
         public setCriteriaLogicalOperator(criteria: ICriteria, operator: string): void {
             criteria.logicalOperator = operator;
-        }
-
-        public setAsFavorite(criteria: ICriteria): void {
-            criteria.isFavorite = !criteria.isFavorite;
         }
 
         public removeCriteria(i): void {
@@ -58,12 +57,10 @@ namespace app.pesquisaAvancada {
         public addNewCriteria(): void {
             var trait: ITrait = this.newCriteria.trait;
             var criteria: ICriteria = <ICriteria> {
-                id: null,
                 logicalOperator: this.newCriteria.logicalOperator,
                 comparisonOperator: trait.dataType === 'constant' ? 'EXISTE' : 'IGUAL',
                 trait: trait,
                 value: trait.dataType === 'constant' ? trait.name : null,
-                isFavorite: false,
                 valid: false
             };
             this.traitSearchText = '';
@@ -79,17 +76,22 @@ namespace app.pesquisaAvancada {
 
         private createFilterFor(query): Function {
             var lowercaseQuery = angular.lowercase(query);
-            return (trait: ITrait): boolean => {
-                if (trait.name.toLowerCase().indexOf(lowercaseQuery) !== -1) {
-                    return true;
-                }
-    
-                if (trait.dataType === 'list') {
-                    return _.some(trait.values, value => value.toLowerCase().indexOf(lowercaseQuery) !== -1);
-                }
-                return false;
-            };
+            return (trait: ITrait): boolean => (trait.name.toLowerCase().indexOf(lowercaseQuery) !== -1);
         }
+        
+        private loadTraitValuesIfNeeded(trait: ITrait) {
+            if (trait.api && !trait.values) {
+                trait.values = [];
+                this.$http.get(this.properties.apiUrl + trait.api, {cache: true})
+                    .then((response: ng.IHttpPromiseCallbackArg<Array<Object>>) => {
+                        response.data.forEach(item => {
+                            let obj = new ITraitListItem(item[trait.apiId], item[trait.apiValue]);                            
+                            trait.values.push(obj);
+                        });
+                    });
+            }
+        }
+        
     }
 
     angular

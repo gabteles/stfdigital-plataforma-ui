@@ -2,12 +2,13 @@ namespace app.core {
 
 	export interface StfHeaderScope extends ng.IScope {
 		layoutOnly: boolean;
-		fabAction: any;
-		fabAriaLabel: any;
-		fabIcon: any;
-		fabText: any;
-		fabActive: any;
-        path: any;
+		fabAction: Function;
+	    fabActionId: string;
+		fabAriaLabel: string;
+		fabIcon: string;
+		fabText: string;
+		fabActive: boolean;
+        path: string;
         hasFabAction: boolean;
 	}
 
@@ -27,6 +28,7 @@ namespace app.core {
 		public scope: Object = {
             'layoutOnly': '=',
             'fabAction': '&',
+            'fabActionId': '@',
             'fabAriaLabel': '@',
             'fabIcon': '@',
             'fabText': '@',
@@ -41,9 +43,7 @@ namespace app.core {
         public controller: any = StfHeaderController;
         public controllerAs: string = 'vm';
 
-        constructor(private msNavigationService) {
-
-        }
+        constructor(private msNavigationService) { }
 
         public link($scope: StfHeaderScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) {
             $scope.hasFabAction = angular.isDefined(attrs.$attr['fabAction']);

@@ -3,9 +3,13 @@
 
     <md-input-container flex class="m-0">
         <label for="searchName" translate="PESQUISA-AVANCADA.MODAL-SALVAR-PESQUISA.NOME-PESQUISA">Nome da pesquisa</label>
-        <input
-            type="text"
-            ng-model="vm.searchName" />
+        <input type="text" ng-model="vm.search.label" />
+    </md-input-container>
+    
+    <md-input-container flex class="m-0">
+       	<md-checkbox ng-model="vm.search.executable" aria-label="{{ 'PESQUISA-AVANCADA.MODAL-SALVAR-PESQUISA.EXECUCAO-AUTOMATICA' | translate }}">
+            {{ 'PESQUISA-AVANCADA.MODAL-SALVAR-PESQUISA.EXECUCAO-AUTOMATICA' | translate }}
+        </md-checkbox>
     </md-input-container>
 
     <div layout="row" layout-align="center right">
@@ -14,7 +18,7 @@
         </md-button>
 
         <md-button class="md-raised md-primary" ng-click="vm.confirm()">
-            <span translate="PESQUISA-AVANCADA.MODAL-SALVAR-PESQUISA.OK">OK</span>
+            <span translate="PESQUISA-AVANCADA.MODAL-SALVAR-PESQUISA.SALVAR">Salvar</span>
         </md-button>
     </div>
 </div>

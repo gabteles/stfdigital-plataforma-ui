@@ -8,8 +8,7 @@ namespace app.support.suggestion {
         public placeholder: string = "Digite aqui para pesquisar";
         private suggestion: Suggestion = <Suggestion>{ description: "" };
         
-        private static $inject = ['$scope', '$http', 'app.support.suggestion.SuggestionService'];
-        
+        /** @ngInject **/
         constructor(private $scope: SuggestionDirectiveScope, private $http: ng.IHttpService, suggestionService: SuggestionService) {
             suggestionService.findById($scope.id)
                 .then(suggestion => {

@@ -53,10 +53,9 @@ namespace app.certification {
 
 	export class SignatureService {
 
-		private static apiSignature: string = "/documents/api/certification/signature"
+		private static apiSignature: string = "/documents/api/certification/signature";
 
-		static $inject = ['properties', '$http', '$q', 'app.certification.CryptoService'];
-
+		/** @ngInject **/
 		constructor(private properties, private $http: IHttpService, private $q: IQService, private cryptoService: CryptoService) {
 
 		}

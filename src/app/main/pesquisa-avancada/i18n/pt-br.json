@@ -10,24 +10,11 @@
 		"EDITAR-CRITERIOS": "Editar Critérios",
 
 		"PESQUISA-SALVA": "Pesquisa salva",
+		"PESQUISA-NAO-SALVA": "Erro ao salvar Pesquisa",
 
 		"SELECIONE-CRITERIO": "Selecione um crítério",
 		"COMBINE-VARIOS-OUTROS": "Combine vários outros",
 		"CRITERIO": "Critério",
-
-		"PROCESSO": "Processo",
-		"TEXTO": "Texto",
-		"OBSERVACAO": "Observação",
-		"FASE": "Fase",
-		"MINISTRO": "Ministro",
-		"RESPONSAVEL": "Responsável",
-		"DATA-INICIO": "Data de Início",
-		"CONTROLE-DE-VOTO": "Controle de Voto",
-
-		"CONTROLE-VOTO": {
-			"SIM": "Sim",
-			"NAO": "Não"
-		},
 
 		"OPERADOR-LOGICO": {
 			"E": "e",
@@ -37,7 +24,7 @@
 
 		"OPERADOR-COMPARACAO": {
 			"IGUAL": "Igual",
-			"CONTEM": "Contem",
+			"CONTEM": "Contém",
 			"ENTRE": "Entre",
 			"MAIOR-QUE": "Maior Que",
 			"MENOR-QUE": "Menor Que",
@@ -46,8 +33,9 @@
 
 		"MODAL-SALVAR-PESQUISA": {
 			"NOME-PESQUISA": "Nome da pesquisa",
+			"EXECUCAO-AUTOMATICA": "Execução automática",
 			"CANCELAR": "Cancelar",
-			"OK": "OK"
+			"SALVAR": "SALVAR"
 		}
 	}	
 }

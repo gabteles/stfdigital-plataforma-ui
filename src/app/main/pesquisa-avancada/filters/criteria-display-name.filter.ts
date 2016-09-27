@@ -7,13 +7,12 @@ namespace app.pesquisaAvancada {
 
     class CriteriaDisplayNameFilter {
 
-        private static getFilter($filter: IFilterService,
-                              $translate: ITranslateService): Function {
+        private static getFilter($filter: IFilterService, $translate: ITranslateService): Function {
 
             return (criteria: ICriteria) => {
 
-                var date: IFilterDate = $filter('date');
-                var name: string | Array<string> = angular.copy(criteria.value);
+                let date: IFilterDate = $filter('date');
+                let name: string | number | Array<string | number> = angular.copy(criteria.value);
 
                 if (criteria.trait.dataType === 'date') {
                     if (_.isArray(name)) {

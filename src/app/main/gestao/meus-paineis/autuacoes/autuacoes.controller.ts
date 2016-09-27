@@ -7,8 +7,7 @@ namespace app.gestao.meusPaineis {
         public widget9: any;
         public widget10: any;
 
-        static $inject = ['app.gestao.meus-paineis.MeusPaineisService'];
-        
+        /** @ngInject **/
         constructor(private meusPaineisService: MeusPaineisService) {
             this.widget8 = meusPaineisService.loadDashboardWidget('Widget8');
             this.widget9 = meusPaineisService.loadDashboardWidget('Widget9');

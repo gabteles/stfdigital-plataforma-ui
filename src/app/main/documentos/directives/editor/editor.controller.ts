@@ -15,8 +15,7 @@ namespace app.documentos {
 	
 		config: {};
 		
-		static $inject = ['$q', '$interval', '$scope', 'app.documentos.OnlyofficeService'];
-		
+		/** @ngInject **/
 		constructor(private $q: IQService, private $interval: IIntervalService, private $scope: EditorScope, private onlyofficeService: OnlyofficeService) {
 			this.documento = $scope.documento;
 			

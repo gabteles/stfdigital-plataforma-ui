@@ -14,26 +14,35 @@ namespace app.pesquisaAvancada {
     }
 
     export interface ISearch {
-        id: number,
-        label: string,
-        criterias: ICriteria[]
+        id: number;
+        label: string;
+        context: string;
+        executable: boolean;
+        criterias: ICriteria[];
     }
 
     export interface ICriteria {
-        id: number;
-        value: string | Array<string>;
+        value: number | string | Array<string | number>;
         trait: ITrait;
         logicalOperator: string;
         comparisonOperator: ComparisionOperator;
-        isFavorite: boolean;
         valid: boolean;
+    }
+    
+    export class ITraitListItem {
+
+        constructor(public id: any, public value: any) {};
     }
 
     export interface ITrait {
         id: string;
         name: string;
+        field: string;
         dataType: string;
-        values: string[];
+        values ?: Array<ITraitListItem>;
+        api ?: string;
+        apiId ?: string;
+        apiValue ?: string;
     }
     
     export interface IResultColumn {
@@ -46,6 +55,13 @@ namespace app.pesquisaAvancada {
             field: string;
             css : string;
         }
+    }
+    
+    export interface ISearchConfig {
+        traits: ITrait[];
+        resultColumns: IResultColumn[];
+        api: string;
+        context: string;
     }
     
     class SearchBuilderDirective implements IDirective {

@@ -9,8 +9,7 @@ namespace app.support.dashboards {
 
 		public layout: DashboardLayout;
 
-		public static $inject = ['$scope', 'app.support.dashboards.DashboardLayoutManager']
-
+	    /** @ngInject **/
 		constructor(private $scope: DashboardScope, private dashboardLayoutManager: DashboardLayoutManager) {
 			this.$scope.$watch('value', () => {
 				let dashlets = angular.isDefined(this.$scope.value) ? this.$scope.value.dashlets : [];

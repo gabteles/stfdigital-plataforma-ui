@@ -43,3 +43,12 @@ exports.errorHandler = function (title)
         this.emit('end');
     };
 };
+
+exports.annotateRename = [
+	{ from: 'cryptoService', to: 'app.certification.CryptoService'},
+	{ from: 'onlyofficeService', to: 'app.documentos.OnlyofficeService' },
+	{ from: 'meusPaineisService', to: 'app.gestao.meus-paineis.MeusPaineisService' },
+	{ from: 'pesquisaAvancadaService', to: 'app.pesquisa-avancada.PesquisaAvancadaService' },	
+	{ from: 'dashboardLayoutManager', to: 'app.support.dashboards.DashboardLayoutManager' },
+	{ from: 'suggestionService', to: 'app.support.suggestion.SuggestionService' }
+];

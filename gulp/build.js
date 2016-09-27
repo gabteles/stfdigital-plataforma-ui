@@ -45,7 +45,7 @@ gulp.task('html', ['inject', 'partials'], function ()
         .pipe(assets = $.useref.assets({}, $.lazypipe().pipe($.sourcemaps.init, {loadMaps: true})))
         .pipe($.rev())
         .pipe(jsFilter)
-        .pipe($.ngAnnotate({gulpWarnings: false}))
+        .pipe($.ngAnnotate({gulpWarnings: false, rename: conf.annotateRename}))
          // compress foi setado pra false, pois esava quebrando os sourcemaps e a biblioteca js-polyfills
         .pipe($.uglify({mangle: false, compress: false})).on('error', conf.errorHandler('Uglify'))
         .pipe($.sourcemaps.write('maps'))

@@ -19,6 +19,11 @@ gulp.task('scripts', ['bower:prune', 'compile-ts'], function ()
     return buildScripts();
 });
 
+gulp.task('scripts-ts', ['compile-dev-ts'], function ()
+{
+    return gulp.start('scripts-reload');
+});
+
 function buildScripts()
 {
     return gulp.src(path.join(conf.paths.src, '/app/**/*.js'))

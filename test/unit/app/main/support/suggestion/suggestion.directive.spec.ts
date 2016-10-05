@@ -9,7 +9,7 @@ namespace app.support.suggestion {
         let suggestion = <Suggestion> {
             id: "sugerir-processo",
             description: "Sugestão de Processos",
-            context: "services"
+            context: "processos"
         };
         let processoSugerido = {
         	classe: 'HC',
@@ -24,7 +24,7 @@ namespace app.support.suggestion {
             
             $httpBackend.whenGET('app/main/support/suggestion/suggestion.tpl.html').passThrough();
             $httpBackend.whenGET(properties.apiUrl + '/discovery/api/queries/suggestions').respond([suggestion])
-            $httpBackend.whenGET(properties.apiUrl + '/services/api/processos/sugestao?identificacao=hc1').respond([processoSugerido])
+            $httpBackend.whenGET(properties.apiUrl + '/processos/api/processos/sugestao?identificacao=hc1').respond([processoSugerido])
         }));
 
         it('Deveria compilar a diretiva', () => {

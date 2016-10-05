@@ -11,29 +11,19 @@ namespace app.pesquisaAvancada {
     
     export class SearchBuilderController {
         
-        public logicalOperators: string[] = ['E', 'OU', 'NAO'];
+        public logicalOperators: string[] = [LogicalOperator.MUST, LogicalOperator.SHOULD, LogicalOperator.MUST_NOT];
         public comparisonOperators: Object = {
-            'IGUAL': ['string', 'number', 'currency', 'date', 'list'],
-            'CONTEM': ['string'],
-            'ENTRE': ['number', 'currency', 'date'],
-            'MAIOR-QUE': ['number', 'currency', 'date'],
-            'MENOR-QUE': ['number', 'currency', 'date'],
-            'EXISTE': ['constant', 'string', 'number', 'currency', 'date', 'list']
+            [ComparisionOperator.EQUALS] : ['string', 'number', 'currency', 'date', 'list'],
+            [ComparisionOperator.CONTAINS]: ['string'],
+            [ComparisionOperator.BETWEEN]: ['number', 'currency', 'date'],
+            [ComparisionOperator.GREATER_THAN]: ['number', 'currency', 'date'],
+            [ComparisionOperator.LESS_THAN]: ['number', 'currency', 'date'],
+            [ComparisionOperator.EXISTS]: ['constant', 'string', 'number', 'currency', 'date', 'list']
         };
         public traitSearchText: string = '';
-        public newCriteria: ICriteria = <ICriteria> {
-            logicalOperator: 'E',
-            trait: null
-        };
+        public newCriteria: Criteria = new Criteria();
         public traits: ITrait[];
         public search: ISearch;
-        public criteriaOrder = '';
-        public sortableOptions: Object = {
-            ghostClass: 'criteria-item-placeholder',
-            handle: '.handle',
-            forceFallback: true,
-            fallbackClass: 'criteria-item-ghost'
-        };
         
         /** @ngInject **/
         constructor(private $scope: SearchBuilderScope, private $http: IHttpService, private properties: Properties) {
@@ -42,7 +32,7 @@ namespace app.pesquisaAvancada {
             this.search = $scope.search;
         }
 
-        public setCriteriaLogicalOperator(criteria: ICriteria, operator: string): void {
+        public setCriteriaLogicalOperator(criteria: Criteria, operator: string): void {
             criteria.logicalOperator = operator;
         }
 
@@ -55,14 +45,9 @@ namespace app.pesquisaAvancada {
         }
 
         public addNewCriteria(): void {
-            var trait: ITrait = this.newCriteria.trait;
-            var criteria: ICriteria = <ICriteria> {
-                logicalOperator: this.newCriteria.logicalOperator,
-                comparisonOperator: trait.dataType === 'constant' ? 'EXISTE' : 'IGUAL',
-                trait: trait,
-                value: trait.dataType === 'constant' ? trait.name : null,
-                valid: false
-            };
+            let trait: ITrait = this.newCriteria.trait;
+            let logicalOperator: LogicalOperator = this.newCriteria.logicalOperator;
+            let criteria: Criteria = new Criteria(logicalOperator, trait);
             this.traitSearchText = '';
             this.newCriteria.trait = null;
             this.search.criterias.push(criteria);
@@ -85,7 +70,7 @@ namespace app.pesquisaAvancada {
                 this.$http.get(this.properties.apiUrl + trait.api, {cache: true})
                     .then((response: ng.IHttpPromiseCallbackArg<Array<Object>>) => {
                         response.data.forEach(item => {
-                            let obj = new ITraitListItem(item[trait.apiId], item[trait.apiValue]);                            
+                            let obj = new TraitListItem(item[trait.apiId], item[trait.apiValue]);                            
                             trait.values.push(obj);
                         });
                     });

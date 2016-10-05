@@ -3,7 +3,7 @@ declare namespace app.gestao.meusPaineis {
         private meusPaineisService;
         chart1: any;
         chart2: any;
-        static $inject: string[];
+        /** @ngInject **/
         constructor(meusPaineisService: MeusPaineisService);
     }
 }

@@ -4,9 +4,11 @@ namespace app.pesquisaAvancada {
     import ISidenavService = angular.material.ISidenavService;
     import IDialogService = angular.material.IDialogService;
     import Properties = app.support.constants.Properties;
+    import MessagesService = app.support.messaging.MessagesService;
     import CommandService = app.support.command.CommandService;
     import ISCEService = angular.ISCEService;
     import IHttpService = angular.IHttpService;
+    import ITranslateService = angular.translate.ITranslateService;
     
     enum Tab {
         NEW_SEARCH, RESULT, EDIT_SEARCH 
@@ -32,10 +34,12 @@ namespace app.pesquisaAvancada {
                     private $mdSidenav: ISidenavService,
                     private $sce: ISCEService,
                     private $http: IHttpService,
+                    private $translate: ITranslateService,
                     private DTColumnDefBuilder: any,
                     private pesquisaAvancadaService: PesquisaAvancadaService,
                     private properties: Properties,
                     commandService: CommandService,
+                    private messagesService: MessagesService,
                     public searchConfig: ISearchConfig) {
 
             this.defaultSearch = <ISearch>{id: null, context: searchConfig.context, label: '', criterias: []};
@@ -46,23 +50,40 @@ namespace app.pesquisaAvancada {
             commandService.findById('salvar-pesquisa-avancada').then(() => this.activeSaveAction = true);
         }
 
+        /**
+         * Verifica se uma pesquisa está válida
+         */
         public canSearch(): boolean {
             var search = (this.selectedTab === Tab.NEW_SEARCH ? this.newSearch : this.search);
             return ((search.criterias.length > 0) && (_.every(search.criterias, 'valid')));
         }
 
+        /**
+         * Realiza uma pesquisa
+         */
         public doSearch(): void {
+            this.setLoadingProgress(true);
+            
             if (this.selectedTab === Tab.NEW_SEARCH) {
                 angular.copy(this.newSearch, this.search);
                 angular.copy(this.defaultSearch, this.newSearch);
             }
             this.pesquisaAvancadaService.executeSearch(this.searchConfig.api, this.search)
-                .then(result => this.searchResults = result);
-            this.selectedTab = Tab.RESULT;
-            this.searchComplete = true;
-            this.editEnabled = true;
+                .then(result => {
+                    this.searchResults = result;
+                }).catch(() => {
+                    this.messagesService.error(this.$translate.instant("PESQUISA-AVANCADA.PESQUISA-NAO-EXECUTADA"));
+                }).finally(() => {
+                    this.selectedTab = Tab.RESULT;
+                    this.editEnabled = true;
+                    this.searchComplete = true;
+                    this.setLoadingProgress(false);
+                });
         }
 
+        /**
+         * Salva uma pesquisa
+         */
         public saveSearch(event): void {
             this.$mdDialog.show({
                 clickOutsideToClose: true,
@@ -79,7 +100,7 @@ namespace app.pesquisaAvancada {
             var removeListener = this.$scope.$on('save-search:confirm', () => {
                 let foundIndex: number = this.savedSearchs.findIndex(savedSearch => savedSearch.id === this.search.id)
                 
-                if (foundIndex > 0) {
+                if (foundIndex > -1) {
                     angular.copy(this.search, this.savedSearchs[foundIndex]);
                 } else {
                     this.savedSearchs.unshift(angular.copy(this.search));
@@ -87,25 +108,48 @@ namespace app.pesquisaAvancada {
                 removeListener();
             });
         }
-
-        public openSavedSearchs(): void {
-            this.$mdSidenav('sidenav').open();
+        
+        /**
+         * Salva uma pesquisa
+         */
+        public deleteSearch(search: ISearch): void {
+            this.pesquisaAvancadaService.deleteSearch(search.id)
+                .then(response => {
+                    if (this.search.id === search.id) this.reset();
+                    let foundIndex: number = this.savedSearchs.findIndex(savedSearch => savedSearch.id === search.id);
+                    this.savedSearchs.splice(foundIndex, 1);
+                    this.messagesService.success("Pesquisa excluída com sucesso!");
+                }).catch(() => {
+                    this.messagesService.error("Erro ao excluir pesquisa!"); 
+                });
         }
 
+        /**
+         * Abre a navegação das pesquisas salvas
+         */
+        public openSavedSearchs(): void {
+            this.$mdSidenav('sidenav-search').open();
+        }
+
+        /**
+         * Carrega uma pesquisa salva
+         */
         public loadSearch(savedSearch: ISearch): void {
             angular.copy(savedSearch, this.search);
-            this.$mdSidenav('sidenav').close();
+            this.$mdSidenav('sidenav-search').close();
             this.editEnabled = true;
+            this.selectedTab = Tab.EDIT_SEARCH;
+            this.searchResults = [];
+            this.searchComplete = false;
             
             if (this.search.executable) {
                 this.doSearch();
-            } else {
-                this.selectedTab = Tab.EDIT_SEARCH;
-                this.searchResults = [];
-                this.searchComplete = false;
             }
         }
         
+        /**
+         * Ativa as ações do header de pesquisa
+         */
         public activateActionHeader(): boolean {
             let active = false;
             
@@ -119,8 +163,10 @@ namespace app.pesquisaAvancada {
             return active;
         }
         
+        /**
+         * Monta o template da tabela de resultados
+         */
         public resultTemplate(): string {
-            
             let template : string = "";
             this.searchConfig.resultColumns.forEach(rc => {
                 template += "<td" + ((rc.result.css) ? " class='" + rc.result.css + "'" : "") + ">"
@@ -129,6 +175,19 @@ namespace app.pesquisaAvancada {
             return this.$sce.trustAsHtml(template);
         }
         
+        /**
+         * Reset da tela de pesquisa 
+         */
+        private reset(): void {
+            angular.copy(this.defaultSearch, this.search);
+            this.selectedTab = Tab.NEW_SEARCH;
+            this.searchComplete = false;
+            this.editEnabled = false;
+        }
+        
+        /**
+         * Configura a tabela de resultados
+         */
         private configureDatatables(): void {
             this.tableOptions = {
                dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
@@ -138,11 +197,25 @@ namespace app.pesquisaAvancada {
                searching: false
             };
        }
-        
+       
+       /**
+        * Carrega as pesquisa salvas
+        */
        private loadSavedSearchs(): void {
+           this.setLoadingProgress(true);
            this.pesquisaAvancadaService.loadSavedSearchs(this.searchConfig.context)
-               .then(searchs => this.savedSearchs = searchs);
+               .then(searchs => this.savedSearchs = searchs)
+               .catch(() => this.messagesService.error(this.$translate.instant("PESQUISA-AVANCADA.PESQUISAS-NAO-CARREGADAS")))
+               .finally(() => this.setLoadingProgress(false));
        }
+       
+       /**
+        * Ativa o efeito do loading
+        */
+       private setLoadingProgress(loading: boolean): void {
+           (<any>this.$scope.$root).loadingProgress = loading;
+       }
+       
     }
     
     angular

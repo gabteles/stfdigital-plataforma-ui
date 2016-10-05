@@ -2,7 +2,7 @@ declare namespace app.gestao.meusPaineis {
     class ProdutividadeDoTimeController {
         private meusPaineisService;
         widget11: any;
-        static $inject: string[];
+        /** @ngInject **/
         constructor(meusPaineisService: MeusPaineisService);
     }
 }

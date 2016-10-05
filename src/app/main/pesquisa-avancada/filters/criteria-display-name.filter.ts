@@ -9,7 +9,7 @@ namespace app.pesquisaAvancada {
 
         private static getFilter($filter: IFilterService, $translate: ITranslateService): Function {
 
-            return (criteria: ICriteria) => {
+            return (criteria: Criteria) => {
 
                 let date: IFilterDate = $filter('date');
                 let name: string | number | Array<string | number> = angular.copy(criteria.value);
@@ -22,22 +22,22 @@ namespace app.pesquisaAvancada {
                         name = date(<string> name, 'dd/MM/yyyy');
                     }
                 }
-
+                
                 switch (criteria.comparisonOperator) {
-                    case ComparisionOperator.ENTRE :
+                    case ComparisionOperator.BETWEEN :
                         name = (name[0] || '') + ' < ' + criteria.trait.name + ' < ' + (name[1] || '');
                         break;
 
-                    case ComparisionOperator.MAIORQUE:
+                    case ComparisionOperator.GREATER_THAN:
                         name = criteria.trait.name + ' > ' + name;
                         break;
 
-                    case ComparisionOperator.MENORQUE:
+                    case ComparisionOperator.LESS_THAN:
                         name = criteria.trait.name + ' < ' + name;
                         break;
 
-                    case ComparisionOperator.EXISTE:
-                        name = $translate.instant('PESQUISA-AVANCADA.OPERADOR-COMPARACAO.EXISTE');
+                    case ComparisionOperator.EXISTS:
+                        name = "Existe";
                 }
                 return <string> name;
             };
@@ -45,10 +45,7 @@ namespace app.pesquisaAvancada {
 
         public static filter(): Function {
             /** @ngInject **/
-            var filter = ($filter, $translate) => {
-                return CriteriaDisplayNameFilter.getFilter($filter, $translate);
-            }
-            return filter;
+            return ($filter, $translate) => CriteriaDisplayNameFilter.getFilter($filter, $translate);
         }
     }
 

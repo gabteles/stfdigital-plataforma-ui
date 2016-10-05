@@ -12,7 +12,7 @@ declare namespace app.documentos {
         edicaoIniciada: boolean;
         documento: any;
         config: {};
-        static $inject: string[];
+        /** @ngInject **/
         constructor($q: IQService, $interval: IIntervalService, $scope: EditorScope, onlyofficeService: OnlyofficeService);
         private iniciarEditor(numeroEdicao);
         private tentativasVerificaoEdicaoCompleta;

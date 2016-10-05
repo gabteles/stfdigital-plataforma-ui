@@ -22,12 +22,14 @@
                 </md-autocomplete>
                 <div class="buttons">
                     <md-button
-                            ng-repeat="op in vm.logicalOperators"
+                            ng-repeat="op in ::vm.logicalOperators"
                             class="md-raised md-fab"
-                            ng-class="{'selected': op === vm.newCriteria.operator, 'md-accent-fg': (op === vm.newCriteria.operator && op !== 'NAO'), 'md-warn-fg': (op === vm.newCriteria.operator && op === 'NAO')}"
-                            aria-label="{{:: 'PESQUISA-AVANCADA.OPERADOR-LOGICO.' + op | translate}}"
-                            ng-click="vm.newCriteria.operator = op">
-                        {{:: 'PESQUISA-AVANCADA.OPERADOR-LOGICO.' + op | translate}}
+                            ng-class="{'selected': op === vm.newCriteria.logicalOperator,
+                            		   'md-accent-fg': (op === vm.newCriteria.logicalOperator && op !== 'MUST_NOT'),
+                            		   'md-warn-fg': (op === vm.newCriteria.logicalOperator && op === 'MUST_NOT')}"
+                            aria-label="{{'PESQUISA-AVANCADA.OPERADOR-LOGICO.TEXT.' + op | translate}}"
+                            ng-click="vm.newCriteria.logicalOperator = op">
+                        <md-icon md-font-icon ng-class="'PESQUISA-AVANCADA.OPERADOR-LOGICO.ICON.' + op | translate"></md-icon>
                     </md-button>
                 </div>
             </div>
@@ -35,47 +37,36 @@
         </div>
         <md-button
                 class="md-raised md-fab add-button"
-                operator-color="vm.newCriteria.operator"
+                operator-color="vm.newCriteria.logicalOperator"
                 ng-disabled="!vm.newCriteria.trait"
-                aria-label="adicionar"
+                aria-label="adicionar critério"
                 ng-click="vm.addNewCriteria()">
             <md-icon md-font-icon="icon-plus"></md-icon>
-        </md-button>
     </div>
 
-    <div class="criteria-list md-whiteframe-2dp"
-         ng-sortable="vm.sortableOptions"
-         ng-class="{'sortable': vm.criteriaOrder === ''}">
+    <div class="criteria-list md-whiteframe-2dp">
 
         <div class="criteria-item"
-             ng-repeat="criteria in vm.search.criterias"
+             ng-repeat="criteria in vm.search.criterias track by $index"
              layout="row" layout-align="start center">
 
-            <div class="handle" ng-click="vm.preventDefault($event)">
-                <md-icon md-font-icon="icon-drag-vertical" class="icon"></md-icon>
-            </div>
-
             <div class="lock-size logical-operator-options"
-                 layout="row" layout-align="center center"
-                 ng-if="$index > 0">
+                 layout="row" layout-align="center center">
                 <md-fab-speed-dial class="md-scale" md-direction="right">
                     <md-fab-trigger>
-                        <md-button
-                                aria-label="menu"
-                                class="md-fab md-mini"
-                                operator-color="criteria.logicalOperator">
-                            <span>{{ 'PESQUISA-AVANCADA.OPERADOR-LOGICO.' + criteria.logicalOperator | translate }}</span>
+                        <md-button aria-label="{{'PESQUISA-AVANCADA.OPERADOR-LOGICO.TEXT.' + op | translate}}" class="md-fab md-mini" operator-color="criteria.logicalOperator">
+                            <md-icon md-font-icon ng-class="'PESQUISA-AVANCADA.OPERADOR-LOGICO.ICON.' + criteria.logicalOperator | translate"></md-icon>
                         </md-button>
                     </md-fab-trigger>
                     <md-fab-actions>
                         <md-button
-                            ng-repeat="op in vm.logicalOperators"
+                            ng-repeat="op in ::vm.logicalOperators"
                             ng-if="criteria.logicalOperator !== op"
-                            aria-label="{{op}}"
+                            aria-label="{{'PESQUISA-AVANCADA.OPERADOR-LOGICO.TEXT.' + op | translate}}"
                             class="md-fab md-raised md-mini"
                             operator-color="op"
                             ng-click="criteria.logicalOperator = op">
-                            <span>{{ 'PESQUISA-AVANCADA.OPERADOR-LOGICO.' + op | translate }}</span>
+                            <md-icon md-font-icon ng-class="'PESQUISA-AVANCADA.OPERADOR-LOGICO.ICON.' + op | translate"></md-icon>
                         </md-button>
                     </md-fab-actions>
                 </md-fab-speed-dial>
@@ -104,7 +95,7 @@
                 <md-button class="md-primary remove"
                            aria-label="Remover"
                            ng-click="vm.removeCriteria($index)">
-                    <md-icon class="icon" md-font-icon="icon-delete"></md-icon>
+                    <md-icon class="icon" md-font-icon="icon-close"></md-icon>
                 </md-button>
             </div>
 

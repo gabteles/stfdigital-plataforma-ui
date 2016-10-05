@@ -9,26 +9,35 @@
 		"RESULTADOS": "Resultados",
 		"EDITAR-CRITERIOS": "Editar Critérios",
 
-		"PESQUISA-SALVA": "Pesquisa salva",
-		"PESQUISA-NAO-SALVA": "Erro ao salvar Pesquisa",
+		"PESQUISA-SALVA": "Pesquisa salva!",
+		"PESQUISA-NAO-SALVA": "Erro ao salvar Pesquisa!",
+		"PESQUISA-NAO-EXECUTADA": "Erro ao executar Pesquisa!",
+		"PESQUISAS-NAO-CARREGADAS": "Erro ao carregar Pesquisas salvas!",
 
 		"SELECIONE-CRITERIO": "Selecione um crítério",
 		"COMBINE-VARIOS-OUTROS": "Combine vários outros",
 		"CRITERIO": "Critério",
 
 		"OPERADOR-LOGICO": {
-			"E": "e",
-			"OU": "ou",
-			"NAO": "não"
+				"TEXT": {
+					"MUST": "Tem",
+					"SHOULD": "Deveria",
+					"MUST_NOT": "Não tem"
+				},
+				"ICON" : {
+					"MUST": "icon-exclamation",
+					"SHOULD": "icon-help",
+					"MUST_NOT": "icon-close"
+				}
 		},
 
 		"OPERADOR-COMPARACAO": {
-			"IGUAL": "Igual",
-			"CONTEM": "Contém",
-			"ENTRE": "Entre",
-			"MAIOR-QUE": "Maior Que",
-			"MENOR-QUE": "Menor Que",
-			"EXISTE": "Existe"
+			"EQUALS": "Igual",
+			"CONTAINS": "Contém",
+			"BETWEEN": "Entre",
+			"GREATER_THAN": "Maior que",
+			"LESS_THAN": "Menor que",
+			"EXISTS": "Existe"
 		},
 
 		"MODAL-SALVAR-PESQUISA": {

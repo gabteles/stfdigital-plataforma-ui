@@ -14,8 +14,8 @@ namespace app.pesquisaAvancada {
         public criterio: string;
         
         constructor(public pesquisaId: number, public descricao: string, public contexto: string, 
-                public execucaoAutomatica: boolean, criterio: Array<Object>) {
-            this.criterio = JSON.stringify(criterio);
+                public execucaoAutomatica: boolean, criterio: Array<Criteria>) {
+            this.criterio = angular.toJson(criterio);
         }
     }
 
@@ -55,6 +55,10 @@ namespace app.pesquisaAvancada {
                             search.id = response.data;
                             return search;
                         });
+        }
+        
+        public deleteSearch(id: number): ng.IPromise<any> {
+            return this.$http.delete(this.properties.apiUrl + '/userauthentication/api/pesquisas/' + id);
         }
         
         public loadSavedSearchs(context: string): ng.IPromise<ISearch[]> {

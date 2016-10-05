@@ -41,7 +41,7 @@ declare namespace app.certification {
         private $q;
         private cryptoService;
         private static apiSignature;
-        static $inject: string[];
+        /** @ngInject **/
         constructor(properties: any, $http: IHttpService, $q: IQService, cryptoService: CryptoService);
         prepare(command: PrepareCommand): IPromise<SignerDto>;
         provideToSign(command: ProvideToSignCommand): IPromise<any>;

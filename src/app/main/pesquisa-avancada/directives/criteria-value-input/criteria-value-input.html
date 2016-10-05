@@ -1,11 +1,11 @@
-<div ng-if="criteria.comparisonOperator !== 'EXISTE' && criteria.trait.dataType !== 'constant'">
-    <div ng-if="criteria.comparisonOperator !== 'ENTRE' && criteria.trait.dataType !== 'list' && criteria.trait.dataType !== 'date'">
+<div ng-if="criteria.comparisonOperator !== 'EXISTS' && criteria.trait.dataType !== 'constant'">
+    <div ng-if="criteria.comparisonOperator !== 'BETWEEN' && criteria.trait.dataType !== 'list' && criteria.trait.dataType !== 'date'">
         <md-input-container md-no-float>
             <input placeholder="Valor" ng-model="criteria.value">
         </md-input-container>
     </div>
 
-    <div ng-if="criteria.comparisonOperator === 'ENTRE' && criteria.trait.dataType !== 'date'">
+    <div ng-if="criteria.comparisonOperator === 'BETWEEN' && criteria.trait.dataType !== 'date'">
         <md-input-container md-no-float>
             <input placeholder="Valor" ng-model="criteria.value[0]">
         </md-input-container>
@@ -24,14 +24,17 @@
     </div>
 
     <div ng-if="criteria.trait.dataType === 'date'">
-        <div ng-if="criteria.comparisonOperator === 'ENTRE'">
-            <md-datepicker flex ng-model="criteria.value[0]" md-placeholder="Escolha..."></md-datepicker>
+        <div ng-if="criteria.comparisonOperator === 'BETWEEN'">
+            <md-datepicker flex ng-model="date[0]" ng-init="date[0] = strToDate(criteria.value[0])"
+            	ng-change="criteria.value[0] = date[0].toISOString()" md-placeholder="Escolha..."></md-datepicker>
             <span class="connector">e</span>
-            <md-datepicker flex ng-model="criteria.value[1]" md-placeholder="Escolha..."></md-datepicker>
+            <md-datepicker flex ng-model="date[1]" ng-init="date[1] = strToDate(criteria.value[1])"
+            	ng-change="criteria.value[1] = date[1].toISOString()" md-placeholder="Escolha..."></md-datepicker>
         </div>
 
-        <div ng-if="criteria.comparisonOperator !== 'ENTRE'">
-            <md-datepicker flex ng-model="criteria.value" md-placeholder="Escolha..."></md-datepicker>
+        <div ng-if="criteria.comparisonOperator !== 'BETWEEN'">
+            <md-datepicker flex ng-model="date" ng-init="date = strToDate(criteria.value)"
+            	ng-change="criteria.value = date.toISOString()" md-placeholder="Escolha..."></md-datepicker>
         </div>
     </div>
 </div>

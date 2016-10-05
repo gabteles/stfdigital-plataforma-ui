@@ -8,7 +8,7 @@ declare namespace app.gestao.meusPaineis {
         widget5: any;
         widget6: any;
         widget7: any;
-        static $inject: string[];
+        /** @ngInject **/
         constructor(meusPaineisService: MeusPaineisService);
     }
 }

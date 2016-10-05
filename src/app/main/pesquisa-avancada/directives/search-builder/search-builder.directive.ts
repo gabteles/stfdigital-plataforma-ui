@@ -5,31 +5,21 @@ namespace app.pesquisaAvancada {
     import IDirectiveFactory = angular.IDirectiveFactory;
 
     export class ComparisionOperator {
-        public static get IGUAL(): string { return 'IGUAL'; }
-        public static get CONTEM(): string { return 'CONTEM'; }
-        public static get ENTRE(): string { return 'ENTRE'; }
-        public static get MAIORQUE(): string { return 'MAIOR-QUE'; }
-        public static get MENORQUE(): string { return 'MENOR-QUE'; }
-        public static get EXISTE(): string { return 'EXISTE'; }
-    }
-
-    export interface ISearch {
-        id: number;
-        label: string;
-        context: string;
-        executable: boolean;
-        criterias: ICriteria[];
-    }
-
-    export interface ICriteria {
-        value: number | string | Array<string | number>;
-        trait: ITrait;
-        logicalOperator: string;
-        comparisonOperator: ComparisionOperator;
-        valid: boolean;
+        public static get EQUALS(): string { return 'EQUALS'; }
+        public static get CONTAINS(): string { return 'CONTAINS'; }
+        public static get BETWEEN(): string { return 'BETWEEN'; }
+        public static get GREATER_THAN(): string { return 'GREATER_THAN'; }
+        public static get LESS_THAN(): string { return 'LESS_THAN'; }
+        public static get EXISTS(): string { return 'EXISTS'; }
     }
     
-    export class ITraitListItem {
+    export class LogicalOperator {
+        public static get MUST(): string { return 'MUST'; }
+        public static get SHOULD(): string { return 'SHOULD'; }
+        public static get MUST_NOT(): string { return 'MUST_NOT'; }
+    }
+    
+    export class TraitListItem {
 
         constructor(public id: any, public value: any) {};
     }
@@ -39,10 +29,28 @@ namespace app.pesquisaAvancada {
         name: string;
         field: string;
         dataType: string;
-        values ?: Array<ITraitListItem>;
+        values ?: Array<TraitListItem>;
         api ?: string;
         apiId ?: string;
         apiValue ?: string;
+    }
+
+    export class Criteria {
+        
+        public comparisonOperator: ComparisionOperator = ComparisionOperator.EQUALS;
+        public value: any;
+        public valid: boolean = false;
+        private group = false;
+    
+        constructor(public logicalOperator?: LogicalOperator, public trait?: ITrait) {
+            if (trait && trait.dataType === 'constant') {
+                this.comparisonOperator = ComparisionOperator.EXISTS;
+                this.value = trait.name;    
+            }
+            if (!logicalOperator) {
+                this.logicalOperator = LogicalOperator.MUST;
+            }
+        }
     }
     
     export interface IResultColumn {
@@ -62,6 +70,15 @@ namespace app.pesquisaAvancada {
         resultColumns: IResultColumn[];
         api: string;
         context: string;
+    }
+    
+    export interface ISearch {
+        
+        id: number;
+        label: string;
+        context: string;
+        executable: boolean;
+        criterias: Criteria[];
     }
     
     class SearchBuilderDirective implements IDirective {

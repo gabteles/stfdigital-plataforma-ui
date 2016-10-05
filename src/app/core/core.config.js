@@ -7,7 +7,7 @@
         .config(config);
 
     /** @ngInject */
-    function config($ariaProvider, $logProvider, msScrollConfigProvider, $translateProvider, $provide, fuseConfigProvider, $sceDelegateProvider, uiSelectConfig)
+    function config($ariaProvider, $logProvider, msScrollConfigProvider, $translateProvider, $provide, fuseConfigProvider, $sceDelegateProvider, uiSelectConfig, $mdDateLocaleProvider)
     {
         // ng-aria configuration
         $ariaProvider.config({
@@ -49,5 +49,27 @@
 		]);
         
         uiSelectConfig.theme = 'select2';
+        
+        // TODO: configurar usando o $translate
+        $mdDateLocaleProvider.months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        $mdDateLocaleProvider.shortMonths = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        $mdDateLocaleProvider.days = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+        $mdDateLocaleProvider.shortDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+        // Example uses moment.js to parse and format dates.
+        $mdDateLocaleProvider.parseDate = function(dateString) {
+          var m = moment(dateString, "DD/MM/YYYY", true);
+          return m.isValid() ? m.toDate() : new Date();
+        };
+
+        $mdDateLocaleProvider.formatDate = function(date) {
+          var m = moment(date);
+          return m.isValid() ? m.format("DD/MM/YYYY") : '';
+        };
+
+        // In addition to date display, date components also need localized messages
+        // for aria-labels for screen-reader users.
+        $mdDateLocaleProvider.msgCalendar = "Calendário";
+        $mdDateLocaleProvider.msgOpenCalendar = "Abrir o calendário";
     }
 })();

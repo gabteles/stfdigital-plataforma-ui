@@ -40,7 +40,7 @@ namespace app.pesquisaAvancada {
                     var classes: any[] = _.union(_.values(config), [attr.operatorColorNegative, attr.operatorColorAfirmative]);
                     angular.forEach(classes, (cl) => { attr.$removeClass(cl); });
                     attr.$addClass(
-                        value === 'NAO' ?
+                        value === LogicalOperator.MUST_NOT ?
                             (attr.operatorColorNegative || config.negativeClass) :
                             (attr.operatorColorAfirmative || config.afirmativeClass)
                     );

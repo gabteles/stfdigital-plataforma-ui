@@ -125,10 +125,11 @@ gulp.task('clean-dangling-js', function() {
  */
 var compileTS = function(){
     var resultTs = gulp.src([allTypeScript, libraryTypeScript])
+        .pipe($.sourcemaps.init())
         .pipe($.typescript(tsProjectDev));
         
-    var resultSM = resultTs.js.pipe($.sourcemaps.init())
-        .pipe($.ngAnnotate())
+    var resultSM = resultTs.js
+        .pipe($.ngAnnotate({ rename: conf.annotateRename }))
         .pipe($.sourcemaps.write('.'));
 
     return merge([
@@ -149,7 +150,7 @@ gulp.task('compile-ts:for-tdd', [], function () {
     return gulp.src([allTypeScript, libraryTypeScript])
         .pipe($.sourcemaps.init())
         .pipe($.typescript(createTsProject()))
-        .pipe($.ngAnnotate())
+        .pipe($.ngAnnotate({ rename: conf.annotateRename }))
         .pipe($.sourcemaps.write('.', {sourceRoot: conf.paths.src + '/app/main'}))
         .pipe($.destClean(tsOutputPathUnitForApp))
         .pipe(gulp.dest(tsOutputPathUnitForApp));
@@ -169,7 +170,7 @@ gulp.task('generate-definitions', function() {
 gulp.task('compile-ts:e2e', ['ts-lint:e2e'], function() {
     return gulp.src([allTypeScriptE2E, libraryTypeScriptE2E])
         .pipe($.typescript(tsProjectE2E))
-        .pipe($.ngAnnotate())
+        .pipe($.ngAnnotate({ rename: conf.annotateRename }))
         .pipe(gulp.dest(tsOutputPathE2E));
 });
 
@@ -180,7 +181,7 @@ gulp.task('compile-ts:unit', ['ts-lint:unit'], function() {
     return gulp.src([allTypeScriptUnit, libraryTypeScriptUnit])
         .pipe($.sourcemaps.init())
         .pipe($.typescript(createTsProjectUnit()))
-        .pipe($.ngAnnotate())
+        .pipe($.ngAnnotate({ rename: conf.annotateRename }))
         .pipe($.sourcemaps.write('.'))
         .pipe($.destClean(tsOutputPathUnit))
         .pipe(gulp.dest(tsOutputPathUnit));

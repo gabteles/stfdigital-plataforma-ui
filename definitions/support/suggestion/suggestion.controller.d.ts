@@ -7,7 +7,7 @@ declare namespace app.support.suggestion {
         items: Array<Object>;
         placeholder: string;
         private suggestion;
-        private static $inject;
+        /** @ngInject **/
         constructor($scope: SuggestionDirectiveScope, $http: ng.IHttpService, suggestionService: SuggestionService);
         selectedItemChange(item: Object): void;
         searchTextChange(): void;

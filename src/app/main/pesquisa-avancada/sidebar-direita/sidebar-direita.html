@@ -9,14 +9,14 @@
 	<md-divider></md-divider>
 	<md-content>
 	    <md-list>
-	      <md-list-item class="md-1-line" ng-repeat="search in vm.savedSearchs | orderBy: 'id' : true | filter: {label: vm.searchSearch} track by search.id">
+	      <md-list-item class="md-1-line" ng-repeat="search in vm.savedSearchs | orderBy: 'id' : true | filter: {label: vm.searchSearch} track by $index">
 	        <div class="md-list-item-text">
 	          <p>{{ search.label }}</p>
 	        </div>
-	        <md-button class="md-secondary" ng-click="vm.loadSearch(search)" aria-label="Restore search: {{ search.label }}">
+	        <md-button class="md-secondary md-fab md-mini" ng-click="vm.loadSearch(search)" aria-label="Restore search: {{ search.label }}">
 	        	<md-icon md-font-icon="icon-restore"></md-icon>
 	        </md-button>
-	        <md-button class="md-secondary" ng-click="vm.deleteSearch(search.id)" aria-label="Delete search: {{ search.label }}">
+	        <md-button class="md-secondary md-fab md-mini md-warn" ng-click="vm.deleteSearch(search)" aria-label="Delete search: {{ search.label }}">
 	        	<md-icon md-font-icon="icon-delete"></md-icon>
 	        </md-button>
 	        <md-divider ng-if="!$last"></md-divider>

@@ -1,4 +1,4 @@
-namespace app.core {
+namespace app.support {
 
 	export interface StfHeaderScope extends ng.IScope {
 		layoutOnly: boolean;
@@ -36,7 +36,7 @@ namespace app.core {
             'path': '='
         };
 
-        public templateUrl: string = 'app/main/core/directives/stf-header/stf-header.html';
+        public templateUrl: string = 'app/main/support/header/header.html';
 
         public transclude: boolean = true;
 
@@ -58,6 +58,6 @@ namespace app.core {
 
     }
 
-    angular.module('app.core').directive('stfHeader', StfHeader.factory());
+    angular.module('app.support').directive('stfHeader', StfHeader.factory());
 
 }

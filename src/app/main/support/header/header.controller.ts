@@ -1,5 +1,4 @@
-namespace app.core {
-	
+namespace app.support {
 	export class StfHeaderController {
 
 		private localBreadcrumbs;

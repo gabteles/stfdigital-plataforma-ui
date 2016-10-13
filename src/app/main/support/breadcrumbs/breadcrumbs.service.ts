@@ -1,4 +1,4 @@
-namespace app.core {
+namespace app.support {
 
     export interface BreadcrumbPath {
         id: string;
@@ -147,5 +147,5 @@ namespace app.core {
 
     }
 
-    angular.module('app.core').service('stfBreadcrumbsService', StfBreadcrumbsService);
+    angular.module('app.support').service('stfBreadcrumbsService', StfBreadcrumbsService);
 }

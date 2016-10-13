@@ -1,4 +1,4 @@
-declare namespace app.core {
+declare namespace app.support {
     interface StfHeaderScope extends ng.IScope {
         layoutOnly: boolean;
         fabAction: Function;

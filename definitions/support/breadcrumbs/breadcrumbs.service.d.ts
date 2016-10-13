@@ -1,4 +1,4 @@
-declare namespace app.core {
+declare namespace app.support {
     interface BreadcrumbPath {
         id: string;
         translation: string;

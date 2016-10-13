@@ -1,4 +1,4 @@
-declare namespace app.core {
+declare namespace app.support {
     class StfHeaderController {
         private $scope;
         private stfBreadcrumbsService;

@@ -23,6 +23,17 @@
 	    };
 
 	    this.responseError = function(response) {
+			// Detecta um token inválido.
+			if (response.status === 401 && response.data && response.data.error === 'invalid_token') {
+				// Caso tenha detectado um token inválido e não esteja tentando acessar o login, limpa esse token
+				// e redireciona para o login
+				if (!window.location.href.endsWith('/login') && $cookies.get('access_token')) {
+					// 
+					$cookies.remove('access_token')
+					$window.location.href = '/login';
+				}
+				return $q.reject(response);
+			}
 			// No caso de 401, só devemos redirecionar para '/login' se a requisição não for de login. 
 			// 401, no caso do login, significa usuário ou senha inválidos. 
 	        if ((response.status === 401 && !response.config.url.endsWith('/oauth/token')) || response.status === 403) {

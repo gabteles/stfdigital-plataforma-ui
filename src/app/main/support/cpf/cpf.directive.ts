@@ -1,25 +1,33 @@
-(function ()
-{
+namespace app.support{
     'use strict';
 
-    angular
-        .module('app.core')
-        .directive('stfCpf', stfCpf);
+    export class StfCpf implements ng.IDirective{
+        public require: string = 'ngModel';
 
-    /** @ngInject */
-    function stfCpf(CPFService) {
-        return {
-            require: 'ngModel',
-            link: function(scope, elm, attrs, ctrl) {
-                ctrl.$validators.cpf = function(modelValue, viewValue) {
-                    if (ctrl.$isEmpty(modelValue)) {
-                        return true;
-                    }
+        constructor(private cpfService: CPFService){
+            
+        }
 
-                    return CPFService.validarCPF(modelValue);
-                };
+        public link($scope: any, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ctrl: any): void{
+            ctrl.$validators.cpf = (modelValue, viewValue) => {
+                if (ctrl.$isEmpty(modelValue)) {
+                    return true;
+                }
+
+                return this.cpfService.validarCPF(modelValue);
+            };
+        }
+
+        public static factory():ng.IDirectiveFactory{
+            return (cpfService: CPFService) => {
+                "ngInject";
+
+                return new StfCpf(cpfService);
             }
-        };
+        }
     }
 
-})();
+    angular
+        .module('app.support')
+        .directive('stfCpf', StfCpf.factory());
+}

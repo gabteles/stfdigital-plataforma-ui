@@ -4,20 +4,21 @@
  * @since 1.0.0
  * @since 10.12.2015
  */
-(function() {
-	'use strict';
+namespace app.support{
+	export class CPFService{
+		constructor(){
 
-	angular.module('app.core').service('CPFService', function() {
+		}
+
 		/**
 		 * Valida um CPF
 		 * 
 		 * @param string numero O número do cpf, sem ponto ou traço
 		 * @return boolean Validade do CPF 
 		 */
-		this.validarCPF = function validarCPF(numero) {
-			var soma = 0; 
-			var resto; 
-
+		public validarCPF(numero: string): boolean{
+			let soma: number = 0;
+			let resto: number;
 			// Verifica tamanho
 			if (numero.length != 11) {
 				return false;
@@ -58,10 +59,9 @@
 			if (resto != parseInt(numero.substring(10, 11))) { 
 				return false; 
 			}
-			
 			return true;
-		};
-		
+		}
+
 		// PRIVATE
 		
 		/**
@@ -70,19 +70,23 @@
 	 	 * @param string numero O número do cpf, sem ponto ou traço
 		 * @return boolean  
 		 */
-		this._isCPFPadrao = function(numero) {
+		private _isCPFPadrao(numero: string): boolean{
 			return (
-				(numero == "00000000000") ||
-				(numero == "11111111111") ||
-				(numero == "22222222222") ||
-				(numero == "33333333333") ||
-				(numero == "44444444444") ||
-				(numero == "55555555555") ||
-				(numero == "66666666666") ||
-				(numero == "77777777777") ||
-				(numero == "88888888888") ||
-				(numero == "99999999999")
+				(numero === "00000000000") ||
+				(numero === "11111111111") ||
+				(numero === "22222222222") ||
+				(numero === "33333333333") ||
+				(numero === "44444444444") ||
+				(numero === "55555555555") ||
+				(numero === "66666666666") ||
+				(numero === "77777777777") ||
+				(numero === "88888888888") ||
+				(numero === "99999999999")
 			);
-		};
-	});
-})();
+		}
+	}
+
+	angular
+		.module('app.support')
+		.service('cpfService', CPFService);
+}

@@ -1,4 +1,4 @@
-namespace app.core {
+namespace app.support {
 
 	/** @ngInject */
 	function configNgSbumitDecorator($provide: ng.auto.IProvideService) {
@@ -28,6 +28,6 @@ namespace app.core {
 		});
 	}
 
-	angular.module('app.core').config(configNgSbumitDecorator);
+	angular.module('app.support').config(configNgSbumitDecorator);
 
 }

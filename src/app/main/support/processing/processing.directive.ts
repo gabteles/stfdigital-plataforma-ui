@@ -1,4 +1,4 @@
-namespace app.core {
+namespace app.support {
 
 	export interface StfProcessingScope extends ng.IScope {
 		stfProcessing: any;
@@ -61,5 +61,5 @@ namespace app.core {
 
 	}
 
-	angular.module('app.core').directive('stfProcessing', StfProcessing.factory());
+	angular.module('app.support').directive('stfProcessing', StfProcessing.factory());
 }

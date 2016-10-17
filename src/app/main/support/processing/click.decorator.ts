@@ -1,4 +1,4 @@
-namespace app.core {
+namespace app.support {
 
 	/** @ngInject */
 	function configNgClickDecorator($provide: ng.auto.IProvideService) {
@@ -29,6 +29,6 @@ namespace app.core {
 		});
 	}
 
-	angular.module('app.core').config(configNgClickDecorator);
+	angular.module('app.support').config(configNgClickDecorator);
 
 }

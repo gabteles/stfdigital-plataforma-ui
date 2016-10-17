@@ -1,4 +1,4 @@
-declare namespace app.core {
+declare namespace app.support {
     interface StfProcessingScope extends ng.IScope {
         stfProcessing: any;
         $stfDecorateNgClickHandler: (promise: ng.IPromise<any>, event) => ng.IPromise<any>;

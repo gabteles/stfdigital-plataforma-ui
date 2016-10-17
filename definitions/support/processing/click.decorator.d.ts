@@ -1,2 +1,2 @@
-declare namespace app.core {
+declare namespace app.support {
 }

@@ -10,7 +10,7 @@ namespace app.cadastro {
 		private form: ICadastro;
 
 		constructor() {
-			this.form.tipoCadastro = 1;
+			//this.form.tipoCadastro = 1;
 		}
 
 		public cadastrar(): void {

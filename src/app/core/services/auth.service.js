@@ -9,9 +9,9 @@
 
 	angular.module('app.core').service('AuthService', function($http, $cookies, $httpParamSerializer, $q, $rootScope, properties) {
 
-		var USER_QUERY_URL = properties.url + ':' + properties.port + '/userauthentication/user';
+		var USER_QUERY_URL = properties.url + ':' + properties.port + '/identidades/user';
 
-		var OAUTH_TOKEN_URL = properties.url + ':' + properties.port + '/userauthentication/oauth/token';
+		var OAUTH_TOKEN_URL = properties.url + ':' + properties.port + '/identidades/oauth/token';
 
 		var AUTH_POST_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8';
 

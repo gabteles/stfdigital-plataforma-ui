@@ -25,10 +25,10 @@ services:
     depends_on:
      - rabbit
      - discovery
-  userauthentication:
+  identidades:
     extends:
       file: shared/compose/common.yml
-      service: userauthentication
+      service: identidades
     depends_on:
      - rabbit
      - discovery

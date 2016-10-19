@@ -1,4 +1,4 @@
-# Define a configuração para rodar com imagens locais
+# Define a configuração para rodar com imagens do Docker Hub
 version: '2'
 volumes:
   logs:
@@ -12,19 +12,16 @@ services:
     extends:
       file: shared/compose/common.yml
       service: discovery
-    image: stfdigital-plataforma-discovery
   gateway:
     extends:
       file: shared/compose/common.yml
       service: gateway
-    image: stfdigital-plataforma-gateway
     depends_on:
      - discovery
   processos:
     extends:
       file: shared/compose/common.yml
       service: processos
-    image: stfdigital-plataforma-processos
     depends_on:
      - rabbit
      - discovery
@@ -32,7 +29,6 @@ services:
     extends:
       file: shared/compose/common.yml
       service: identidades
-    image: stfdigital-plataforma-identidades
     depends_on:
      - rabbit
      - discovery

@@ -20,8 +20,8 @@ namespace app.autenticacao{
 			private properties
 		){
 			let baseUrl: string = this.properties.url + ':' + this.properties.port;
-			this.USER_QUERY_URL = baseUrl + '/userauthentication/user';
-			this.OAUTH_TOKEN_URL = baseUrl + '/userauthentication/oauth/token';
+			this.USER_QUERY_URL = baseUrl + '/identidades/user';
+			this.OAUTH_TOKEN_URL = baseUrl + '/identidades/oauth/token';
 		}
 
 		/**

@@ -36,7 +36,7 @@ namespace app.autenticacao{
 			if (response.status === 401 && response.data && response.data.error === 'invalid_token') {
 				// Caso tenha detectado um token inválido e não esteja tentando acessar o login, limpa esse token
 				// e redireciona para o login
-				if (!this.$window.location.href.endsWith('/login') && this.$cookies.get('access_token')) {
+				if (this.$cookies.get('access_token')) {
 					// 
 					this.$cookies.remove('access_token')
 					this.$window.location.href = '/login';

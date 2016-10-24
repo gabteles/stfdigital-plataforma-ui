@@ -17,7 +17,7 @@ declare namespace app.support.suggestion {
     /**
      * Diretiva de sugestao
      * Ex. de uso:
-     * &lt;suggestion id="sugerir-processo" ng-model="vm.processo" api="/api/processos/sugestao"
+     * &lt;suggestion id="sugerir-processo" ng-model="vm.processo" api="/api/sugestao"
      * search-item="identificacao" item-text="vm.format(item)" use-description="true"&gt;&lt;/suggestion&gt;
      */
     class SuggestionDirective implements ng.IDirective {

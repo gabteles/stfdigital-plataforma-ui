@@ -26,6 +26,6 @@ namespace app.autenticacao {
 	}
 
 	angular
-		.module('app.nao-autenticado', [])
+		.module('app.nao-autenticado', ['app.autenticacao'])
 		.config(config);
 }

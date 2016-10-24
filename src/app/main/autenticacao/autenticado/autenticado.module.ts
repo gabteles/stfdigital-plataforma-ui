@@ -33,6 +33,6 @@ namespace app.autenticacao {
 	}
 	
 	angular
-		.module('app.autenticado', [])
+		.module('app.autenticado', ['app.autenticacao'])
 		.config(config);
 }

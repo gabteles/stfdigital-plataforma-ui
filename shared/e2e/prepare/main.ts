@@ -1,15 +1,13 @@
-import mockMessagingModule from '../mocks/messaging';
-import debugInfoModule from '../mocks/debug-info';
+import mockMessagingModule from "../mocks/messaging";
 
 function prepare() {
-    console.info('Preparando ambiente para o teste');
+    console.info("Preparando ambiente para o teste");
     addMockModules();
     extendProtractor();
 }
 
 function addMockModules() {
-    browser.addMockModule('e2e.mocks.messaging', mockMessagingModule);
-    browser.addMockModule('e2e.debug.info', debugInfoModule);
+    browser.addMockModule("e2e.mocks.messaging", mockMessagingModule);
 }
 
 function extendProtractor() {
@@ -23,7 +21,7 @@ function extendProtractor() {
 function extendWebElementClick() {
     (function(click) {
         protractor.WebElement.prototype.click = function() {
-            var scrollIntoView = function() {
+            let scrollIntoView = function() {
                 arguments[0].scrollIntoView();
             };
             return this.isDisplayed().then((isVisible) => {

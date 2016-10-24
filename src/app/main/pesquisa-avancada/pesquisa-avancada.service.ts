@@ -50,7 +50,7 @@ namespace app.pesquisaAvancada {
         
         public saveSearch(search: ISearch): ng.IPromise<ISearch> {
             let command = new SalvarPesquisaCommand(search.id, search.label, search.context, search.executable, search.criterias);
-            return this.$http.post(this.properties.apiUrl + '/userauthentication/api/pesquisas', command)
+            return this.$http.post(this.properties.apiUrl + '/identidades/api/pesquisas', command)
                         .then((response: ng.IHttpPromiseCallbackArg<number>) => {
                             search.id = response.data;
                             return search;
@@ -58,12 +58,12 @@ namespace app.pesquisaAvancada {
         }
         
         public deleteSearch(id: number): ng.IPromise<any> {
-            return this.$http.delete(this.properties.apiUrl + '/userauthentication/api/pesquisas/' + id);
+            return this.$http.delete(this.properties.apiUrl + '/identidades/api/pesquisas/' + id);
         }
         
         public loadSavedSearchs(context: string): ng.IPromise<ISearch[]> {
             let config = {params: {contexto: context}};
-            return this.$http.get(this.properties.apiUrl + '/userauthentication/api/pesquisas', config)
+            return this.$http.get(this.properties.apiUrl + '/identidades/api/pesquisas', config)
                         .then(response => response.data);
         }
         

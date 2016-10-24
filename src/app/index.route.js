@@ -10,7 +10,8 @@
     function routeConfig($stateProvider, $urlRouterProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
 
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/tarefas/minhas-tarefas');
+        
 
         // State definitions
         $stateProvider

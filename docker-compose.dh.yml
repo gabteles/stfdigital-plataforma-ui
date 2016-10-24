@@ -1,0 +1,34 @@
+# Define a configuração para rodar com imagens do Docker Hub
+version: '2'
+volumes:
+  logs:
+    driver: local
+services:
+  rabbit:
+    extends:
+      file: shared/compose/common.yml
+      service: rabbit
+  discovery:
+    extends:
+      file: shared/compose/common.yml
+      service: discovery
+  gateway:
+    extends:
+      file: shared/compose/common.yml
+      service: gateway
+    depends_on:
+     - discovery
+  processos:
+    extends:
+      file: shared/compose/common.yml
+      service: processos
+    depends_on:
+     - rabbit
+     - discovery
+  identidades:
+    extends:
+      file: shared/compose/common.yml
+      service: identidades
+    depends_on:
+     - rabbit
+     - discovery

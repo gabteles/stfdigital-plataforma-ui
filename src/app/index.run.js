@@ -18,7 +18,7 @@
                 }
             }).catch(function() {
                 // Se não está logado e solicita uma página protegida, deve ser redirecionado para a página de login     
-                if (toState.url !== '/login') {
+                if (toState.url !== '/login' && toState.url !== '/cadastro') {
                     event.preventDefault();
                     $state.go('app.login');
                 }

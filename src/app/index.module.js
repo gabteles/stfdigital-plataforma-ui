@@ -19,7 +19,7 @@
 
             // Quick panel
             'app.quick-panel',
-
+            
             // Pages
             'app.login',
             'app.cadastro',

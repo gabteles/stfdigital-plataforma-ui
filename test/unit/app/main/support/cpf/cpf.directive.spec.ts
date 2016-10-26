@@ -1,6 +1,6 @@
 namespace app.support{
     import Properties = app.support.constants.Properties;
-    describe('Teste da diretiva de CPF', () =>{
+    describe('Teste da diretiva stf-cpf', () =>{
         let $compile:ng.ICompileService, scope, element;
 
         beforeEach(angular.mock.module('ngMockE2E', 'app.support'));

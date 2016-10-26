@@ -15,13 +15,14 @@ namespace app.support{
 
         it('Deveria compilar a diretiva com valor de stfAdditionalModel igual ao do ng-model', () => {
             $rootScope.model = 1;
-            let element = $compile('<div ng-model="model" stf-additional-model></div>')($rootScope);
+            $rootScope.model2 = 2;
+            let element = $compile('<div ng-model="model" stf-additional-model="model2"></div>')($rootScope);
             
             scope = element.isolateScope();
 
             $rootScope.$digest();
 
-            expect(scope.stfAdditionalModel).toEqual($rootScope.model);
+            expect($rootScope.model2).toEqual($rootScope.model);
         });
     })
 }

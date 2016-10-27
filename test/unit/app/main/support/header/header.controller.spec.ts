@@ -57,8 +57,6 @@ namespace app.support {
                         link: '/'
                     }
                 });
-
-                
             });
 
             it('Deveria retornar os breadcrumbs de acordo com o $state', () => {

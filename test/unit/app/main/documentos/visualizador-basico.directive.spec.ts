@@ -12,13 +12,16 @@ namespace app.documentos {
 			};
 		}
 
-		const API_PARA_ACESSAR_DOCUMENTO = "api/para/acessar-o-documento";
-		const PDF_CONTENT = "%PDF-1.3\nAAA\n30 0 obj\n%%EOF";
+		const API_PARA_ACESSAR_DOCUMENTO = "/api/para/acessar-o-documento";
+		const PDF_CONTENT = "%PDF-1.3\nAAA\n30 0 obj\n%%EOF333";
 
 		let $compile: ng.ICompileService;
+		let $rootScope: ng.IRootScopeService;
 		let scope: TestScope;
 		let element: ng.IAugmentedJQuery;
 		let template;
+
+		let anchorClickService: AnchorClickService;
 
 		let $httpBackend: ng.IHttpBackendService;
 
@@ -32,11 +35,16 @@ namespace app.documentos {
 			angular.mock.module("ngMockE2E", "templates", "app.documentos");
 		});
 
+		beforeEach(inject(["app.documentos.AnchorClickService", (_anchorClickService_: AnchorClickService) => {
+			anchorClickService = _anchorClickService_;
+		}]));
+
 		beforeEach(inject((_$compile_: ng.ICompileService, _$rootScope_: ng.IRootScopeService, _$httpBackend_: ng.IHttpBackendService) => {
 			$compile = _$compile_;
 			$httpBackend = _$httpBackend_;
+			$rootScope = _$rootScope_;
 
-			$httpBackend.whenGET('http://docker:8765/documents/api/onlyoffice/baseUrl').respond("http://onlyoffice");
+			$httpBackend.whenGET('http://docker:8765/documents/api/onlyoffice/baseUrl').respond(200, "http://onlyoffice");
 
 			scope = <TestScope>_$rootScope_.$new();
 
@@ -46,33 +54,28 @@ namespace app.documentos {
 
 			element = angular.element(`<a href="#" stf-visualizador-basico="vm.apiParaAcessarODocumento"></a>`);
 			template = $compile(element)(scope);
-			scope.$digest();
+			$rootScope.$digest();
 		}));
 
-		it("Deveria compilar a diretiva sendo utilizada em uma anchor", () => {
-			let controller = element.controller("stf-visualizador-basico");
-
-			expect(controller).toBeDefined("A controller da diretiva deveria ter sido instalada no elemento");
-		});
-
 		it("Deveria carregar o documento da api", () => {
-			$httpBackend.expectGET(API_PARA_ACESSAR_DOCUMENTO).respond(PDF_CONTENT);
+			$httpBackend.expectGET(API_PARA_ACESSAR_DOCUMENTO).respond(200, PDF_CONTENT);
 
 			element.triggerHandler("click");
-
-			scope.$digest();
 
 			$httpBackend.verifyNoOutstandingExpectation();
 		});
 
 		it("Deveria carregar o documento em uma nova janela do navegador", () => {
-			$httpBackend.whenGET(API_PARA_ACESSAR_DOCUMENTO).respond(PDF_CONTENT);
+			$httpBackend.expectGET(API_PARA_ACESSAR_DOCUMENTO).respond(200, PDF_CONTENT);
 
 			element.triggerHandler("click");
 
-			scope.$digest();
+			spyOn(anchorClickService, "clickAnchor").and.callFake((a: HTMLAnchorElement) => {
+				expect(a.target).toBe("_blank");
+				expect(a.href).toBeTruthy();
+			});
 
-			fail("TDD TODO Escrever verificação de se o documento foi aberto na nova aba");
+			$httpBackend.flush();
 		});
 
 	});

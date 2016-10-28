@@ -17,6 +17,8 @@
     "app.support.suggestion.service": "file:../../definitions/support/suggestion/suggestion.service.d.ts",
     "app.support.dashboards.dashlet-service": "file:../../definitions/support/dashboards/dashlet.service.d.ts",
     "app.support.dashboards.dashboard-service": "file:../../definitions/support/dashboards/dashboard.service.d.ts",
-    "app.support.dashboards.dashboard-layout-manager": "file:../../definitions/support/dashboards/directives/dashboard-layout-manager.service.d.ts"
+    "app.support.dashboards.dashboard-layout-manager": "file:../../definitions/support/dashboards/directives/dashboard-layout-manager.service.d.ts",
+    "app.documentos.anchor-click.service": "file:../../definitions/documentos/anchor-click.service.d.ts",
+    "app.documentos.visualizador-basico.directive": "file:../../definitions/documentos/visualizador-basico.directive.d.ts"
   }
 }

@@ -25,7 +25,7 @@ namespace app.tarefas {
     }
 
     /** @ngInject */
-    function run(stfBreadcrumbsService: app.core.StfBreadcrumbsService) {
+    function run(stfBreadcrumbsService: app.support.StfBreadcrumbsService) {
         stfBreadcrumbsService.registerPath({
             id: 'tarefas',
             translation: 'Tarefas',

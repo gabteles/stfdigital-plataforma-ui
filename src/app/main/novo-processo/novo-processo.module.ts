@@ -41,7 +41,7 @@ namespace app.novoProcesso {
     }
 
     /** @ngInject */
-    function run(stfBreadcrumbsService: app.core.StfBreadcrumbsService) {
+    function run(stfBreadcrumbsService: app.support.StfBreadcrumbsService) {
         stfBreadcrumbsService.registerPath({
             id: 'novo-processo',
             translation: 'Iniciar Processo',

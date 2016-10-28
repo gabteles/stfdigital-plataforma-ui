@@ -17,16 +17,30 @@ namespace app.documentos {
 		let element;
 		let template;
 
-		beforeEach(inject((_$compile_: ng.ICompileService, _$rootScope_: ng.IRootScopeService) => {
+		beforeEach(() => {
+			angular.mock.module("app.core");
+
+			angular.module("app.autenticado", []);
+			angular.mock.module("app.support.constants");
+			angular.module("app.support", ["app.support.constants"]);
+
+			angular.mock.module("ngMockE2E", "templates", "app.documentos");
+		});
+
+		beforeEach(inject((_$compile_: ng.ICompileService, _$rootScope_: ng.IRootScopeService, $httpBackend: ng.IHttpBackendService) => {
 			$compile = _$compile_;
+
+			$httpBackend.whenGET('http://docker:8765/documents/api/onlyoffice/baseUrl').respond("http://onlyoffice");
+
 			scope = <TestScope>_$rootScope_.$new();
 
 			scope.vm = {
 				apiParaAcessarODocumento: "api/para/acessar-o-documento"
 			};
 
-			element = angular.element(`<a href="" stf-visualizador-basico="vm.apiParaAcessarODocumento"></a>`);
+			element = angular.element(`<div stf-visualizador-basico="vm.apiParaAcessarODocumento"></div>`);
 			template = $compile(element)(scope);
+			scope.$digest();
 		}));
 
 		it("Deveria compilar a diretiva sendo utilizada em uma anchor", () => {

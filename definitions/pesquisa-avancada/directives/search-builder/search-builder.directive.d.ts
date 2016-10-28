@@ -1,5 +1,5 @@
 declare namespace app.pesquisaAvancada {
-    class ComparisionOperator {
+    class ComparisonOperator {
         static EQUALS: string;
         static CONTAINS: string;
         static BETWEEN: string;
@@ -30,7 +30,7 @@ declare namespace app.pesquisaAvancada {
     class Criteria {
         logicalOperator: LogicalOperator;
         trait: ITrait;
-        comparisonOperator: ComparisionOperator;
+        comparisonOperator: ComparisonOperator;
         value: any;
         valid: boolean;
         private group;

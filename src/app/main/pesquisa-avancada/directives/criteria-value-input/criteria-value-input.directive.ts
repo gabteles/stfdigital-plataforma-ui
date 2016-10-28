@@ -39,11 +39,11 @@ namespace app.pesquisaAvancada {
                 CriteriaValueInputDirective.updateCriteriaValidity($scope.criteria);
             });
 
-            $scope.$watch('criteria.comparisonOperator', (op: ComparisionOperator) => {
+            $scope.$watch('criteria.comparisonOperator', (op: ComparisonOperator) => {
                 let criteria: Criteria = $scope.criteria,
                     value = criteria.value;
 
-                if (op == ComparisionOperator.BETWEEN) {
+                if (op == ComparisonOperator.BETWEEN) {
                     criteria.value = _.isArray(value) ? value : [value];
                 } else {
                     criteria.value = _.isArray(value) ? value[0] : value;
@@ -58,10 +58,10 @@ namespace app.pesquisaAvancada {
 
         private static updateCriteriaValidity(criteria: Criteria): void {
             switch (criteria.comparisonOperator) {
-                case ComparisionOperator.EQUALS:
-                case ComparisionOperator.CONTAINS:
-                case ComparisionOperator.GREATER_THAN:
-                case ComparisionOperator.LESS_THAN:
+                case ComparisonOperator.EQUALS:
+                case ComparisonOperator.CONTAINS:
+                case ComparisonOperator.GREATER_THAN:
+                case ComparisonOperator.LESS_THAN:
                     if (criteria.trait.dataType == 'date') {
                         criteria.valid = (!!criteria.value);
                     } else {
@@ -69,7 +69,7 @@ namespace app.pesquisaAvancada {
                     }
                     break;
 
-                case ComparisionOperator.BETWEEN:
+                case ComparisonOperator.BETWEEN:
                     if (criteria.trait.dataType == 'date') {
                         criteria.valid = ((!!criteria.value[0]) && (!!criteria.value[1]));
                     } else {
@@ -78,7 +78,7 @@ namespace app.pesquisaAvancada {
                     }
                     break;
 
-                case ComparisionOperator.EXISTS:
+                case ComparisonOperator.EXISTS:
                     criteria.valid = true;
                     break;
             }

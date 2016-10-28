@@ -33,7 +33,6 @@ declare namespace app.pesquisaAvancada {
         comparisonOperator: ComparisonOperator;
         value: any;
         valid: boolean;
-        private group;
         constructor(logicalOperator?: LogicalOperator, trait?: ITrait);
     }
     interface IResultColumn {

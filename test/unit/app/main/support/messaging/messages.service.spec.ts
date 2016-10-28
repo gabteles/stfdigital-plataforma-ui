@@ -8,7 +8,8 @@ namespace app.support.messaging{
         beforeEach(inject((_$mdToast_:IToastService, $httpBackend:ng.IHttpBackendService, properties:Properties, _messagesService_) => {
             messagesService = _messagesService_;
             $mdToast = _$mdToast_;
-            spyOn($mdToast, 'show');
+            spyOn($mdToast, 'show').and.callThrough();
+            spyOn($mdToast, 'simple').and.callThrough();
             $httpBackend.whenGET(properties.apiUrl + '/discovery/api/commands').passThrough();
         }));
 
@@ -16,12 +17,14 @@ namespace app.support.messaging{
             messagesService.error('Erro');
             
             expect($mdToast.show).toHaveBeenCalledTimes(1);
+            expect($mdToast.simple).toHaveBeenCalledTimes(1);
         });
 
         it('Deveria exibir a mensagem de sucesso', () => {
             messagesService.success('Sucesso');
             
             expect($mdToast.show).toHaveBeenCalledTimes(1);
+            expect($mdToast.simple).toHaveBeenCalledTimes(1);
         });
     });
 }

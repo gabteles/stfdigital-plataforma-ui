@@ -38,7 +38,7 @@ namespace app.documentos {
 				apiParaAcessarODocumento: "api/para/acessar-o-documento"
 			};
 
-			element = angular.element(`<div stf-visualizador-basico="vm.apiParaAcessarODocumento"></div>`);
+			element = angular.element(`<a href="#" stf-visualizador-basico="vm.apiParaAcessarODocumento"></a>`);
 			template = $compile(element)(scope);
 			scope.$digest();
 		}));

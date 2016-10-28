@@ -4,7 +4,7 @@ namespace app.pesquisaAvancada {
     import IDirective = angular.IDirective;
     import IDirectiveFactory = angular.IDirectiveFactory;
 
-    export class ComparisionOperator {
+    export class ComparisonOperator {
         public static get EQUALS(): string { return 'EQUALS'; }
         public static get CONTAINS(): string { return 'CONTAINS'; }
         public static get BETWEEN(): string { return 'BETWEEN'; }
@@ -37,14 +37,13 @@ namespace app.pesquisaAvancada {
 
     export class Criteria {
         
-        public comparisonOperator: ComparisionOperator = ComparisionOperator.EQUALS;
+        public comparisonOperator: ComparisonOperator = ComparisonOperator.EQUALS;
         public value: any;
         public valid: boolean = false;
-        private group = false;
     
         constructor(public logicalOperator?: LogicalOperator, public trait?: ITrait) {
             if (trait && trait.dataType === 'constant') {
-                this.comparisonOperator = ComparisionOperator.EXISTS;
+                this.comparisonOperator = ComparisonOperator.EXISTS;
                 this.value = trait.name;    
             }
             if (!logicalOperator) {

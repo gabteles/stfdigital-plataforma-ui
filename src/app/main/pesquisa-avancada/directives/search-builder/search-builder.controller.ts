@@ -13,12 +13,12 @@ namespace app.pesquisaAvancada {
         
         public logicalOperators: string[] = [LogicalOperator.MUST, LogicalOperator.SHOULD, LogicalOperator.MUST_NOT];
         public comparisonOperators: Object = {
-            [ComparisionOperator.EQUALS] : ['string', 'number', 'currency', 'date', 'list'],
-            [ComparisionOperator.CONTAINS]: ['string'],
-            [ComparisionOperator.BETWEEN]: ['number', 'currency', 'date'],
-            [ComparisionOperator.GREATER_THAN]: ['number', 'currency', 'date'],
-            [ComparisionOperator.LESS_THAN]: ['number', 'currency', 'date'],
-            [ComparisionOperator.EXISTS]: ['constant', 'string', 'number', 'currency', 'date', 'list']
+            [ComparisonOperator.EQUALS] : ['string', 'number', 'currency', 'date', 'list'],
+            [ComparisonOperator.CONTAINS]: ['string'],
+            [ComparisonOperator.BETWEEN]: ['number', 'currency', 'date'],
+            [ComparisonOperator.GREATER_THAN]: ['number', 'currency', 'date'],
+            [ComparisonOperator.LESS_THAN]: ['number', 'currency', 'date'],
+            [ComparisonOperator.EXISTS]: ['constant', 'string', 'number', 'currency', 'date', 'list']
         };
         public traitSearchText: string = '';
         public newCriteria: Criteria = new Criteria();

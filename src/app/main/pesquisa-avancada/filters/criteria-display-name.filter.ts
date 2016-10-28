@@ -24,19 +24,19 @@ namespace app.pesquisaAvancada {
                 }
                 
                 switch (criteria.comparisonOperator) {
-                    case ComparisionOperator.BETWEEN :
+                    case ComparisonOperator.BETWEEN :
                         name = (name[0] || '') + ' < ' + criteria.trait.name + ' < ' + (name[1] || '');
                         break;
 
-                    case ComparisionOperator.GREATER_THAN:
+                    case ComparisonOperator.GREATER_THAN:
                         name = criteria.trait.name + ' > ' + name;
                         break;
 
-                    case ComparisionOperator.LESS_THAN:
+                    case ComparisonOperator.LESS_THAN:
                         name = criteria.trait.name + ' < ' + name;
                         break;
 
-                    case ComparisionOperator.EXISTS:
+                    case ComparisonOperator.EXISTS:
                         name = "Existe";
                 }
                 return <string> name;
